@@ -10,8 +10,9 @@ import {
   Box,
   Stack,
 } from "@mui/material";
-import { Search } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 function Header() {
   const store = useStore();
@@ -49,7 +50,7 @@ function Header() {
         onChange={onChange}
         startAdornment={
           <InputAdornment position="start">
-            <Search />
+            <FontAwesomeIcon icon={faMagnifyingGlass} />
           </InputAdornment>
         }
       />

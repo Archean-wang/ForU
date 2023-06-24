@@ -60,13 +60,15 @@ function Progress() {
         mb: 1,
       }}>
       <Typography
+        noWrap
         sx={{
           color: "primary",
-          fontSize: 14,
+          fontSize: 12,
         }}>
         {showTime(position)}
       </Typography>
       <Slider
+        sx={{ flex: 1 }}
         size="small"
         color="primary"
         valueLabelDisplay="auto"
@@ -78,11 +80,13 @@ function Progress() {
           playbackState?.duration !== undefined
             ? Math.floor(playbackState?.duration / 1000)
             : 100
-        }></Slider>
+        }
+      />
       <Typography
+        noWrap
         sx={{
           color: "primary",
-          fontSize: 14,
+          fontSize: 10,
         }}>
         {showTime(playbackState?.duration)}
       </Typography>

@@ -3,8 +3,9 @@ import SongList from "../../components/SongList";
 import { Avatar, Box, Button, Typography } from "@mui/material";
 import { InlineArtists } from "../../components/InlineArtists";
 import { showTime } from "../../utils/formatter";
-import { PlayCircleOutline } from "@mui/icons-material";
 import { startPlayback } from "../../api";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCirclePlay } from "@fortawesome/free-solid-svg-icons";
 
 function Album() {
   const params = useParams();
@@ -56,7 +57,7 @@ function Album() {
             onClick={() => startPlay(0)}
             variant="contained"
             color="success"
-            startIcon={<PlayCircleOutline />}
+            startIcon={<FontAwesomeIcon icon={faCirclePlay} />}
             sx={{
               maxWidth: 120,
               boxShadow: "none",

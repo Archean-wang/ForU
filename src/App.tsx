@@ -55,10 +55,8 @@ function App() {
         <WebPlaybackSDK
           initialDeviceName={"ForU"}
           getOAuthToken={getAuthCode}
-          initialVolume={volumeTmp === null ? 0.5 : parseFloat(volumeTmp)}>
-          <Player
-            volumeInit={volumeTmp === null ? 0.5 : parseFloat(volumeTmp)}
-          />
+          initialVolume={volumeTmp === null ? 0.5 : parseInt(volumeTmp) / 100}>
+          <Player volumeInit={volumeTmp === null ? 50 : parseInt(volumeTmp)} />
         </WebPlaybackSDK>
       )}
     </Box>

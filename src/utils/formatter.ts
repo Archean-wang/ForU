@@ -4,7 +4,7 @@ function tr(n: number) {
 
 
 function showTime(time: number | undefined) {
-    if (time === undefined) return "--:--";
+    if (time === undefined) return "00:00";
     let sec = Math.floor(time / 1000);
     let second = sec % 60;
     let min = Math.floor(sec / 60);

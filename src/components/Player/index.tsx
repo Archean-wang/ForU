@@ -1,6 +1,5 @@
 import {
   Avatar,
-  Button,
   Slider,
   IconButton,
   Typography,
@@ -35,6 +34,22 @@ import { useNavigate } from "react-router-dom";
 import { InlineArtists } from "../InlineArtists";
 import Progress from "../Progress";
 import ScrollText from "../ScrollText";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBackward,
+  faBackwardStep,
+  faBars,
+  faCirclePause,
+  faCirclePlay,
+  faForwardStep,
+  faHeart,
+  faLaptop,
+  faRepeat,
+  faShuffle,
+  faVolumeHigh,
+  faVolumeLow,
+  faVolumeOff,
+} from "@fortawesome/free-solid-svg-icons";
 
 function WebPlayback({ volumeInit }: { volumeInit: number }) {
   const playbackState = usePlaybackState();
@@ -76,8 +91,8 @@ function WebPlayback({ volumeInit }: { volumeInit: number }) {
     if (typeof value === "number") {
       const v = value / 100;
       player?.setVolume(v).then(() => {
-        localStorage.setItem("volume", v.toString());
-        setVolume(v);
+        localStorage.setItem("volume", value.toString());
+        setVolume(value);
       });
     }
   }
@@ -85,8 +100,8 @@ function WebPlayback({ volumeInit }: { volumeInit: number }) {
   function mute() {
     if (volume === 0) {
       let vl = localStorage.getItem("volume");
-      let v = vl === null ? 0.5 : parseFloat(vl);
-      player?.setVolume(v).then(() => {
+      let v = vl === null ? 50 : parseInt(vl);
+      player?.setVolume(v / 100).then(() => {
         setVolume(v);
       });
     } else {
@@ -96,24 +111,16 @@ function WebPlayback({ volumeInit }: { volumeInit: number }) {
     }
   }
 
-  function toggleIcon() {
-    return playbackState?.paused ? (
-      <Play color="#1DB954" />
-    ) : (
-      <Pause color="#1DB954" />
-    );
-  }
-
   function volumeIcon() {
-    if (volume === 0) return <VolumeMute />;
-    else if (volume <= 0.5) return <VolumeHalf />;
-    return <VolumeFull />;
+    if (volume === 0) return faVolumeOff;
+    else if (volume <= 50) return faVolumeLow;
+    return faVolumeHigh;
   }
 
   function repeatIcon() {
     switch (playbackState?.repeat_mode) {
       case 0:
-        return <Repeat color="black" />;
+        return faRepeat;
       case 1:
         return <Repeat color="#1DB954" />;
       case 2:
@@ -122,13 +129,6 @@ function WebPlayback({ volumeInit }: { volumeInit: number }) {
         return <Repeat color="black" />;
     }
   }
-
-  const ControlButton = styled(IconButton)(
-    ({ theme }) => `
-            width: 42px;
-            height: 42px;
-        `
-  );
 
   const OtherButton = styled(IconButton)(
     ({ theme }) => `
@@ -155,6 +155,7 @@ function WebPlayback({ volumeInit }: { volumeInit: number }) {
           overflow: "hidden",
           pl: 1,
           pr: 1,
+          gap: 1,
         }}>
         <Avatar
           src={playbackState?.track_window?.current_track?.album.images[0].url}
@@ -175,9 +176,13 @@ function WebPlayback({ volumeInit }: { volumeInit: number }) {
             />
           </ScrollText>
         </Stack>
-        <OtherButton>
-          <Like />
-        </OtherButton>
+
+        <FontAwesomeIcon
+          // onClick={shuffle}
+          icon={faHeart}
+          color="#1DB954"
+          cursor="pointer"
+        />
       </Box>
       <Box
         sx={{
@@ -192,58 +197,36 @@ function WebPlayback({ volumeInit }: { volumeInit: number }) {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            gap: 3,
+            fontSize: 20,
           }}>
-          <ControlButton onClick={shuffle}>
-            <Shuffle color={playbackState?.shuffle ? "#1DB954" : "black"} />
-          </ControlButton>
-          <ControlButton onClick={() => player?.previousTrack()}>
-            <Previous color="#1DB954" />
-          </ControlButton>
-          <ControlButton onClick={() => player?.togglePlay()}>
-            {toggleIcon()}
-          </ControlButton>
-          <ControlButton onClick={() => player?.nextTrack()}>
-            <Next color="#1DB954" />
-          </ControlButton>
-          <ControlButton onClick={repeat}>{repeatIcon()}</ControlButton>
+          <FontAwesomeIcon
+            onClick={shuffle}
+            icon={faShuffle}
+            color={playbackState?.shuffle ? "#1DB954" : "black"}
+            cursor="pointer"
+          />
+          <FontAwesomeIcon
+            onClick={() => player?.previousTrack()}
+            icon={faBackwardStep}
+            cursor="pointer"
+          />
+
+          <FontAwesomeIcon
+            onClick={() => player?.togglePlay()}
+            icon={!playbackState?.paused ? faCirclePause : faCirclePlay}
+            cursor="pointer"
+          />
+
+          <FontAwesomeIcon
+            onClick={() => player?.nextTrack()}
+            icon={faForwardStep}
+            cursor="pointer"
+          />
+
+          <FontAwesomeIcon onClick={repeat} icon={faRepeat} cursor="pointer" />
         </Box>
         <Progress></Progress>
-        {/* <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: 2,
-            mb: 1,
-          }}>
-          <Typography
-            sx={{
-              color: "primary",
-              fontSize: 14,
-            }}>
-            {showTime(position)}
-          </Typography>
-          <Slider
-            size="small"
-            color="primary"
-            valueLabelDisplay="auto"
-            valueLabelFormat={getAriaValueText}
-            value={Math.floor(position / 1000)}
-            onChange={onChangePosition}
-            onChangeCommitted={onChangePositionCommitted}
-            max={
-              playbackState?.duration !== undefined
-                ? Math.floor(playbackState?.duration / 1000)
-                : 100
-            }></Slider>
-          <Typography
-            sx={{
-              color: "primary",
-              fontSize: 14,
-            }}>
-            {showTime(playbackState?.duration)}
-          </Typography>
-        </Box> */}
       </Box>
       <Box
         sx={{
@@ -253,26 +236,28 @@ function WebPlayback({ volumeInit }: { volumeInit: number }) {
           pr: 4,
           height: "100%",
           alignItems: "center",
+          gap: 2,
         }}>
-        <OtherButton onClick={() => navigate("/playing")}>
-          <PlayingList />
-        </OtherButton>
-        <OtherButton>
-          <Devices />
-        </OtherButton>
-        <OtherButton disabled={device?.status !== "ready"} onClick={mute}>
-          {volumeIcon()}
-        </OtherButton>
+        <FontAwesomeIcon
+          onClick={() => navigate("/playing")}
+          icon={faBars}
+          cursor="pointer"
+        />
+
+        <FontAwesomeIcon icon={faLaptop} cursor="pointer" />
+        <FontAwesomeIcon icon={volumeIcon()} cursor="pointer" onClick={mute} />
+
         <Slider
           sx={{
             marginLeft: "8px",
             maxWidth: 80,
+            ml: 0,
           }}
           size="small"
           valueLabelDisplay="auto"
-          value={volume * 100}
+          value={volume}
           disabled={device?.status !== "ready"}
-          defaultValue={volumeInit * 100}
+          defaultValue={volumeInit}
           onChange={changeVolume}
         />
       </Box>

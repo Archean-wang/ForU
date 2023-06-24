@@ -7,13 +7,7 @@ import Search from "./route/Search";
 import Daily from "./route/Daily";
 import Playing from "./route/Playing";
 import Playlist from "./route/Playlist";
-import {
-  getAlbum,
-  getAlbumInfo,
-  getPlayingQueue,
-  getPlaylist,
-  getPlaylistInfo,
-} from "./api";
+import { getAlbumInfo, getPlayingQueue, getPlaylistInfo } from "./api";
 import Album from "./route/Album";
 
 const router = createBrowserRouter([
@@ -27,6 +21,7 @@ const router = createBrowserRouter([
       },
       {
         index: true,
+        path: "/daily",
         element: <Daily />,
       },
       {
