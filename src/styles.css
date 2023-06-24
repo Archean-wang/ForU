@@ -1,0 +1,52 @@
+:root {
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  height: 100%;
+  color: #0f0f0f;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.scrollText {
+  position: relative;
+  &>:first-of-type {
+    animation: scroll 5s linear infinite alternate;
+  }
+}
+
+@keyframes scroll {
+    from {
+      margin-left: 0;
+      transform: translate(0, 0);
+    }
+    to {
+      margin-left: 100%;
+      transform: translate(-100%, 0);
+    }
+  }
