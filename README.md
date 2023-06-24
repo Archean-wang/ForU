@@ -1,7 +1,17 @@
-# Tauri + React + Typescript
+# ForU
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+基于Web的第三方spotify客户端
 
-## Recommended IDE Setup
+功能：
+    - 实例化一个spotify播放器
+    - 登录spotify
+    - 浏览收藏的歌单、专辑、歌手
+    - 专辑详情页
+    - 歌单详情页
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+TODO:
+    - 浏览收藏的歌曲
+    - 搜索歌曲、专辑、歌手
+    - 创建/编辑 歌单
+    - （取消）收藏 歌曲/专辑/歌手
+    - 正在播放列表
