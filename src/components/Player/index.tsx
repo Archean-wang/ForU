@@ -1,33 +1,11 @@
-import {
-  Avatar,
-  Slider,
-  IconButton,
-  Typography,
-  Box,
-  Stack,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { Avatar, Slider, Typography, Box, Stack } from "@mui/material";
 
 import {
   usePlaybackState,
   usePlayerDevice,
   useSpotifyPlayer,
 } from "react-spotify-web-playback-sdk";
-import {
-  Devices,
-  Like,
-  Next,
-  Pause,
-  Play,
-  PlayingList,
-  Previous,
-  Repeat,
-  RepeatOne,
-  Shuffle,
-  VolumeFull,
-  VolumeHalf,
-  VolumeMute,
-} from "../../icons";
+import { Repeat, RepeatOne } from "../../icons";
 import { useState } from "react";
 import { setRepeatMode, setShuffleMode, transfer } from "../../api";
 import { useNavigate } from "react-router-dom";
@@ -36,7 +14,6 @@ import Progress from "../Progress";
 import ScrollText from "../ScrollText";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faBackward,
   faBackwardStep,
   faBars,
   faCirclePause,
@@ -117,7 +94,7 @@ function WebPlayback({ volumeInit }: { volumeInit: number }) {
     return faVolumeHigh;
   }
 
-  function repeatIcon() {
+  const repeatIcon = function () {
     switch (playbackState?.repeat_mode) {
       case 0:
         return faRepeat;
@@ -128,17 +105,11 @@ function WebPlayback({ volumeInit }: { volumeInit: number }) {
       default:
         return <Repeat color="black" />;
     }
-  }
-
-  const OtherButton = styled(IconButton)(
-    ({ theme }) => `
-            width: 36px;
-            height: 36px;
-        `
-  );
+  };
 
   return (
     <Box
+      visibility={hasTransfer ? "visible" : "hidden"}
       sx={{
         height: "80px",
         display: "flex",
@@ -184,6 +155,7 @@ function WebPlayback({ volumeInit }: { volumeInit: number }) {
           cursor="pointer"
         />
       </Box>
+      {/* 中部按钮 */}
       <Box
         sx={{
           flex: 1,
@@ -191,6 +163,7 @@ function WebPlayback({ volumeInit }: { volumeInit: number }) {
           display: "flex",
           flexFlow: "column",
           justifyContent: "center",
+          gap: 1,
         }}>
         <Box
           sx={{
@@ -228,6 +201,7 @@ function WebPlayback({ volumeInit }: { volumeInit: number }) {
         </Box>
         <Progress></Progress>
       </Box>
+      {/* 右侧按钮 */}
       <Box
         sx={{
           flex: 1,

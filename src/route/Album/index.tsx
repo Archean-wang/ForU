@@ -6,17 +6,21 @@ import { showTime } from "../../utils/formatter";
 import { startPlayback } from "../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlay } from "@fortawesome/free-solid-svg-icons";
+import { useCallback } from "react";
 
 function Album() {
   const params = useParams();
   // @ts-ignore
   const { album } = useLoaderData();
 
-  function startPlay(index: number) {
-    startPlayback(album.uri, index).then(() => {
-      console.log(`${album.uri} @ ${index}`);
-    });
-  }
+  const startPlay = useCallback(
+    (index: number) => {
+      startPlayback(album.uri, index).then(() => {
+        console.log(`${album.uri} @ ${index}`);
+      });
+    },
+    [album]
+  );
   return (
     <Box
       sx={{

@@ -1,36 +1,52 @@
 import { useStore } from "../../store";
 import { getUserProfile } from "../../api";
-import { useState } from "react";
-import { getAuthCode } from "../../utils/authentication";
+import { useEffect, useState } from "react";
 import {
   Input,
   InputAdornment,
   Avatar,
-  Button,
   Box,
-  Stack,
+  IconButton,
+  Menu,
+  MenuItem,
+  ListItemIcon,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMagnifyingGlass,
+  faRightFromBracket,
+} from "@fortawesome/free-solid-svg-icons";
 
 function Header() {
   const store = useStore();
   const [avatarUrl, setAvatarUrl] = useState("");
   const [username, setUsername] = useState("");
   const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
-  if (store.loginStore.loginStore) {
-    console.log(`login status in header: ${store.loginStore.loginStore}`);
+  useEffect(() => {
+    getProfile();
+  }, [store.loginStore.loginStore]);
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
+
+  const getProfile = () => {
     getUserProfile().then((res) => {
       setAvatarUrl(res.images[0].url);
       setUsername(res.display_name);
     });
-  }
-
-  async function login() {
-    await getAuthCode();
-  }
+  };
 
   function onChange() {
     navigate("/search");
@@ -54,14 +70,30 @@ function Header() {
           </InputAdornment>
         }
       />
-      {store.loginStore.loginStore ? (
-        <Stack direction="row" alignItems="center" gap="4px">
-          <Avatar src={avatarUrl}></Avatar>
-          <label>{username}</label>
-        </Stack>
-      ) : (
-        <Button onClick={login}>登录</Button>
-      )}
+
+      <IconButton
+        onClick={handleClick}
+        title={username}
+        sx={{
+          fontSize: 16,
+          gap: 1,
+        }}>
+        <Avatar src={avatarUrl}></Avatar>
+      </IconButton>
+
+      <Menu
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
+        <MenuItem onClick={handleLogout}>
+          <ListItemIcon>
+            <FontAwesomeIcon icon={faRightFromBracket} />
+          </ListItemIcon>
+          退出
+        </MenuItem>
+      </Menu>
     </Box>
   );
 }

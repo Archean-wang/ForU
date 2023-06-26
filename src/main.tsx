@@ -9,6 +9,8 @@ import Playing from "./route/Playing";
 import Playlist from "./route/Playlist";
 import { getAlbumInfo, getPlayingQueue, getPlaylistInfo } from "./api";
 import Album from "./route/Album";
+import Login from "./route/Login";
+import Callback from "./route/Callback";
 
 const router = createBrowserRouter([
   {
@@ -52,7 +54,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/callback",
-    element: <App />,
+    element: <Callback />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
   },
 ]);
 
