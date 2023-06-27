@@ -5,8 +5,7 @@ import {
   usePlayerDevice,
   useSpotifyPlayer,
 } from "react-spotify-web-playback-sdk";
-import { Repeat, RepeatOne } from "../../icons";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { setRepeatMode, setShuffleMode, transfer } from "../../api";
 import { useNavigate } from "react-router-dom";
 import { InlineArtists } from "../InlineArtists";
@@ -28,7 +27,7 @@ import {
   faVolumeOff,
 } from "@fortawesome/free-solid-svg-icons";
 
-function WebPlayback({ volumeInit }: { volumeInit: number }) {
+function Player({ volumeInit }: { volumeInit: number }) {
   const playbackState = usePlaybackState();
   const player = useSpotifyPlayer();
   const device = usePlayerDevice();
@@ -36,13 +35,16 @@ function WebPlayback({ volumeInit }: { volumeInit: number }) {
   const [hasTransfer, setHasTransfer] = useState(false);
   const navigate = useNavigate();
 
-  if (device?.status === "ready" && !hasTransfer) {
-    console.log(device.device_id);
-    transfer(device.device_id, false).then(() => {
-      setHasTransfer(true);
-      console.log("transfer");
-    });
-  }
+  console.log(playbackState);
+
+  useEffect(() => {
+    if (device?.status === "ready" && !hasTransfer) {
+      console.log(device.device_id);
+      transfer(device.device_id, false).then(() => {
+        setHasTransfer(true);
+      });
+    }
+  }, [device?.status, hasTransfer]);
 
   function shuffle() {
     let mode = !playbackState?.shuffle;
@@ -88,24 +90,11 @@ function WebPlayback({ volumeInit }: { volumeInit: number }) {
     }
   }
 
-  function volumeIcon() {
-    if (volume === 0) return faVolumeOff;
-    else if (volume <= 50) return faVolumeLow;
+  const volumeIcon = useCallback((v: number) => {
+    if (v === 0) return faVolumeOff;
+    else if (v <= 50) return faVolumeLow;
     return faVolumeHigh;
-  }
-
-  const repeatIcon = function () {
-    switch (playbackState?.repeat_mode) {
-      case 0:
-        return faRepeat;
-      case 1:
-        return <Repeat color="#1DB954" />;
-      case 2:
-        return <RepeatOne color="#1DB954" />;
-      default:
-        return <Repeat color="black" />;
-    }
-  };
+  }, []);
 
   return (
     <Box
@@ -172,13 +161,15 @@ function WebPlayback({ volumeInit }: { volumeInit: number }) {
             alignItems: "center",
             gap: 3,
             fontSize: 20,
+            position: "relative",
           }}>
           <FontAwesomeIcon
+            opacity={playbackState?.shuffle ? 1 : 0.4}
             onClick={shuffle}
             icon={faShuffle}
-            color={playbackState?.shuffle ? "#1DB954" : "black"}
             cursor="pointer"
           />
+
           <FontAwesomeIcon
             onClick={() => player?.previousTrack()}
             icon={faBackwardStep}
@@ -197,7 +188,26 @@ function WebPlayback({ volumeInit }: { volumeInit: number }) {
             cursor="pointer"
           />
 
-          <FontAwesomeIcon onClick={repeat} icon={faRepeat} cursor="pointer" />
+          <Box
+            sx={{
+              position: "relative",
+              "&::after": {
+                content: '"1"',
+                fontSize: "1px",
+                fontWeight: "bold",
+                display: playbackState?.repeat_mode === 2 ? "inherit" : "none",
+                position: "absolute",
+                right: -5,
+                top: -6,
+              },
+            }}>
+            <FontAwesomeIcon
+              onClick={repeat}
+              icon={faRepeat}
+              cursor="pointer"
+              opacity={playbackState?.repeat_mode === 0 ? 0.4 : 1}
+            />
+          </Box>
         </Box>
         <Progress></Progress>
       </Box>
@@ -219,7 +229,11 @@ function WebPlayback({ volumeInit }: { volumeInit: number }) {
         />
 
         <FontAwesomeIcon icon={faLaptop} cursor="pointer" />
-        <FontAwesomeIcon icon={volumeIcon()} cursor="pointer" onClick={mute} />
+        <FontAwesomeIcon
+          icon={volumeIcon(volume)}
+          cursor="pointer"
+          onClick={mute}
+        />
 
         <Slider
           sx={{
@@ -239,4 +253,4 @@ function WebPlayback({ volumeInit }: { volumeInit: number }) {
   );
 }
 
-export default WebPlayback;
+export default Player;

@@ -1,6 +1,5 @@
 import { useStore } from "../../store";
-import { getUserProfile } from "../../api";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Input,
   InputAdornment,
@@ -10,25 +9,23 @@ import {
   Menu,
   MenuItem,
   ListItemIcon,
+  Stack,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useRouteLoaderData } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faAngleLeft,
+  faAngleRight,
   faMagnifyingGlass,
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 
 function Header() {
-  const store = useStore();
-  const [avatarUrl, setAvatarUrl] = useState("");
-  const [username, setUsername] = useState("");
+  // @ts-ignore
+  const { userProfile } = useRouteLoaderData("root");
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-
-  useEffect(() => {
-    getProfile();
-  }, [store.loginStore.loginStore]);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -39,13 +36,6 @@ function Header() {
   const handleLogout = () => {
     localStorage.clear();
     navigate("/login");
-  };
-
-  const getProfile = () => {
-    getUserProfile().then((res) => {
-      setAvatarUrl(res.images[0].url);
-      setUsername(res.display_name);
-    });
   };
 
   function onChange() {
@@ -59,12 +49,25 @@ function Header() {
         height: "60px",
         justifyContent: "space-between",
         alignItems: "center",
-        paddingRight: "20px",
+        pr: 2,
+        pl: 2,
       }}>
+      <Stack direction="row" sx={{ gap: 2 }}>
+        <FontAwesomeIcon
+          icon={faAngleLeft}
+          cursor="pointer"
+          onClick={() => navigate(-1)}
+        />
+        <FontAwesomeIcon
+          icon={faAngleRight}
+          cursor="pointer"
+          onClick={() => navigate(1)}
+        />
+      </Stack>
       <Input
         placeholder="搜索"
         onChange={onChange}
-        startAdornment={
+        endAdornment={
           <InputAdornment position="start">
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </InputAdornment>
@@ -73,12 +76,12 @@ function Header() {
 
       <IconButton
         onClick={handleClick}
-        title={username}
+        title={userProfile.display_name}
         sx={{
           fontSize: 16,
           gap: 1,
         }}>
-        <Avatar src={avatarUrl}></Avatar>
+        <Avatar src={userProfile.images[0].url}></Avatar>
       </IconButton>
 
       <Menu

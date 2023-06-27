@@ -36,6 +36,18 @@ async function getArtists() {
     }
 }
 
+async function getTracks() {
+    try {
+        const res = await http.get("/me/tracks");
+        if (res.status === 200)
+            return res.data;
+        console.warn(`Error when get tracks: ${res.data}`);
+    }
+    catch (err) {
+        console.error(`Error when get tracks: ${err}`);
+    }
+}
+
 async function getUserProfile() {
     try {
         const res = await http.get("/me");
@@ -52,7 +64,7 @@ async function transfer(device_id: string, play: boolean) {
     try {
         const res = await http.put("/me/player",
             { device_ids: [device_id], play: play });
-        if (res.status === 204)
+        if (res.status === 202)
             return res.data;
         console.warn(`Error when transfer: ${res.data}`);
     }
@@ -64,7 +76,7 @@ async function transfer(device_id: string, play: boolean) {
 async function setRepeatMode(mode: string, device_id: string | undefined) {
     try {
         const res = await http.put(`/me/player/repeat?state=${mode}`);
-        if (res.status !== 204) {
+        if (res.status >= 300) {
             console.warn(`Error when set repeat mode: ${res.data}`);
             return false;
         }
@@ -78,7 +90,7 @@ async function setRepeatMode(mode: string, device_id: string | undefined) {
 async function setShuffleMode(mode: boolean, device_id: string | undefined) {
     try {
         const res = await http.put(`/me/player/shuffle?state=${mode}`);
-        if (res.status !== 204) {
+        if (res.status >= 300) {
             console.warn(`Error when set shuffle mode: ${res.data}`);
             return false;
         }
@@ -185,7 +197,7 @@ async function getAlbumInfo(aid: string) {
     }
 }
 
-export { getUserProfile, getPlaylists, transfer, getArtists, getAlbums,
+export { getUserProfile, getPlaylists, getTracks, transfer, getArtists, getAlbums,
     setRepeatMode, setShuffleMode, getPlayingQueue, getPlaybackState, startPlayback,
     getPlaylist, getPlaylistInfo, getAlbum, getAlbumInfo
  }

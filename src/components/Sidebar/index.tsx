@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { getAlbums, getArtists, getPlaylists } from "../../api";
-import { AlbumIcon, ArtistIcon, PlaylistIcon } from "../../icons";
 import {
   Avatar,
   List,
@@ -13,13 +11,12 @@ import {
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useRouteLoaderData } from "react-router-dom";
 import { Artist, Playlist, SavedAlbum } from "../../utils/interface";
 import {
   faAngleDown,
   faAngleUp,
   faCompactDisc,
-  faFloppyDisk,
   faHeadphonesSimple,
   faHeart,
   faHouse,
@@ -27,9 +24,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 function Sidebar() {
-  const [playlists, setPlaylists] = useState([]);
-  const [artists, setArtists] = useState([]);
-  const [albums, setAlbums] = useState([]);
+  // @ts-ignore
+  const { playlistsRes, artistsRes, albumsRes } = useRouteLoaderData("root");
+  const playlists = playlistsRes.items;
+  const artists = artistsRes.artists.items;
+  const albums = albumsRes.items;
 
   const [playlistsOpen, setPlaylistsOpen] = useState(false);
   const [artistsOpen, setArtistsOpen] = useState(false);
@@ -77,31 +76,6 @@ function Sidebar() {
     </ListItemButton>
   ));
 
-  function onClick(n: number) {
-    if (n === 0) {
-      setPlaylistsOpen(!playlistsOpen);
-      if (!playlistsOpen) {
-        getPlaylists().then((res) => {
-          if (res.items) setPlaylists(res.items);
-        });
-      }
-    } else if (n === 1) {
-      setArtistsOpen(!artistsOpen);
-      if (!artistsOpen) {
-        getArtists().then((res) => {
-          if (res.artists.items) setArtists(res.artists.items);
-        });
-      }
-    } else {
-      setAlbumsOpen(!albumsOpen);
-      if (!albumsOpen) {
-        getAlbums().then((res) => {
-          if (res.items) setAlbums(res.items);
-        });
-      }
-    }
-  }
-
   return (
     <Box
       sx={{
@@ -120,7 +94,7 @@ function Sidebar() {
           </ListItemIcon>
           <ListItemText primary="主页" />
         </ListItemButton>
-        <ListItemButton divider>
+        <ListItemButton divider onClick={() => navigate("/loved")}>
           <ListItemIcon
             sx={{
               alignItems: "center",
@@ -138,7 +112,7 @@ function Sidebar() {
         component="nav"
         subheader={<ListSubheader component="div">我的音乐库</ListSubheader>}
         dense>
-        <ListItemButton onClick={() => onClick(0)}>
+        <ListItemButton onClick={() => setPlaylistsOpen(!playlistsOpen)}>
           <ListItemIcon
             sx={{
               alignItems: "center",
@@ -157,7 +131,7 @@ function Sidebar() {
             {playlistsList}
           </List>
         </Collapse>
-        <ListItemButton onClick={() => onClick(1)}>
+        <ListItemButton onClick={() => setArtistsOpen(!artistsOpen)}>
           <ListItemIcon
             sx={{
               alignItems: "center",
@@ -176,7 +150,7 @@ function Sidebar() {
             {artistsList}
           </List>
         </Collapse>
-        <ListItemButton onClick={() => onClick(2)}>
+        <ListItemButton onClick={() => setAlbumsOpen(!albumsOpen)}>
           <ListItemIcon
             sx={{
               alignItems: "center",

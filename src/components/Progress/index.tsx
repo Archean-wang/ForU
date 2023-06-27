@@ -57,7 +57,7 @@ function Progress() {
         justifyContent: "center",
         alignItems: "center",
         gap: 2,
-        mb: 1,
+        // mb: 1,
       }}>
       <Typography
         noWrap

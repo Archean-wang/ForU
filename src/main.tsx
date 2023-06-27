@@ -7,15 +7,46 @@ import Search from "./route/Search";
 import Daily from "./route/Daily";
 import Playing from "./route/Playing";
 import Playlist from "./route/Playlist";
-import { getAlbumInfo, getPlayingQueue, getPlaylistInfo } from "./api";
+import {
+  getAlbumInfo,
+  getAlbums,
+  getArtists,
+  getPlayingQueue,
+  getPlaylistInfo,
+  getPlaylists,
+  getTracks,
+  getUserProfile,
+} from "./api";
 import Album from "./route/Album";
 import Login from "./route/Login";
 import Callback from "./route/Callback";
+import ErrorPage from "./route/ErrorPage";
+import Loved from "./route/Loved";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <ErrorPage />,
+    id: "root",
+    loader: async () => {
+      try {
+        const playlistsRes = await getPlaylists();
+        const albumsRes = await getAlbums();
+        const artistsRes = await getArtists();
+        const tracksRes = await getTracks();
+        const userProfile = await getUserProfile();
+        return {
+          playlistsRes,
+          albumsRes,
+          artistsRes,
+          tracksRes,
+          userProfile,
+        };
+      } catch (err) {
+        console.log(`Error when get user library: ${err}`);
+      }
+    },
     children: [
       {
         path: "/search",
@@ -49,6 +80,10 @@ const router = createBrowserRouter([
           const album = await getAlbumInfo(params.id as string);
           return { album };
         },
+      },
+      {
+        path: "/loved",
+        element: <Loved />,
       },
     ],
   },
