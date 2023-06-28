@@ -49,7 +49,7 @@ function Player({ volumeInit }: { volumeInit: number }) {
   const hasTransfer = playbackState?.track_window.current_track;
   const navigate = useNavigate();
   const [isLove, setIsLove] = useState(false);
-  const currentId = playbackState?.track_window.current_track.id;
+  const currentId = playbackState?.track_window.current_track?.id;
 
   console.log(playbackState);
 
@@ -301,6 +301,12 @@ function Player({ volumeInit }: { volumeInit: number }) {
             marginLeft: "8px",
             maxWidth: 80,
             ml: 0,
+            "& .MuiSlider-thumb": {
+              display: "none",
+            },
+            "&:hover .MuiSlider-thumb": {
+              display: "block",
+            },
           }}
           size="small"
           valueLabelDisplay="auto"

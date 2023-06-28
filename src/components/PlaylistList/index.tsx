@@ -11,7 +11,7 @@ function PlaylistList({ playlists }: { playlists: Playlist[] }) {
         height: "100%",
         gap: 4,
         padding: 4,
-        overflow: "overlap",
+        overflow: "auto",
         flexWrap: "wrap",
         display: "flex",
       }}>

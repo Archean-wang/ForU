@@ -26,9 +26,9 @@ import {
 function Sidebar() {
   // @ts-ignore
   const { playlistsRes, artistsRes, albumsRes } = useRouteLoaderData("root");
-  const playlists = playlistsRes.items;
-  const artists = artistsRes.artists.items;
-  const albums = albumsRes.items;
+  const playlists = playlistsRes?.items;
+  const artists = artistsRes?.artists.items;
+  const albums = albumsRes?.items;
 
   const [playlistsOpen, setPlaylistsOpen] = useState(false);
   const [artistsOpen, setArtistsOpen] = useState(false);
@@ -36,7 +36,7 @@ function Sidebar() {
 
   const navigate = useNavigate();
 
-  const playlistsList = playlists.map((pl: Playlist) => (
+  const playlistsList = playlists?.map((pl: Playlist) => (
     <ListItemButton
       sx={{ pl: 4 }}
       key={pl.id}
@@ -48,7 +48,7 @@ function Sidebar() {
     </ListItemButton>
   ));
 
-  const artistsList = artists.map((ar: Artist) => (
+  const artistsList = artists?.map((ar: Artist) => (
     <ListItemButton
       sx={{ pl: 4 }}
       key={ar.id}
@@ -60,7 +60,7 @@ function Sidebar() {
     </ListItemButton>
   ));
 
-  const albumsList = albums.map((al: SavedAlbum) => (
+  const albumsList = albums?.map((al: SavedAlbum) => (
     <ListItemButton
       sx={{ pl: 4 }}
       key={al.album.id}
@@ -86,7 +86,7 @@ function Sidebar() {
         // borderRight: " solid 8px grey",
       }}>
       <List dense>
-        <ListItemButton onClick={() => navigate("/daily")}>
+        <ListItemButton onClick={() => navigate("/")}>
           <ListItemIcon
             sx={{
               alignItems: "center",

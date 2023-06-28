@@ -35,7 +35,6 @@ function Song({ track, index }: { track: any; index: number }) {
           flex: 1,
         }}>
         <InlineArtists artists={track.artists} />
-        {/* {showArtists(track.artists)} */}
       </Box>
       <Typography noWrap={true} sx={{ flex: 1, color: "grey" }}>
         <Link to={`/album/${track.album.id}`}>{track.album.name}</Link>

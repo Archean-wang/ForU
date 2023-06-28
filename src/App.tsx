@@ -43,7 +43,7 @@ function App() {
     });
   }
 
-  return (
+  return store.loginStore.loginStore ? (
     <Box
       sx={{
         overflow: "hidden",
@@ -59,6 +59,8 @@ function App() {
         </WebPlaybackSDK>
       )}
     </Box>
+  ) : (
+    <></>
   );
 }
 

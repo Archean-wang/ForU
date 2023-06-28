@@ -7,12 +7,13 @@ import {
   TableBody,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-
-import { startPlayback } from "../../api";
+import { useEffect, useState } from "react";
 
 const Cell = styled(TableCell)(
   ({ theme }) => `
-            border: 0
+            border: 0;
+            max-width: 200px;
+            overflow: hidden;
         `
 );
 
@@ -45,6 +46,9 @@ export default function SongList({
         borderRadius: 2,
         bgcolor: "#f3f2f1",
         overflow: "auto",
+        // "&::-webkit-scrollbar": {
+        //   display: "none",
+        // },
       }}>
       <Table padding="normal" size="small">
         <TableHead sx={{ width: "100%" }}>
@@ -62,6 +66,7 @@ export default function SongList({
             <TableRow
               key={rowKey(item)}
               hover
+              onContextMenu={() => {}}
               onDoubleClick={() => handDoubleClick(index)}>
               <Cell component="th" scope="row">
                 {index + 1}

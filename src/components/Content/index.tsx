@@ -7,6 +7,8 @@ function Content() {
     <Box
       sx={{
         flex: 1,
+        minWidth: 400,
+        overflow: "auto",
         height: "100%",
       }}>
       <Header></Header>

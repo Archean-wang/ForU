@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import React, { ReactElement, useEffect, useRef, useState } from "react";
+import { ReactElement, useEffect, useRef, useState } from "react";
 
 function ScrollText({ children }: { children: ReactElement }) {
   const ref = useRef(null);

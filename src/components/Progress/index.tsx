@@ -6,7 +6,7 @@ import {
   useSpotifyPlayer,
 } from "react-spotify-web-playback-sdk";
 
-function getAriaValueText(value: number, index: number) {
+function getAriaValueText(value: number) {
   return showTime(value * 1000);
 }
 
@@ -68,7 +68,15 @@ function Progress() {
         {showTime(position)}
       </Typography>
       <Slider
-        sx={{ flex: 1 }}
+        sx={{
+          flex: 1,
+          "& .MuiSlider-thumb": {
+            display: "none",
+          },
+          "&:hover .MuiSlider-thumb": {
+            display: "block",
+          },
+        }}
         size="small"
         color="primary"
         valueLabelDisplay="auto"

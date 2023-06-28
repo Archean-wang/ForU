@@ -1,5 +1,3 @@
-import { redirect } from "react-router-dom";
-
 const clientID = "e04e58aec96244b686b4c7e71933b798";
 function generateRandomString(length: number) {
     let text = '';

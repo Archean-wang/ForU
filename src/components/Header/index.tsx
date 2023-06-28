@@ -46,8 +46,10 @@ function Header() {
   return (
     <Box
       sx={{
+        width: "100%",
         display: "flex",
         height: "60px",
+        overflow: "hidden",
         justifyContent: "space-between",
         alignItems: "center",
         pr: 4,
@@ -77,12 +79,12 @@ function Header() {
 
       <IconButton
         onClick={handleClick}
-        title={userProfile.display_name}
+        title={userProfile?.display_name}
         sx={{
           fontSize: 16,
           gap: 1,
         }}>
-        <Avatar src={userProfile.images[0].url}></Avatar>
+        <Avatar src={userProfile?.images[0].url}></Avatar>
       </IconButton>
 
       <Menu
