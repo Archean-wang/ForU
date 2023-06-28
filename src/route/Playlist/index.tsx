@@ -1,4 +1,4 @@
-import { Link, useLoaderData, useParams } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import SongList from "../../components/SongList";
 import { Avatar, Box, Button, Typography } from "@mui/material";
 import { InlineArtists } from "../../components/InlineArtists";
@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlay } from "@fortawesome/free-solid-svg-icons";
 
 function Playlist() {
-  const params = useParams();
   // @ts-ignore
   const { playlist } = useLoaderData();
   function startPlay(index: number) {
@@ -19,7 +18,9 @@ function Playlist() {
   return (
     <Box
       sx={{
-        margin: 4,
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
       }}>
       <Box
         sx={{
@@ -44,11 +45,13 @@ function Playlist() {
             flexDirection: "column",
             gap: 1,
           }}>
-          <Typography sx={{ fontSize: 32 }}>{playlist.name}</Typography>
-          <Typography sx={{ fontSize: 14 }}>
+          <Typography noWrap sx={{ fontSize: 32 }}>
+            {playlist.name}
+          </Typography>
+          <Typography noWrap sx={{ fontSize: 14 }}>
             详情：{playlist.description ? playlist.description : "暂无"}
           </Typography>
-          <Typography sx={{ fontSize: 14 }}>
+          <Typography noWrap sx={{ fontSize: 14 }}>
             曲目： {playlist.tracks.items.length}首
           </Typography>
           <Button
@@ -65,48 +68,54 @@ function Playlist() {
           </Button>
         </Box>
       </Box>
-      <SongList
-        rowKey={(v) => v.track.id}
-        items={playlist.tracks.items}
-        uri={`spotify:playlist:${params.id}`}
-        columns={[
-          {
-            header: "歌名",
-            field: "track",
-            render: (v) => v.name,
-          },
-          {
-            header: "歌手",
-            field: "track",
-            render: (v) => <InlineArtists artists={v.artists}></InlineArtists>,
-          },
-          {
-            header: "专辑",
-            field: "track",
-            render: (v) => (
-              <Typography
-                noWrap={true}
-                sx={{ flex: 1, color: "grey", fontSize: 14 }}>
-                <Link to={`/album/${v.album.id}`}>{v.album.name}</Link>
-              </Typography>
-            ),
-          },
-          {
-            header: "时长",
-            field: "track",
-            render: (v) => (
-              <Typography
-                noWrap={true}
-                width={80}
-                sx={{
-                  color: "grey",
-                }}>
-                {showTime(v.duration_ms)}
-              </Typography>
-            ),
-          },
-        ]}
-      />
+      <Box sx={{ flex: 1, overflow: "hidden" }}>
+        <SongList
+          rowKey={(v) => v.track.id}
+          items={playlist.tracks.items}
+          handDoubleClick={(n) => {
+            startPlayback(playlist.uri, n);
+          }}
+          columns={[
+            {
+              header: "歌名",
+              field: "track",
+              render: (v) => <Typography noWrap>{v.name}</Typography>,
+            },
+            {
+              header: "歌手",
+              field: "track",
+              render: (v) => (
+                <InlineArtists artists={v.artists}></InlineArtists>
+              ),
+            },
+            {
+              header: "专辑",
+              field: "track",
+              render: (v) => (
+                <Typography
+                  noWrap={true}
+                  sx={{ flex: 1, color: "grey", fontSize: 14 }}>
+                  <Link to={`/album/${v.album.id}`}>{v.album.name}</Link>
+                </Typography>
+              ),
+            },
+            {
+              header: "时长",
+              field: "track",
+              render: (v) => (
+                <Typography
+                  noWrap={true}
+                  width={80}
+                  sx={{
+                    color: "grey",
+                  }}>
+                  {showTime(v.duration_ms)}
+                </Typography>
+              ),
+            },
+          ]}
+        />
+      </Box>
     </Box>
   );
 }

@@ -80,9 +80,10 @@ function Sidebar() {
     <Box
       sx={{
         width: "100%",
-        maxWidth: 280,
-        minWidth: 150,
+        maxWidth: 240,
+        minWidth: 240,
         overflowY: "auto",
+        // borderRight: " solid 8px grey",
       }}>
       <List dense>
         <ListItemButton onClick={() => navigate("/daily")}>

@@ -24,7 +24,9 @@ function Album() {
   return (
     <Box
       sx={{
-        margin: 4,
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
       }}>
       <Box
         sx={{
@@ -49,12 +51,14 @@ function Album() {
             flexDirection: "column",
             gap: 1,
           }}>
-          <Typography sx={{ fontSize: 32 }}>{album.name}</Typography>
+          <Typography noWrap sx={{ fontSize: 32 }}>
+            {album.name}
+          </Typography>
           <InlineArtists fontSize={20} artists={album.artists}></InlineArtists>
-          <Typography sx={{ fontSize: 14 }}>
+          <Typography noWrap sx={{ fontSize: 14 }}>
             发行时间：{album.release_date}
           </Typography>
-          <Typography sx={{ fontSize: 14 }}>
+          <Typography noWrap sx={{ fontSize: 14 }}>
             曲目： {album.total_tracks}首
           </Typography>
           <Button
@@ -71,37 +75,41 @@ function Album() {
           </Button>
         </Box>
       </Box>
-      <SongList
-        rowKey={(v) => v.id}
-        items={album.tracks.items}
-        uri={`spotify:album:${params.id}`}
-        columns={[
-          {
-            header: "歌名",
-            field: "name",
-            render: undefined,
-          },
-          {
-            header: "歌手",
-            field: "artists",
-            render: (v) => <InlineArtists artists={v}></InlineArtists>,
-          },
-          {
-            header: "时长",
-            field: "duration_ms",
-            render: (v) => (
-              <Typography
-                noWrap={true}
-                width={80}
-                sx={{
-                  color: "grey",
-                }}>
-                {showTime(v)}
-              </Typography>
-            ),
-          },
-        ]}
-      />
+      <Box sx={{ flex: 1, overflow: "hidden" }}>
+        <SongList
+          rowKey={(v) => v.id}
+          items={album.tracks.items}
+          handDoubleClick={(n) => {
+            startPlayback(album.uri, n);
+          }}
+          columns={[
+            {
+              header: "歌名",
+              field: "name",
+              render: undefined,
+            },
+            {
+              header: "歌手",
+              field: "artists",
+              render: (v) => <InlineArtists artists={v}></InlineArtists>,
+            },
+            {
+              header: "时长",
+              field: "duration_ms",
+              render: (v) => (
+                <Typography
+                  noWrap={true}
+                  width={80}
+                  sx={{
+                    color: "grey",
+                  }}>
+                  {showTime(v)}
+                </Typography>
+              ),
+            },
+          ]}
+        />
+      </Box>
     </Box>
   );
 }

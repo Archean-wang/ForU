@@ -44,7 +44,10 @@ function App() {
   }
 
   return (
-    <Box sx={{ overflow: "auto" }}>
+    <Box
+      sx={{
+        overflow: "hidden",
+      }}>
       <Main />
       {store.loginStore.loginStore && (
         /* @ts-ignore */

@@ -7,11 +7,16 @@ function Content() {
     <Box
       sx={{
         flex: 1,
-        display: "flex",
-        flexDirection: "column",
+        height: "100%",
       }}>
       <Header></Header>
-      <Box sx={{ flex: 1, overflow: "auto" }}>
+      <Box
+        sx={{
+          width: "100%",
+          padding: 4,
+          height: "calc(100% - 60px)",
+          overflow: "hidden",
+        }}>
         <Outlet></Outlet>
       </Box>
     </Box>

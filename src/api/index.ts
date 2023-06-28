@@ -36,15 +36,51 @@ async function getArtists() {
     }
 }
 
-async function getTracks() {
+async function getTracks(offset=0) {
     try {
-        const res = await http.get("/me/tracks");
+        const res = await http.get("/me/tracks", { params: { limit: 50, offset } });
         if (res.status === 200)
             return res.data;
         console.warn(`Error when get tracks: ${res.data}`);
     }
     catch (err) {
         console.error(`Error when get tracks: ${err}`);
+    }
+}
+
+async function checkTracks(ids:string) {
+    try {
+        const res = await http.get("/me/tracks/contains", { params: { ids} });
+        if (res.status === 200)
+            return res.data;
+        console.warn(`Error when check tracks: ${res.data}`);
+    }
+    catch (err) {
+        console.error(`Error when check tracks: ${err}`);
+    }
+}
+
+async function loveTracks(ids:string) {
+    try {
+        const res = await http.put(`/me/tracks?ids=${ids}`);
+        if (res.status === 200)
+            return res.data;
+        console.warn(`Error when love tracks: ${res.data}`);
+    }
+    catch (err) {
+        console.error(`Error when love tracks: ${err}`);
+    }
+}
+
+async function unloveTracks(ids:string) {
+    try {
+        const res = await http.delete(`/me/tracks?ids=${ids}`);
+        if (res.status === 200)
+            return res.data;
+        console.warn(`Error when unlove tracks: ${res.data}`);
+    }
+    catch (err) {
+        console.error(`Error when unlove tracks: ${err}`);
     }
 }
 
@@ -129,11 +165,26 @@ async function getPlaybackState() {
     }
 }
 
-async function startPlayback(context_uri: string, offset: number | string, position_ms: number=0) {
+async function startPlayback(context_uri: string, offset: number | string=0, position_ms: number=0) {
     try {
         let off = typeof offset === "number" ? {position: offset} : {uri: offset}
         const res = await http.put(`/me/player/play`, {
             context_uri: context_uri, offset: off, position_ms: position_ms
+        });
+        if (res.status !== 204) {
+            console.warn(`Error when get start state: ${res.data}`);
+        }
+        return res.data;
+    }
+    catch (err) {
+        console.error(`Error when get start state: ${err}`);
+    }
+}
+
+async function playTracks(uris:string[], position_ms: number=0) {
+    try {
+        const res = await http.put(`/me/player/play`, {
+            uris, position_ms: position_ms
         });
         if (res.status !== 204) {
             console.warn(`Error when get start state: ${res.data}`);
@@ -155,6 +206,19 @@ async function getPlaylist(pid: string) {
     }
     catch(err) {
         console.error(`Error when get playlist tracks: ${pid}, ${err}`)
+    }
+}
+
+async function search(kw: string, type:string="track,artist,album,playlist") {
+    try {
+        const res = await http.get(`/search`, {params: {q: kw, type}})
+        if (res.status!=200) {
+            console.error(`Error when search: ${res.data}`)
+        }
+        return res.data;
+    }
+    catch(err) {
+        console.error(`Error when search: ${err}`)
     }
 }
 
@@ -197,7 +261,46 @@ async function getAlbumInfo(aid: string) {
     }
 }
 
-export { getUserProfile, getPlaylists, getTracks, transfer, getArtists, getAlbums,
-    setRepeatMode, setShuffleMode, getPlayingQueue, getPlaybackState, startPlayback,
-    getPlaylist, getPlaylistInfo, getAlbum, getAlbumInfo
+async function getArtistTop(aid: string, country:string="HK") {
+    try {
+        const res = await http.get(`/artists/${aid}/top-tracks`, {params: {market: country}})
+        if (res.status!=200) {
+            console.error(`Error when get artist top: ${aid}, ${res.data}`)
+        }
+        return res.data;
+    }
+    catch(err) {
+        console.error(`Error when get artist top: ${aid}, ${err}`)
+    }
+}
+
+async function getArtistAlbums(aid: string) {
+    try {
+        const res = await http.get(`/artists/${aid}/albums`)
+        if (res.status!=200) {
+            console.error(`Error when get artist albums: ${aid}, ${res.data}`)
+        }
+        return res.data;
+    }
+    catch(err) {
+        console.error(`Error when get artist albums: ${aid}, ${err}`)
+    }
+}
+
+async function getRelatedArtist(aid: string) {
+    try {
+        const res = await http.get(`/artists/${aid}/related-artists`)
+        if (res.status!=200) {
+            console.error(`Error when get artist related-artists: ${aid}, ${res.data}`)
+        }
+        return res.data;
+    }
+    catch(err) {
+        console.error(`Error when get artist related-artists: ${aid}, ${err}`)
+    }
+}
+
+export { getUserProfile, getPlaylists, getTracks, checkTracks, loveTracks, search, unloveTracks ,transfer, getArtists, getAlbums,
+    setRepeatMode, setShuffleMode, getPlayingQueue, getPlaybackState, startPlayback,playTracks,
+    getPlaylist, getPlaylistInfo, getAlbum, getAlbumInfo, getArtistTop, getArtistAlbums, getRelatedArtist
  }

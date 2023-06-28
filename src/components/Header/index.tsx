@@ -1,4 +1,3 @@
-import { useStore } from "../../store";
 import { useState } from "react";
 import {
   Input,
@@ -38,8 +37,10 @@ function Header() {
     navigate("/login");
   };
 
-  function onChange() {
-    navigate("/search");
+  function onChange(
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) {
+    if (e.target.value) navigate(`/search/${e.target.value}`);
   }
 
   return (
@@ -49,8 +50,8 @@ function Header() {
         height: "60px",
         justifyContent: "space-between",
         alignItems: "center",
-        pr: 2,
-        pl: 2,
+        pr: 4,
+        pl: 4,
       }}>
       <Stack direction="row" sx={{ gap: 2 }}>
         <FontAwesomeIcon

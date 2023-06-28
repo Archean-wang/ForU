@@ -8,6 +8,7 @@ interface Album {
     name: string
     id: string
     images: Image[]
+    release_date: string
   }
   
 interface Track {

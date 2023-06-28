@@ -10,18 +10,23 @@ import Playlist from "./route/Playlist";
 import {
   getAlbumInfo,
   getAlbums,
+  getArtistAlbums,
+  getArtistTop,
   getArtists,
   getPlayingQueue,
   getPlaylistInfo,
   getPlaylists,
+  getRelatedArtist,
   getTracks,
   getUserProfile,
+  search,
 } from "./api";
 import Album from "./route/Album";
 import Login from "./route/Login";
 import Callback from "./route/Callback";
 import ErrorPage from "./route/ErrorPage";
 import Loved from "./route/Loved";
+import Artist from "./route/Artist";
 
 const router = createBrowserRouter([
   {
@@ -34,13 +39,11 @@ const router = createBrowserRouter([
         const playlistsRes = await getPlaylists();
         const albumsRes = await getAlbums();
         const artistsRes = await getArtists();
-        const tracksRes = await getTracks();
         const userProfile = await getUserProfile();
         return {
           playlistsRes,
           albumsRes,
           artistsRes,
-          tracksRes,
           userProfile,
         };
       } catch (err) {
@@ -49,8 +52,12 @@ const router = createBrowserRouter([
     },
     children: [
       {
-        path: "/search",
+        path: "/search/:kw",
         element: <Search />,
+        loader: async ({ params }: { params: Params }) => {
+          const searchResult = await search(params.kw as string);
+          return { searchResult };
+        },
       },
       {
         index: true,
@@ -82,8 +89,22 @@ const router = createBrowserRouter([
         },
       },
       {
+        path: "/artist/:id",
+        element: <Artist />,
+        loader: async ({ params }: { params: Params }) => {
+          const albums = await getArtistAlbums(params.id as string);
+          const hotTracks = await getArtistTop(params.id as string);
+          const relatedArtists = await getRelatedArtist(params.id as string);
+          return { hotTracks, albums, relatedArtists };
+        },
+      },
+      {
         path: "/loved",
         element: <Loved />,
+        loader: async () => {
+          const tracksRes = await getTracks();
+          return { tracksRes };
+        },
       },
     ],
   },

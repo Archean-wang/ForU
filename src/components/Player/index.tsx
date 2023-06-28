@@ -1,4 +1,11 @@
-import { Avatar, Slider, Typography, Box, Stack } from "@mui/material";
+import {
+  Avatar,
+  Slider,
+  Typography,
+  Box,
+  Stack,
+  Skeleton,
+} from "@mui/material";
 
 import {
   usePlaybackState,
@@ -6,7 +13,14 @@ import {
   useSpotifyPlayer,
 } from "react-spotify-web-playback-sdk";
 import { useCallback, useEffect, useState } from "react";
-import { setRepeatMode, setShuffleMode, transfer } from "../../api";
+import {
+  checkTracks,
+  loveTracks,
+  setRepeatMode,
+  setShuffleMode,
+  transfer,
+  unloveTracks,
+} from "../../api";
 import { useNavigate } from "react-router-dom";
 import { InlineArtists } from "../InlineArtists";
 import Progress from "../Progress";
@@ -32,8 +46,10 @@ function Player({ volumeInit }: { volumeInit: number }) {
   const player = useSpotifyPlayer();
   const device = usePlayerDevice();
   const [volume, setVolume] = useState(volumeInit);
-  const [hasTransfer, setHasTransfer] = useState(false);
+  const hasTransfer = playbackState?.track_window.current_track;
   const navigate = useNavigate();
+  const [isLove, setIsLove] = useState(false);
+  const currentId = playbackState?.track_window.current_track.id;
 
   console.log(playbackState);
 
@@ -41,10 +57,22 @@ function Player({ volumeInit }: { volumeInit: number }) {
     if (device?.status === "ready" && !hasTransfer) {
       console.log(device.device_id);
       transfer(device.device_id, false).then(() => {
-        setHasTransfer(true);
+        // setHasTransfer(true);
       });
     }
   }, [device?.status, hasTransfer]);
+
+  useEffect(() => {
+    check();
+  }, [currentId]);
+
+  function check() {
+    if (currentId) {
+      checkTracks(currentId).then((res) => {
+        res[0] ? setIsLove(true) : setIsLove(false);
+      });
+    }
+  }
 
   function shuffle() {
     let mode = !playbackState?.shuffle;
@@ -62,11 +90,7 @@ function Player({ volumeInit }: { volumeInit: number }) {
     });
   }
 
-  function changeVolume(
-    e: Event,
-    value: number | Array<number>,
-    activeThumb: number
-  ) {
+  function changeVolume(e: Event, value: number | Array<number>) {
     if (typeof value === "number") {
       const v = value / 100;
       player?.setVolume(v).then(() => {
@@ -96,9 +120,21 @@ function Player({ volumeInit }: { volumeInit: number }) {
     return faVolumeHigh;
   }, []);
 
+  const handLove = () => {
+    if (!currentId) return;
+    if (isLove) {
+      unloveTracks(currentId).then(() => {
+        setIsLove(false);
+      });
+    } else {
+      loveTracks(currentId).then(() => {
+        setIsLove(true);
+      });
+    }
+  };
+
   return (
     <Box
-      visibility={hasTransfer ? "visible" : "hidden"}
       sx={{
         height: "80px",
         display: "flex",
@@ -113,34 +149,59 @@ function Player({ volumeInit }: { volumeInit: number }) {
           display: "flex",
           alignItems: "center",
           overflow: "hidden",
+          minWidth: 58,
           pl: 1,
           pr: 1,
           gap: 1,
         }}>
-        <Avatar
-          src={playbackState?.track_window?.current_track?.album.images[0].url}
-          variant="rounded"
-          sx={{ width: 56, height: 56 }}
-        />
-        <Stack sx={{ overflow: "hidden", gap: 1 }}>
-          <ScrollText>
-            <Typography align={"left"} noWrap={true} fontSize={14}>
-              {playbackState?.track_window.current_track?.name}
-            </Typography>
-          </ScrollText>
+        {hasTransfer ? (
+          <Avatar
+            src={
+              playbackState?.track_window?.current_track?.album.images[0].url
+            }
+            variant="rounded"
+            sx={{ width: 56, height: 56 }}
+          />
+        ) : (
+          <Skeleton variant="rounded" animation="wave" width={56} height={56} />
+        )}
 
-          <ScrollText>
-            <InlineArtists
-              fontSize={12}
-              artists={playbackState?.track_window.current_track?.artists}
+        <Stack sx={{ overflow: "hidden", gap: 1 }}>
+          {hasTransfer ? (
+            <ScrollText>
+              <Typography align={"left"} noWrap={true} fontSize={14}>
+                {playbackState?.track_window.current_track?.name}
+              </Typography>
+            </ScrollText>
+          ) : (
+            <Skeleton
+              variant="text"
+              animation="wave"
+              width={100}
+              height="1em"
             />
-          </ScrollText>
+          )}
+          {hasTransfer ? (
+            <ScrollText>
+              <InlineArtists
+                fontSize={12}
+                artists={playbackState?.track_window.current_track?.artists}
+              />
+            </ScrollText>
+          ) : (
+            <Skeleton
+              variant="text"
+              animation="wave"
+              width={100}
+              height="1em"
+            />
+          )}
         </Stack>
 
         <FontAwesomeIcon
-          // onClick={shuffle}
+          onClick={handLove}
           icon={faHeart}
-          color="#1DB954"
+          color={isLove ? "#1DB954" : "grey"}
           cursor="pointer"
         />
       </Box>

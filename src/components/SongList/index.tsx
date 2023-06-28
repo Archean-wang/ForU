@@ -23,35 +23,37 @@ interface ColumnDefine {
   render: Render | undefined;
 }
 type KeyGetter = (v: any) => string;
-
+type Handler = (v: number) => any;
 interface Info {
   items: any[];
-  uri: string;
   columns: ColumnDefine[];
   rowKey: KeyGetter;
+  handDoubleClick: Handler;
 }
 
-export default function SongList({ items, uri, columns, rowKey }: Info) {
-  const uriType = uri.split(":")[1];
-  function startPlay(index: number) {
-    startPlayback(uri, index).then(() => {
-      console.log(`${uri} @ ${index}`);
-    });
-  }
+export default function SongList({
+  items,
+  columns,
+  rowKey,
+  handDoubleClick,
+}: Info) {
   return (
     <TableContainer
       sx={{
+        height: "100%",
         width: "100%",
         borderRadius: 2,
         bgcolor: "#f3f2f1",
         overflow: "auto",
       }}>
-      <Table padding="normal">
-        <TableHead>
+      <Table padding="normal" size="small">
+        <TableHead sx={{ width: "100%" }}>
           <TableRow>
             <TableCell align="left">#</TableCell>
-            {columns.map((v) => (
-              <TableCell align="left">{v.header}</TableCell>
+            {columns.map((v, index) => (
+              <TableCell align="left" key={index} sx={{ flex: 1 }}>
+                {v.header}
+              </TableCell>
             ))}
           </TableRow>
         </TableHead>
@@ -60,12 +62,12 @@ export default function SongList({ items, uri, columns, rowKey }: Info) {
             <TableRow
               key={rowKey(item)}
               hover
-              onDoubleClick={() => startPlay(index)}>
+              onDoubleClick={() => handDoubleClick(index)}>
               <Cell component="th" scope="row">
                 {index + 1}
               </Cell>
-              {columns.map((v) => (
-                <Cell component="th" scope="row">
+              {columns.map((v, index) => (
+                <Cell component="th" scope="row" key={index}>
                   {v.render ? v.render(item[v.field]) : item[v.field]}
                 </Cell>
               ))}
