@@ -1,12 +1,20 @@
 import React from "react";
-import login from "./loginStore";
-import {LoginStore} from "./loginStore";
+import loginStore, {LoginStore} from "./loginStore";
+import playlistsStore, { PlaylistsStore } from "./playlistsStore";
+import albumsStore, { AlbumsStore } from "./albumsStore";
+import artistsStore, { ArtistsStore } from "./artistsStore";
 
 
 class RootStore {
-    loginStore: LoginStore;
+    loginStore: LoginStore
+    playlistsStore: PlaylistsStore
+    albumsStore: AlbumsStore
+    artistsStore: ArtistsStore
     constructor() {
-        this.loginStore = login;
+        this.loginStore = loginStore;
+        this.playlistsStore = playlistsStore
+        this.albumsStore = albumsStore
+        this.artistsStore = artistsStore
     }
 }
 

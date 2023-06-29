@@ -51,8 +51,6 @@ function Player({ volumeInit }: { volumeInit: number }) {
   const [isLove, setIsLove] = useState(false);
   const currentId = playbackState?.track_window.current_track?.id;
 
-  console.log(playbackState);
-
   useEffect(() => {
     if (device?.status === "ready" && !hasTransfer) {
       console.log(device.device_id);

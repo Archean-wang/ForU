@@ -1,23 +1,51 @@
 import { useLoaderData, useParams } from "react-router-dom";
 import SongList from "../../components/SongList";
-import { Avatar, Box, Button, Typography } from "@mui/material";
+import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
 import { InlineArtists } from "../../components/InlineArtists";
 import { showTime } from "../../utils/formatter";
-import { startPlayback } from "../../api";
+import {
+  checkAlbums,
+  followAlbum,
+  startPlayback,
+  unfollowAlbum,
+} from "../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCirclePlay } from "@fortawesome/free-solid-svg-icons";
-import { useCallback } from "react";
+import { faCirclePlay, faHeart } from "@fortawesome/free-solid-svg-icons";
+import { useCallback, useEffect, useState } from "react";
+import { useStore } from "../../store";
+import { usePlayerDevice } from "react-spotify-web-playback-sdk";
 
 function Album() {
   const params = useParams();
   // @ts-ignore
   const { album } = useLoaderData();
+  const [isLoved, setIsLoved] = useState(false);
+  const store = useStore();
+  const device = usePlayerDevice();
+
+  useEffect(() => {
+    checkAlbums(params.id as string).then((res) => {
+      setIsLoved(res[0]);
+    });
+  }, [params.id]);
+
+  const toggleLoved = function () {
+    if (isLoved) {
+      unfollowAlbum(params.id as string).then(() => {
+        setIsLoved(false);
+        store.albumsStore.setAlbums();
+      });
+    } else {
+      followAlbum(params.id as string).then(() => {
+        setIsLoved(true);
+        store.albumsStore.setAlbums();
+      });
+    }
+  };
 
   const startPlay = useCallback(
     (index: number) => {
-      startPlayback(album.uri, index).then(() => {
-        console.log(`${album.uri} @ ${index}`);
-      });
+      startPlayback(album.uri, index);
     },
     [album]
   );
@@ -49,6 +77,7 @@ function Album() {
             display: "flex",
             height: "100%",
             flexDirection: "column",
+            justifyContent: "space-between",
             gap: 1,
           }}>
           <Typography noWrap sx={{ fontSize: 32 }}>
@@ -61,18 +90,35 @@ function Album() {
           <Typography noWrap sx={{ fontSize: 14 }}>
             曲目： {album.total_tracks}首
           </Typography>
-          <Button
-            onClick={() => startPlay(0)}
-            variant="contained"
-            color="success"
-            startIcon={<FontAwesomeIcon icon={faCirclePlay} />}
-            sx={{
-              maxWidth: 120,
-              boxShadow: "none",
-              "&:hover": { boxShadow: "none" },
-            }}>
-            播放全部
-          </Button>
+          <Stack direction={"row"} gap={2}>
+            <Button
+              onClick={() => startPlay(0)}
+              variant="contained"
+              color="success"
+              startIcon={<FontAwesomeIcon icon={faCirclePlay} />}
+              sx={{
+                maxWidth: 120,
+                boxShadow: "none",
+                "&:hover": { boxShadow: "none" },
+              }}>
+              播放全部
+            </Button>
+            <Button
+              onClick={toggleLoved}
+              variant="contained"
+              color="success"
+              startIcon={
+                <FontAwesomeIcon
+                  icon={faHeart}
+                  color={isLoved ? "red" : "white"}
+                />
+              }
+              sx={{
+                maxWidth: 120,
+              }}>
+              收藏
+            </Button>
+          </Stack>
         </Box>
       </Box>
       <Box sx={{ flex: 1, overflow: "hidden" }}>
@@ -80,7 +126,7 @@ function Album() {
           rowKey={(v) => v.id}
           items={album.tracks.items}
           handDoubleClick={(n) => {
-            startPlayback(album.uri, n);
+            startPlayback(album.uri, n, device?.device_id);
           }}
           columns={[
             {

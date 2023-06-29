@@ -8,13 +8,11 @@ import Playing from "./route/Playing";
 import Playlist from "./route/Playlist";
 import {
   getAlbumInfo,
-  getAlbums,
+  getArtist,
   getArtistAlbums,
   getArtistTop,
-  getArtists,
   getPlayingQueue,
   getPlaylistInfo,
-  getPlaylists,
   getRelatedArtist,
   getTracks,
   getUserProfile,
@@ -35,14 +33,8 @@ const router = createBrowserRouter([
     id: "root",
     loader: async () => {
       try {
-        const playlistsRes = await getPlaylists();
-        const albumsRes = await getAlbums();
-        const artistsRes = await getArtists();
         const userProfile = await getUserProfile();
         return {
-          playlistsRes,
-          albumsRes,
-          artistsRes,
           userProfile,
         };
       } catch (err) {
@@ -93,7 +85,8 @@ const router = createBrowserRouter([
           const albums = await getArtistAlbums(params.id as string);
           const hotTracks = await getArtistTop(params.id as string);
           const relatedArtists = await getRelatedArtist(params.id as string);
-          return { hotTracks, albums, relatedArtists };
+          const artistInfo = await getArtist(params.id as string);
+          return { hotTracks, albums, relatedArtists, artistInfo };
         },
       },
       {

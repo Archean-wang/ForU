@@ -165,10 +165,11 @@ async function getPlaybackState() {
     }
 }
 
-async function startPlayback(context_uri: string, offset: number | string=0, position_ms: number=0) {
+async function startPlayback(context_uri: string, offset: number | string=0,device_id: string|null=null, position_ms: number=0) {
     try {
+        const url = device_id ? `/me/player/play?device_id=${device_id}` : "/me/player/play";
         let off = typeof offset === "number" ? {position: offset} : {uri: offset}
-        const res = await http.put(`/me/player/play`, {
+        const res = await http.put(url, {
             context_uri: context_uri, offset: off, position_ms: position_ms
         });
         if (res.status !== 204) {
@@ -181,9 +182,10 @@ async function startPlayback(context_uri: string, offset: number | string=0, pos
     }
 }
 
-async function playTracks(uris:string[], position_ms: number=0) {
+async function playTracks(uris:string[], device_id: string|null=null, position_ms: number=0) {
     try {
-        const res = await http.put(`/me/player/play`, {
+        const url = device_id ? `/me/player/play?device_id=${device_id}` : "/me/player/play";
+        const res = await http.put(url, {
             uris, position_ms: position_ms
         });
         if (res.status !== 204) {
@@ -235,11 +237,129 @@ async function getPlaylistInfo(pid: string) {
     }
 }
 
+async function checkPlaylist(pid: string, ids: string) {
+    try {
+        const res = await http.get(`/playlists/${pid}/followers/contains`, {params: {ids }});
+        if (res.status!=200) {
+            console.error(`Error when check playlist : ${pid}, ${res.data}`);
+        }
+        return res.data;
+    }
+    catch(err) {
+        console.error(`Error when check playlist : ${pid}, ${err}`);
+    }
+}
+
+async function checkAlbums(aids: string) {
+    try {
+        const res = await http.get(`/me/albums/contains`, {params: {ids: aids }});
+        if (res.status!=200) {
+            console.error(`Error when check albums : ${aids}, ${res.data}`);
+        }
+        return res.data;
+    }
+    catch(err) {
+        console.error(`Error when check albums : ${aids}, ${err}`);
+    }
+}
+
+async function checkArtists(aids: string) {
+    try {
+        const res = await http.get(`/me/following/contains`, {params: {ids: aids, type: "artist" }});
+        if (res.status!=200) {
+            console.error(`Error when check artists : ${aids}, ${res.data}`);
+        }
+        return res.data;
+    }
+    catch(err) {
+        console.error(`Error when check artists : ${aids}, ${err}`);
+    }
+}
+
+async function followArtists(aids: string) {
+    try {
+        const res = await http.put(`/me/following?type=artist&ids=${aids}`);
+        if (res.status>=300) {
+            console.error(`Error when follow artists : ${aids}, ${res.data}`);
+        }
+        return res.data;
+    }
+    catch(err) {
+        console.error(`Error when follow artists : ${aids}, ${err}`);
+    }
+}
+
+async function unfollowArtists(aids: string) {
+    try {
+        const res = await http.delete(`/me/following`, {params: {ids: aids, type: "artist" }});
+        if (res.status>=300) {
+            console.error(`Error when unfollow artists : ${aids}, ${res.data}`);
+        }
+        return res.data;
+    }
+    catch(err) {
+        console.error(`Error when unfollow artists : ${aids}, ${err}`);
+    }
+}
+
+async function followPlaylist(pid: string) {
+    try {
+        const res = await http.put(`/playlists/${pid}/followers`);
+        if (res.status!=200) {
+            console.error(`Error when follow playlist : ${pid}, ${res.data}`);
+        }
+        return res.data;
+    }
+    catch(err) {
+        console.error(`Error when follow playlist : ${pid}, ${err}`);
+    }
+}
+
+
+async function followAlbum(aids: string) {
+    try {
+        const res = await http.put(`/me/albums?ids=${aids}`);
+        if (res.status!=200) {
+            console.error(`Error when follow albums : ${aids}, ${res.data}`);
+        }
+        return res.data;
+    }
+    catch(err) {
+        console.error(`Error when follow albums : ${aids}, ${err}`);
+    }
+}
+
+async function unfollowAlbum(aids: string) {
+    try {
+        const res = await http.delete(`/me/albums?ids=${aids}`);
+        if (res.status!=200) {
+            console.error(`Error when unfollow albums : ${aids}, ${res.data}`);
+        }
+        return res.data;
+    }
+    catch(err) {
+        console.error(`Error when unfollow albums : ${aids}, ${err}`);
+    }
+}
+
+async function unfollowPlaylist(pid: string) {
+    try {
+        const res = await http.delete(`/playlists/${pid}/followers`);
+        if (res.status!=200) {
+            console.error(`Error when unfollow playlist : ${pid}, ${res.data}`);
+        }
+        return res.data;
+    }
+    catch(err) {
+        console.error(`Error when unfollow playlist : ${pid}, ${err}`);
+    }
+}
+
 async function getAlbum(aid: string) {
     try {
-        const res = await http.get(`/albums/${aid}/tracks`)
+        const res = await http.get(`/albums/${aid}/tracks`);
         if (res.status!=200) {
-            console.error(`Error when get album tracks: ${aid}, ${res.data}`)
+            console.error(`Error when get album tracks: ${aid}, ${res.data}`);
         }
         return res.data;
     }
@@ -258,6 +378,19 @@ async function getAlbumInfo(aid: string) {
     }
     catch(err) {
         console.error(`Error when get album info: ${aid}, ${err}`)
+    }
+}
+
+async function getArtist(aid: string) {
+    try {
+        const res = await http.get(`/artists/${aid}`)
+        if (res.status!=200) {
+            console.error(`Error when get artist: ${aid}, ${res.data}`)
+        }
+        return res.data;
+    }
+    catch(err) {
+        console.error(`Error when get artist: ${aid}, ${err}`)
     }
 }
 
@@ -302,5 +435,7 @@ async function getRelatedArtist(aid: string) {
 
 export { getUserProfile, getPlaylists, getTracks, checkTracks, loveTracks, search, unloveTracks ,transfer, getArtists, getAlbums,
     setRepeatMode, setShuffleMode, getPlayingQueue, getPlaybackState, startPlayback,playTracks,
-    getPlaylist, getPlaylistInfo, getAlbum, getAlbumInfo, getArtistTop, getArtistAlbums, getRelatedArtist
+    getPlaylist, getPlaylistInfo,checkPlaylist, followPlaylist,unfollowPlaylist, getAlbum, checkAlbums,
+    followAlbum, unfollowAlbum, checkArtists, followArtists, unfollowArtists,
+     getAlbumInfo, getArtistTop, getArtistAlbums, getRelatedArtist, getArtist
  }

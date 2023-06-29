@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Avatar,
   List,
@@ -22,13 +22,13 @@ import {
   faHouse,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
+import { useStore } from "../../store";
+import { observer } from "mobx-react-lite";
 
 function Sidebar() {
   // @ts-ignore
-  const { playlistsRes, artistsRes, albumsRes } = useRouteLoaderData("root");
-  const playlists = playlistsRes?.items;
-  const artists = artistsRes?.artists.items;
-  const albums = albumsRes?.items;
+
+  const store = useStore();
 
   const [playlistsOpen, setPlaylistsOpen] = useState(false);
   const [artistsOpen, setArtistsOpen] = useState(false);
@@ -36,31 +36,41 @@ function Sidebar() {
 
   const navigate = useNavigate();
 
-  const playlistsList = playlists?.map((pl: Playlist) => (
-    <ListItemButton
-      sx={{ pl: 4 }}
-      key={pl.id}
-      onClick={() => navigate(`/playlist/${pl.id}`)}>
-      <ListItemIcon>
-        <Avatar src={pl.images[0].url} variant="rounded" />
-      </ListItemIcon>
-      <ListItemText primary={pl.name} />
-    </ListItemButton>
-  ));
+  useEffect(() => {
+    store.playlistsStore.setPlaylists();
+    store.albumsStore.setAlbums();
+    store.artistsStore.setArtists();
+  }, []);
 
-  const artistsList = artists?.map((ar: Artist) => (
-    <ListItemButton
-      sx={{ pl: 4 }}
-      key={ar.id}
-      onClick={() => navigate(`/artist/${ar.id}`)}>
-      <ListItemIcon>
-        <Avatar src={ar.images[0].url} variant="rounded" />
-      </ListItemIcon>
-      <ListItemText primary={ar.name} />
-    </ListItemButton>
-  ));
+  const playlistsList = store.playlistsStore.playlists.items.map(
+    (pl: Playlist) => (
+      <ListItemButton
+        sx={{ pl: 4 }}
+        key={pl.id}
+        onClick={() => navigate(`/playlist/${pl.id}`)}>
+        <ListItemIcon>
+          <Avatar src={pl.images[0].url} variant="rounded" />
+        </ListItemIcon>
+        <ListItemText primary={pl.name} />
+      </ListItemButton>
+    )
+  );
 
-  const albumsList = albums?.map((al: SavedAlbum) => (
+  const artistsList = store.artistsStore.artists.artists.items.map(
+    (ar: Artist) => (
+      <ListItemButton
+        sx={{ pl: 4 }}
+        key={ar.id}
+        onClick={() => navigate(`/artist/${ar.id}`)}>
+        <ListItemIcon>
+          <Avatar src={ar.images[0].url} variant="rounded" />
+        </ListItemIcon>
+        <ListItemText primary={ar.name} />
+      </ListItemButton>
+    )
+  );
+
+  const albumsList = store.albumsStore.albums.items.map((al: SavedAlbum) => (
     <ListItemButton
       sx={{ pl: 4 }}
       key={al.album.id}
@@ -175,4 +185,4 @@ function Sidebar() {
   );
 }
 
-export default Sidebar;
+export default observer(Sidebar);

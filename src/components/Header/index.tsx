@@ -18,8 +18,10 @@ import {
   faMagnifyingGlass,
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
+import { useStore } from "../../store";
 
 function Header() {
+  const store = useStore();
   // @ts-ignore
   const { userProfile } = useRouteLoaderData("root");
   const navigate = useNavigate();
@@ -33,6 +35,7 @@ function Header() {
     setAnchorEl(null);
   };
   const handleLogout = () => {
+    store.loginStore.setLogin(false);
     localStorage.clear();
     navigate("/login");
   };

@@ -30,7 +30,7 @@ export async function getAuthCode() {
     localStorage.setItem("verifier", codeVerifier);
 
     let state = generateRandomString(16);
-    let scope = "user-read-playback-state user-modify-playback-state user-read-currently-playing streaming playlist-read-private playlist-modify-private user-follow-modify user-follow-read user-read-recently-played user-library-modify user-library-read user-read-email user-read-private"
+    let scope = "user-read-playback-state user-modify-playback-state user-read-currently-playing streaming playlist-read-private playlist-modify-private user-follow-modify playlist-modify-public user-follow-read user-read-recently-played user-library-modify user-library-read user-read-email user-read-private"
     let auth_query_parameters = new URLSearchParams({
         response_type: "code",
         client_id: clientID,

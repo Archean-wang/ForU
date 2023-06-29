@@ -1,10 +1,21 @@
 import { Box, Button } from "@mui/material";
 import { getAuthCode } from "../../utils/authentication";
+import { useEffect } from "react";
+import { useStore } from "../../store";
+import { useNavigate } from "react-router-dom";
+import { observer } from "mobx-react-lite";
 
 function Login() {
+  const store = useStore();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (store.loginStore.login) navigate("/");
+  }, [store.loginStore.login]);
+
   const handlogin = async () => {
     await getAuthCode();
   };
+
   return (
     <Box
       sx={{
@@ -32,4 +43,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default observer(Login);

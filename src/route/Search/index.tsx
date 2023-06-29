@@ -8,19 +8,18 @@ import { playTracks } from "../../api";
 import AlbumList from "../../components/AlbumList";
 import ArtistList from "../../components/ArtistList";
 import PlaylistList from "../../components/PlaylistList";
+import { usePlayerDevice } from "react-spotify-web-playback-sdk";
 
 function Search() {
   // @ts-ignore
   const { searchResult } = useLoaderData();
   const [value, setValue] = useState(0);
-
-  console.log(searchResult);
+  const device = usePlayerDevice();
 
   function handleChange(event: React.SyntheticEvent, newValue: number) {
     setValue(newValue);
   }
 
-  console.log(searchResult);
   return (
     <Box
       sx={{
@@ -42,9 +41,7 @@ function Search() {
             rowKey={(v) => v.id}
             items={searchResult.tracks.items}
             handDoubleClick={(n) => {
-              playTracks([searchResult.tracks.items[n].uri]).then(() => {
-                console.log(``);
-              });
+              playTracks([searchResult.tracks.items[n].uri], device?.device_id);
             }}
             columns={[
               {

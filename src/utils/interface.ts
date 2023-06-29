@@ -23,6 +23,38 @@ interface TrackItems {
     track: Track
 }
 
+interface Playlists {
+    href: string
+    limit: number
+    next: string
+    offset: number
+    previous: string
+    total: number
+    items: Playlist[]
+}
+
+interface Albums {
+    href: string
+    limit: number
+    next: string
+    offset: number
+    previous: string
+    total: number
+    items: SavedAlbum[]
+}
+
+interface FollowedArtists {
+    artists: Artists
+}
+
+interface Artists {
+    href: string
+    limit: number
+    next: string
+    total: number
+    items: Artist[]
+}
+
 interface Playlist {
     name: string
     id:string
@@ -39,4 +71,4 @@ interface SavedAlbum {
     aded_at: string
 }
 
-export type {Album, Artist, Track, TrackItems, Playlist, SavedAlbum}
+export type {Albums, Album, FollowedArtists, Artist, Track, TrackItems, Playlists, Playlist, SavedAlbum}

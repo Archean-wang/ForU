@@ -10,7 +10,7 @@ function AlbumList({ albums }: { albums: Album[] }) {
         width: "100%",
         height: "100%",
         gap: 4,
-        padding: 4,
+        padding: 2,
         overflow: "auto",
         flexWrap: "wrap",
         display: "flex",

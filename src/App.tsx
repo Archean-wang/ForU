@@ -15,7 +15,7 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!store.loginStore.loginStore) {
+    if (!store.loginStore.login) {
       if (rt !== null) {
         getToken()
           .then((res) => {
@@ -43,21 +43,18 @@ function App() {
     });
   }
 
-  return store.loginStore.loginStore ? (
+  return store.loginStore.login ? (
     <Box
       sx={{
         overflow: "hidden",
       }}>
-      <Main />
-      {store.loginStore.loginStore && (
-        /* @ts-ignore */
-        <WebPlaybackSDK
-          initialDeviceName={"ForU"}
-          getOAuthToken={getAuthCode}
-          initialVolume={volumeTmp === null ? 0.5 : parseInt(volumeTmp) / 100}>
-          <Player volumeInit={volumeTmp === null ? 50 : parseInt(volumeTmp)} />
-        </WebPlaybackSDK>
-      )}
+      <WebPlaybackSDK
+        initialDeviceName={"ForU"}
+        getOAuthToken={getAuthCode}
+        initialVolume={volumeTmp === null ? 0.5 : parseInt(volumeTmp) / 100}>
+        <Main />
+        <Player volumeInit={volumeTmp === null ? 50 : parseInt(volumeTmp)} />
+      </WebPlaybackSDK>
     </Box>
   ) : (
     <></>

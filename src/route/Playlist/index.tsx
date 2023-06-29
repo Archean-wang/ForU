@@ -1,19 +1,57 @@
-import { Link, useLoaderData } from "react-router-dom";
+import {
+  Link,
+  useLoaderData,
+  useParams,
+  useRouteLoaderData,
+} from "react-router-dom";
 import SongList from "../../components/SongList";
-import { Avatar, Box, Button, Typography } from "@mui/material";
+import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
 import { InlineArtists } from "../../components/InlineArtists";
 import { showTime } from "../../utils/formatter";
-import { startPlayback } from "../../api";
+import {
+  checkPlaylist,
+  followPlaylist,
+  startPlayback,
+  unfollowPlaylist,
+} from "../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCirclePlay } from "@fortawesome/free-solid-svg-icons";
+import { faCirclePlay, faHeart } from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState } from "react";
+import { useStore } from "../../store";
+import { usePlayerDevice } from "react-spotify-web-playback-sdk";
 
 function Playlist() {
+  const params = useParams();
+  // @ts-ignore
+  const { userProfile } = useRouteLoaderData("root");
   // @ts-ignore
   const { playlist } = useLoaderData();
-  function startPlay(index: number) {
-    startPlayback(playlist.uri, index).then(() => {
-      console.log(`${playlist.uri} @ ${index}`);
+  const [isLoved, setIsLoved] = useState(false);
+  const store = useStore();
+  const device = usePlayerDevice();
+
+  useEffect(() => {
+    checkPlaylist(params.id as string, userProfile.id).then((res) => {
+      setIsLoved(res[0]);
     });
+  }, []);
+
+  const toggleLoved = function () {
+    if (isLoved) {
+      unfollowPlaylist(params.id as string).then(() => {
+        setIsLoved(false);
+        store.playlistsStore.setPlaylists();
+      });
+    } else {
+      followPlaylist(params.id as string).then(() => {
+        setIsLoved(true);
+        store.playlistsStore.setPlaylists();
+      });
+    }
+  };
+
+  function startPlay(index: number) {
+    startPlayback(playlist.uri, index, device?.device_id);
   }
   return (
     <Box
@@ -43,6 +81,7 @@ function Playlist() {
             display: "flex",
             height: "100%",
             flexDirection: "column",
+            justifyContent: "space-between",
             gap: 1,
           }}>
           <Typography noWrap sx={{ fontSize: 32 }}>
@@ -54,18 +93,33 @@ function Playlist() {
           <Typography noWrap sx={{ fontSize: 14 }}>
             曲目： {playlist.tracks.items.length}首
           </Typography>
-          <Button
-            onClick={() => startPlay(0)}
-            variant="contained"
-            color="success"
-            startIcon={<FontAwesomeIcon icon={faCirclePlay} />}
-            sx={{
-              maxWidth: 120,
-              boxShadow: "none",
-              "&:hover": { boxShadow: "none" },
-            }}>
-            播放全部
-          </Button>
+          <Stack direction={"row"} gap={2}>
+            <Button
+              onClick={() => startPlay(0)}
+              variant="contained"
+              color="success"
+              startIcon={<FontAwesomeIcon icon={faCirclePlay} />}
+              sx={{
+                maxWidth: 120,
+              }}>
+              播放全部
+            </Button>
+            <Button
+              onClick={toggleLoved}
+              variant="contained"
+              color="success"
+              startIcon={
+                <FontAwesomeIcon
+                  icon={faHeart}
+                  color={isLoved ? "red" : "white"}
+                />
+              }
+              sx={{
+                maxWidth: 120,
+              }}>
+              收藏
+            </Button>
+          </Stack>
         </Box>
       </Box>
       <Box sx={{ flex: 1, overflow: "hidden" }}>

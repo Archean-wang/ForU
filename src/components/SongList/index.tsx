@@ -46,9 +46,6 @@ export default function SongList({
         borderRadius: 2,
         bgcolor: "#f3f2f1",
         overflow: "auto",
-        // "&::-webkit-scrollbar": {
-        //   display: "none",
-        // },
       }}>
       <Table padding="normal" size="small">
         <TableHead sx={{ width: "100%" }}>
