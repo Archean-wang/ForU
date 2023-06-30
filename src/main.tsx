@@ -22,7 +22,7 @@ import Album from "./route/Album";
 import Login from "./route/Login";
 import Callback from "./route/Callback";
 import ErrorPage from "./route/ErrorPage";
-import Loved from "./route/Loved";
+import Loves from "./route/Loves";
 import Artist from "./route/Artist";
 
 const router = createBrowserRouter([
@@ -90,12 +90,8 @@ const router = createBrowserRouter([
         },
       },
       {
-        path: "/loved",
-        element: <Loved />,
-        loader: async () => {
-          const tracksRes = await getTracks();
-          return { tracksRes };
-        },
+        path: "/loves",
+        element: <Loves />,
       },
     ],
   },

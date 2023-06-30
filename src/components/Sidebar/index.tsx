@@ -105,7 +105,7 @@ function Sidebar() {
           </ListItemIcon>
           <ListItemText primary="主页" />
         </ListItemButton>
-        <ListItemButton divider onClick={() => navigate("/loved")}>
+        <ListItemButton divider onClick={() => navigate("/loves")}>
           <ListItemIcon
             sx={{
               alignItems: "center",

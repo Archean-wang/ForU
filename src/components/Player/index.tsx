@@ -40,6 +40,7 @@ import {
   faVolumeLow,
   faVolumeOff,
 } from "@fortawesome/free-solid-svg-icons";
+import { useStore } from "../../store";
 
 function Player({ volumeInit }: { volumeInit: number }) {
   const playbackState = usePlaybackState();
@@ -50,6 +51,7 @@ function Player({ volumeInit }: { volumeInit: number }) {
   const navigate = useNavigate();
   const [isLove, setIsLove] = useState(false);
   const currentId = playbackState?.track_window.current_track?.id;
+  const store = useStore();
 
   useEffect(() => {
     if (device?.status === "ready" && !hasTransfer) {
@@ -123,10 +125,12 @@ function Player({ volumeInit }: { volumeInit: number }) {
     if (isLove) {
       unloveTracks(currentId).then(() => {
         setIsLove(false);
+        store.lovesStore.setLoves();
       });
     } else {
       loveTracks(currentId).then(() => {
         setIsLove(true);
+        store.lovesStore.setLoves();
       });
     }
   };

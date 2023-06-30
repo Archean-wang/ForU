@@ -1,4 +1,4 @@
-import { Link, useLoaderData, useRouteLoaderData } from "react-router-dom";
+import { Link, useRouteLoaderData } from "react-router-dom";
 import SongList from "../../components/SongList";
 import { InlineArtists } from "../../components/InlineArtists";
 import { Avatar, Box, Typography } from "@mui/material";
@@ -7,13 +7,19 @@ import { startPlayback } from "../../api";
 import { usePlayerDevice } from "react-spotify-web-playback-sdk";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { useStore } from "../../store";
+import { useEffect } from "react";
+import { observer } from "mobx-react-lite";
 
-function Loved() {
+function Loves() {
   // @ts-ignore
   const { userProfile } = useRouteLoaderData("root");
-  // @ts-ignore
-  const { tracksRes } = useLoaderData();
+  const store = useStore();
   const device = usePlayerDevice();
+
+  useEffect(() => {
+    store.lovesStore.setLoves();
+  }, []);
   return (
     <Box
       sx={{
@@ -49,11 +55,11 @@ function Loved() {
       <Box sx={{ flex: 1, overflow: "hidden" }}>
         <SongList
           rowKey={(v) => v.track.id}
-          items={tracksRes.items}
+          items={store.lovesStore.loves.items}
           handDoubleClick={(n) => {
             startPlayback(
               `${userProfile.uri}:collection`,
-              tracksRes.items[n].track.uri,
+              store.lovesStore.loves.items[n].track.uri,
               device?.device_id
             );
           }}
@@ -97,4 +103,4 @@ function Loved() {
     </Box>
   );
 }
-export default Loved;
+export default observer(Loves);
