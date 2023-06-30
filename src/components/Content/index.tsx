@@ -1,8 +1,9 @@
 import Header from "../Header";
-import { Box } from "@mui/material";
-import { Outlet } from "react-router-dom";
+import { Box, CircularProgress } from "@mui/material";
+import { Outlet, useNavigation } from "react-router-dom";
 
 function Content() {
+  const navigation = useNavigation();
   return (
     <Box
       sx={{
@@ -18,8 +19,20 @@ function Content() {
           padding: 4,
           height: "calc(100% - 60px)",
           overflow: "hidden",
+          position: "relative",
         }}>
-        <Outlet></Outlet>
+        {navigation.state === "loading" ? (
+          <CircularProgress
+            sx={{
+              position: "absolute",
+              left: "50%",
+              top: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          />
+        ) : (
+          <Outlet></Outlet>
+        )}
       </Box>
     </Box>
   );
