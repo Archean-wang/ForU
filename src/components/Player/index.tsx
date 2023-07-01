@@ -168,10 +168,10 @@ function Player({ volumeInit }: { volumeInit: number }) {
           <Skeleton variant="rounded" animation="wave" width={56} height={56} />
         )}
 
-        <Stack sx={{ overflow: "hidden", gap: 1 }}>
+        <Stack sx={{ gap: 1, flex: 1, minWidth: 30 }}>
           {hasTransfer ? (
             <ScrollText>
-              <Typography align={"left"} noWrap={true} fontSize={14}>
+              <Typography noWrap display={"inline-block"}>
                 {playbackState?.track_window.current_track?.name}
               </Typography>
             </ScrollText>
@@ -200,12 +200,14 @@ function Player({ volumeInit }: { volumeInit: number }) {
           )}
         </Stack>
 
-        <FontAwesomeIcon
-          onClick={handLove}
-          icon={faHeart}
-          color={isLove ? "#1DB954" : "grey"}
-          cursor="pointer"
-        />
+        <Box sx={{ width: 20 }}>
+          <FontAwesomeIcon
+            onClick={handLove}
+            icon={faHeart}
+            color={isLove ? "#1DB954" : "grey"}
+            cursor="pointer"
+          />
+        </Box>
       </Box>
       {/* 中部按钮 */}
       <Box

@@ -8,15 +8,19 @@ import {
   ListSubheader,
   Collapse,
   Box,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useNavigate } from "react-router-dom";
 import { Artist, Playlist, SavedAlbum } from "../../utils/interface";
 import {
+  faAdd,
   faAngleDown,
   faAngleUp,
   faCompactDisc,
+  faDeleteLeft,
   faHeadphonesSimple,
   faHeart,
   faHouse,
@@ -34,6 +38,11 @@ function Sidebar() {
   const [artistsOpen, setArtistsOpen] = useState(false);
   const [albumsOpen, setAlbumsOpen] = useState(false);
 
+  const [playlistMenu, setPlaylistMenu] = useState<{
+    mouseX: number;
+    mouseY: number;
+  } | null>(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,9 +51,26 @@ function Sidebar() {
     store.artistsStore.setArtists();
   }, []);
 
+  function handlePlaylistClose() {
+    setPlaylistMenu(null);
+  }
+  function addPlaylist() {}
+  function deletePlaylist() {}
+
   const playlistsList = store.playlistsStore.playlists.items.map(
     (pl: Playlist) => (
       <ListItemButton
+        onContextMenu={(e) => {
+          e.preventDefault();
+          setPlaylistMenu(
+            playlistMenu === null
+              ? {
+                  mouseX: e.clientX + 2,
+                  mouseY: e.clientY - 6,
+                }
+              : null
+          );
+        }}
         sx={{ pl: 4 }}
         key={pl.id}
         onClick={() => navigate(`/playlist/${pl.id}`)}>
@@ -142,6 +168,7 @@ function Sidebar() {
             {playlistsList}
           </List>
         </Collapse>
+
         <ListItemButton onClick={() => setArtistsOpen(!artistsOpen)}>
           <ListItemIcon
             sx={{
@@ -161,6 +188,7 @@ function Sidebar() {
             {artistsList}
           </List>
         </Collapse>
+
         <ListItemButton onClick={() => setAlbumsOpen(!albumsOpen)}>
           <ListItemIcon
             sx={{
@@ -181,6 +209,30 @@ function Sidebar() {
           </List>
         </Collapse>
       </List>
+
+      <Menu
+        open={playlistMenu !== null}
+        onClose={handlePlaylistClose}
+        anchorReference="anchorPosition"
+        anchorPosition={
+          playlistMenu !== null
+            ? { top: playlistMenu.mouseY, left: playlistMenu.mouseX }
+            : undefined
+        }
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
+        <MenuItem onClick={addPlaylist}>
+          <ListItemIcon>
+            <FontAwesomeIcon icon={faAdd} />
+          </ListItemIcon>
+          新建歌单
+        </MenuItem>
+        <MenuItem onClick={deletePlaylist}>
+          <ListItemIcon>
+            <FontAwesomeIcon icon={faDeleteLeft} />
+          </ListItemIcon>
+          删除歌单
+        </MenuItem>
+      </Menu>
     </Box>
   );
 }
