@@ -1,3 +1,4 @@
+import { PlaylistDetail } from "../components/EditPlaylist";
 import http from "../utils/http";
 
 async function getPlaylists() {
@@ -433,9 +434,35 @@ async function getRelatedArtist(aid: string) {
     }
 }
 
+async function changePlaylistCover(pid: string, data:string) {
+    try {
+        const res = await http.put(`/playlists/${pid}/images`, data)
+        if (res.status>=300) {
+            console.error(`Error when change playlist cover: ${pid}, ${res.data}`)
+        }
+        return res.data;
+    }
+    catch(err) {
+        console.error(`Error when get change playlist cover: ${pid}, ${err}`)
+    }
+}
+
+async function changePlaylistDetail(pid: string, data:PlaylistDetail) {
+    try {
+        const res = await http.put(`/playlists/${pid}`, {name:data.name, description: data.description})
+        if (res.status>=300) {
+            console.error(`Error when change playlist detail: ${pid}, ${res.data}`)
+        }
+        return res.data;
+    }
+    catch(err) {
+        console.error(`Error when get change playlist codetailver: ${pid}, ${err}`)
+    }
+}
+
 export { getUserProfile, getPlaylists, getTracks, checkTracks, loveTracks, search, unloveTracks ,transfer, getArtists, getAlbums,
     setRepeatMode, setShuffleMode, getPlayingQueue, getPlaybackState, startPlayback,playTracks,
     getPlaylist, getPlaylistInfo,checkPlaylist, followPlaylist,unfollowPlaylist, getAlbum, checkAlbums,
     followAlbum, unfollowAlbum, checkArtists, followArtists, unfollowArtists,
-     getAlbumInfo, getArtistTop, getArtistAlbums, getRelatedArtist, getArtist
+     getAlbumInfo, getArtistTop, getArtistAlbums, getRelatedArtist, getArtist, changePlaylistCover, changePlaylistDetail
  }

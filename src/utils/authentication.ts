@@ -30,7 +30,7 @@ export async function getAuthCode() {
     localStorage.setItem("verifier", codeVerifier);
 
     let state = generateRandomString(16);
-    let scope = "user-read-playback-state user-modify-playback-state user-read-currently-playing streaming playlist-read-private playlist-modify-private user-follow-modify playlist-modify-public user-follow-read user-read-recently-played user-library-modify user-library-read user-read-email user-read-private"
+    let scope = "user-top-read ugc-image-upload user-read-playback-state user-modify-playback-state user-read-currently-playing streaming playlist-read-private playlist-modify-private user-follow-modify playlist-modify-public user-follow-read user-read-recently-played user-library-modify user-library-read user-read-email user-read-private"
     let auth_query_parameters = new URLSearchParams({
         response_type: "code",
         client_id: clientID,
@@ -95,16 +95,16 @@ export async function refreshToken() {
             body: params
         })
         const res = await response.json();
-        if (res.eror) {
+        if (res.error) {
             console.error(`${res.error} :${res.error_description}`);
             refreshing = false;
             return false;
         } else {
             const {access_token, refresh_token} = res;
-            if(access_token === undefined) {
-                console.log(res);
-                return false;
-            }
+            // if(access_token === undefined) {
+            //     console.log(res);
+            //     return false;
+            // }
             localStorage.setItem("sp_tk", access_token);
             localStorage.setItem("sp_rt", refresh_token);
             localStorage.setItem("expire", String(3590000 + new Date().valueOf()));
@@ -113,7 +113,7 @@ export async function refreshToken() {
         }
     }
     catch (err) {
-        console.log(err);
+        console.error(err);
         return false;
     }
     finally {

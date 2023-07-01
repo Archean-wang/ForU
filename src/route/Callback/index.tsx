@@ -7,7 +7,6 @@ import { observer } from "mobx-react-lite";
 function Callback() {
   const store = useStore();
   const navigate = useNavigate();
-  console.log("我渲染啦");
 
   useEffect(() => {
     if (store.loginStore.login) {

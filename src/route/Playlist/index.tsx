@@ -9,16 +9,23 @@ import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
 import { InlineArtists } from "../../components/InlineArtists";
 import { showTime } from "../../utils/formatter";
 import {
+  changePlaylistCover,
+  changePlaylistDetail,
   checkPlaylist,
   followPlaylist,
   startPlayback,
   unfollowPlaylist,
 } from "../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCirclePlay, faHeart } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCirclePlay,
+  faEdit,
+  faHeart,
+} from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useStore } from "../../store";
 import { usePlayerDevice } from "react-spotify-web-playback-sdk";
+import EditPlaylist, { PlaylistDetail } from "../../components/EditPlaylist";
 
 function Playlist() {
   const params = useParams();
@@ -29,6 +36,11 @@ function Playlist() {
   const [isLoved, setIsLoved] = useState(false);
   const store = useStore();
   const device = usePlayerDevice();
+  const [open, setOpen] = useState(false);
+
+  const [imageUrl, setImageUrl] = useState(playlist.images[0].url);
+  const [name, setName] = useState(playlist.name);
+  const [description, setDescription] = useState(playlist.description);
 
   useEffect(() => {
     checkPlaylist(params.id as string, userProfile.id).then((res) => {
@@ -50,7 +62,32 @@ function Playlist() {
     }
   };
 
+  const editPlaylist = function () {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleCommit = (data: PlaylistDetail) => {
+    if (data.imageUrl !== imageUrl) {
+      const base64Image = data.imageUrl.split(",")[1];
+      changePlaylistCover(playlist.id, base64Image).then(() => {
+        setImageUrl(data.imageUrl);
+      });
+    }
+    if (data.name !== name || data.description !== description) {
+      changePlaylistDetail(playlist.id, data).then(() => {
+        setName(data.name);
+        setDescription(data.description);
+      });
+    }
+    setOpen(false);
+  };
+
   function startPlay(index: number) {
+    console.log(device);
     startPlayback(playlist.uri, index, device?.device_id);
   }
   return (
@@ -69,7 +106,7 @@ function Playlist() {
           mb: 2,
         }}>
         <Avatar
-          src={playlist.images[0].url}
+          src={imageUrl}
           variant="rounded"
           sx={{
             height: 200,
@@ -85,10 +122,10 @@ function Playlist() {
             gap: 1,
           }}>
           <Typography noWrap sx={{ fontSize: 32 }}>
-            {playlist.name}
+            {name}
           </Typography>
           <Typography noWrap sx={{ fontSize: 14 }}>
-            详情：{playlist.description ? playlist.description : "暂无"}
+            详情：{description ? description : "暂无"}
           </Typography>
           <Typography noWrap sx={{ fontSize: 14 }}>
             曲目： {playlist.tracks.items.length}首
@@ -104,21 +141,34 @@ function Playlist() {
               }}>
               播放全部
             </Button>
-            <Button
-              onClick={toggleLoved}
-              variant="contained"
-              color="success"
-              startIcon={
-                <FontAwesomeIcon
-                  icon={faHeart}
-                  color={isLoved ? "red" : "white"}
-                />
-              }
-              sx={{
-                maxWidth: 120,
-              }}>
-              收藏
-            </Button>
+            {playlist.owner.id === userProfile.id ? (
+              <Button
+                onClick={editPlaylist}
+                variant="contained"
+                color="success"
+                startIcon={<FontAwesomeIcon icon={faEdit} />}
+                sx={{
+                  maxWidth: 120,
+                }}>
+                编辑
+              </Button>
+            ) : (
+              <Button
+                onClick={toggleLoved}
+                variant="contained"
+                color="success"
+                startIcon={
+                  <FontAwesomeIcon
+                    icon={faHeart}
+                    color={isLoved ? "red" : "white"}
+                  />
+                }
+                sx={{
+                  maxWidth: 120,
+                }}>
+                收藏
+              </Button>
+            )}
           </Stack>
         </Box>
       </Box>
@@ -127,7 +177,7 @@ function Playlist() {
           rowKey={(v) => v.track.id}
           items={playlist.tracks.items}
           handDoubleClick={(n) => {
-            startPlayback(playlist.uri, n);
+            startPlayback(playlist.uri, n, device?.device_id);
           }}
           columns={[
             {
@@ -170,6 +220,13 @@ function Playlist() {
           ]}
         />
       </Box>
+
+      <EditPlaylist
+        open={open}
+        handleClose={handleClose}
+        handleCommit={handleCommit}
+        playlist={playlist}
+      />
     </Box>
   );
 }

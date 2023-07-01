@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { useNavigate, useRouteLoaderData } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Artist, Playlist, SavedAlbum } from "../../utils/interface";
 import {
   faAngleDown,

@@ -70,6 +70,7 @@ interface Playlist {
     name: string
     id:string
     images: Image[]
+    description: string
 }
 
 interface Image {
