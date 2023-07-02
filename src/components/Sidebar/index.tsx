@@ -43,6 +43,8 @@ function Sidebar() {
     mouseY: number;
   } | null>(null);
 
+  const [optIdx, setOptIdx] = useState(-1);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -55,12 +57,19 @@ function Sidebar() {
     setPlaylistMenu(null);
   }
   function addPlaylist() {}
-  function deletePlaylist() {}
+  function deletePlaylist() {
+    console.log(`未提供API`);
+    console.log(
+      `delete playlist index: ${optIdx}, name: ${store.playlistsStore.playlists.items[optIdx].name}`
+    );
+  }
 
   const playlistsList = store.playlistsStore.playlists.items.map(
-    (pl: Playlist) => (
+    (pl: Playlist, index: number) => (
       <ListItemButton
         onContextMenu={(e) => {
+          setOptIdx(index);
+          console.log(optIdx);
           e.preventDefault();
           setPlaylistMenu(
             playlistMenu === null
