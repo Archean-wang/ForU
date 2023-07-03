@@ -80,10 +80,14 @@ function Playlist() {
       });
     }
     if (data.name !== name || data.description !== description) {
-      changePlaylistDetail(playlist.id, data).then(() => {
-        setName(data.name);
-        setDescription(data.description);
-      });
+      changePlaylistDetail(playlist.id, data)
+        .then(() => {
+          setName(data.name);
+          setDescription(data.description);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     }
     setOpen(false);
   };

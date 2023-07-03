@@ -8,16 +8,13 @@ const http = axios.create({
     headers: { post: { "Content-Type": "application/json" } }
 })
 
-http.interceptors.request.use(async function (config) {
+http.interceptors.request.use(async (config) =>{
     const token = await getToken();
     if (token) {
         config.headers.Authorization = `Bearer ${localStorage.getItem("sp_tk")}`
-        return config;
     }
-    else {
-        return config;
-    }
-}, function (error) {
-    return Promise.reject(error)
-})
+    return config;
+}, error => Promise.reject(error))
+
+http.interceptors.response.use(response => response, error => Promise.reject(`${error.response.data.error.message}`));
 export default http;
