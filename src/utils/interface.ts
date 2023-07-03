@@ -1,3 +1,10 @@
+interface Device {
+    id: string
+    is_active: boolean
+    name: string
+    type: string
+}
+
 interface Artist {
     name: string
     images: Image[]
@@ -88,4 +95,4 @@ interface SavedTrack {
     aded_at: string
 }
 
-export type {Albums, Album, FollowedArtists, Artist, Track, TrackItems, Playlists, Playlist, SavedAlbum, Loves}
+export type {Device, Albums, Album, FollowedArtists, Artist, Track, TrackItems, Playlists, Playlist, SavedAlbum, Loves}

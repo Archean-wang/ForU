@@ -82,7 +82,7 @@ async function getUserProfile() {
     }
 }
 
-async function transfer(device_id: string, play: boolean) {
+async function transfer(device_id: string, play: boolean=false) {
     try {
         const res = await http.put("/me/player",
             { device_ids: [device_id], play: play });
@@ -363,17 +363,27 @@ async function changePlaylistCover(pid: string, data:string) {
 
 async function changePlaylistDetail(pid: string, data:PlaylistDetail) {
     try {
-        const res = await http.put(`/playlists/${pid}`, {name:data.name, description: data.description})
+        const res = await http.put(`/playlists/${pid}`, {name:data.name, description: data.description});
         return res.data;
     }
     catch(err) {
-        return Promise.reject(`Error when get change playlist detail: ${pid}, ${err}`)
+        return Promise.reject(`Error when get change playlist detail: ${pid}, ${err}`);
+    }
+}
+
+async function getDevices() {
+    try {
+        const res = await http.get("/me/player/devices");
+        return res.data;
+    }
+    catch(err) {
+        return Promise.reject(`Error when get devices: ${err}`);
     }
 }
 
 export { getUserProfile, getPlaylists, getTracks, checkTracks, loveTracks, search, unloveTracks ,transfer, getArtists, getAlbums,
     setRepeatMode, setShuffleMode, getPlayingQueue, getPlaybackState, startPlayback,playTracks,
     getPlaylist, getPlaylistInfo,checkPlaylist, followPlaylist,unfollowPlaylist, getAlbum, checkAlbums,
-    followAlbum, unfollowAlbum, checkArtists, followArtists, unfollowArtists, createPlaylist,
+    followAlbum, unfollowAlbum, checkArtists, followArtists, unfollowArtists, createPlaylist, getDevices,
      getAlbumInfo, getArtistTop, getArtistAlbums, getRelatedArtist, getArtist, changePlaylistCover, changePlaylistDetail
  }

@@ -5,6 +5,9 @@ import {
   Box,
   Stack,
   Skeleton,
+  Menu,
+  MenuItem,
+  ListItemIcon,
 } from "@mui/material";
 
 import {
@@ -31,9 +34,12 @@ import {
   faBars,
   faCirclePause,
   faCirclePlay,
+  faComputer,
+  faDesktop,
   faForwardStep,
   faHeart,
   faLaptop,
+  faMobilePhone,
   faRepeat,
   faShuffle,
   faVolumeHigh,
@@ -41,6 +47,7 @@ import {
   faVolumeOff,
 } from "@fortawesome/free-solid-svg-icons";
 import { useStore } from "../../store";
+import { Device } from "../../utils/interface";
 
 function Player({ volumeInit }: { volumeInit: number }) {
   const playbackState = usePlaybackState();
@@ -53,18 +60,27 @@ function Player({ volumeInit }: { volumeInit: number }) {
   const currentId = playbackState?.track_window.current_track?.id;
   const store = useStore();
 
+  const [anchorEl, setAnchorEl] = useState<SVGSVGElement | null>(null);
+  const open = Boolean(anchorEl);
+
   useEffect(() => {
-    if (device?.status === "ready" && !hasTransfer) {
-      console.log(device.device_id);
-      transfer(device.device_id, false).then(() => {
-        // setHasTransfer(true);
-      });
+    if (device?.status === "ready" && store.devicesStore.devices.length === 1) {
+      transfer(device.device_id, false);
+    } else {
+      console.log(device?.status);
     }
-  }, [device?.status, hasTransfer]);
+  }, [device?.status]);
 
   useEffect(() => {
     check();
   }, [currentId]);
+
+  useEffect(() => {
+    const timer = setInterval(store.devicesStore.setDevices, 5000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
 
   function check() {
     if (currentId) {
@@ -133,6 +149,20 @@ function Player({ volumeInit }: { volumeInit: number }) {
         store.lovesStore.setLoves();
       });
     }
+  };
+
+  const showDevices = (e: React.MouseEvent<SVGSVGElement>) => {
+    setAnchorEl(e.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleTransfer = (id: string) => {
+    console.log(`start transfer: ${!playbackState?.paused}`);
+    transfer(id, !playbackState?.paused);
+    setAnchorEl(null);
   };
 
   return (
@@ -293,7 +323,11 @@ function Player({ volumeInit }: { volumeInit: number }) {
           cursor="pointer"
         />
 
-        <FontAwesomeIcon icon={faLaptop} cursor="pointer" />
+        <FontAwesomeIcon
+          icon={faLaptop}
+          cursor="pointer"
+          onClick={showDevices}
+        />
         <FontAwesomeIcon
           icon={volumeIcon(volume)}
           cursor="pointer"
@@ -320,6 +354,26 @@ function Player({ volumeInit }: { volumeInit: number }) {
           onChange={changeVolume}
         />
       </Box>
+      <Menu
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        transformOrigin={{ horizontal: "right", vertical: "bottom" }}
+        anchorOrigin={{ horizontal: "right", vertical: "top" }}>
+        {store.devicesStore.devices.map((dev: Device) => (
+          <MenuItem
+            onClick={() => handleTransfer(dev.id)}
+            key={dev.id}
+            sx={{ color: dev.is_active ? "green" : "black" }}>
+            <ListItemIcon>
+              <FontAwesomeIcon
+                icon={dev.type === "Computer" ? faDesktop : faMobilePhone}
+              />
+            </ListItemIcon>
+            {dev.name}
+          </MenuItem>
+        ))}
+      </Menu>
     </Box>
   );
 }
