@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useRouteLoaderData } from "react-router-dom";
 import { Artist, Playlist, SavedAlbum } from "../../utils/interface";
 import {
   faAdd,
@@ -28,10 +28,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useStore } from "../../store";
 import { observer } from "mobx-react-lite";
+import { createPlaylist } from "../../api";
 
 function Sidebar() {
   // @ts-ignore
-
+  const { userProfile } = useRouteLoaderData("root");
   const store = useStore();
 
   const [playlistsOpen, setPlaylistsOpen] = useState(false);
@@ -56,12 +57,20 @@ function Sidebar() {
   function handlePlaylistClose() {
     setPlaylistMenu(null);
   }
-  function addPlaylist() {}
+
+  function addPlaylist() {
+    createPlaylist(userProfile.id).then((res) => {
+      store.playlistsStore.setPlaylists();
+      setPlaylistMenu(null);
+    });
+  }
+
   function deletePlaylist() {
     console.log(`未提供API`);
     console.log(
       `delete playlist index: ${optIdx}, name: ${store.playlistsStore.playlists.items[optIdx].name}`
     );
+    setPlaylistMenu(null);
   }
 
   const playlistsList = store.playlistsStore.playlists.items.map(
@@ -69,7 +78,6 @@ function Sidebar() {
       <ListItemButton
         onContextMenu={(e) => {
           setOptIdx(index);
-          console.log(optIdx);
           e.preventDefault();
           setPlaylistMenu(
             playlistMenu === null
@@ -84,7 +92,10 @@ function Sidebar() {
         key={pl.id}
         onClick={() => navigate(`/playlist/${pl.id}`)}>
         <ListItemIcon>
-          <Avatar src={pl.images[0].url} variant="rounded" />
+          <Avatar
+            src={pl.images.length !== 0 ? pl.images[0].url : "/spotify.png"}
+            variant="rounded"
+          />
         </ListItemIcon>
         <ListItemText primary={pl.name} />
       </ListItemButton>

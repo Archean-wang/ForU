@@ -251,6 +251,19 @@ async function checkPlaylist(pid: string, ids: string) {
     }
 }
 
+async function createPlaylist(uid: string) {
+    try {
+        const res = await http.post(`/users/${uid}/playlists`, {name: "新建歌单"});
+        if (res.status>=300) {
+            console.error(`Error when create playlist`);
+        }
+        return res.data;
+    }
+    catch(err) {
+        console.error(`Error when create playlist`);
+    }
+}
+
 async function checkAlbums(aids: string) {
     try {
         const res = await http.get(`/me/albums/contains`, {params: {ids: aids }});
@@ -463,6 +476,6 @@ async function changePlaylistDetail(pid: string, data:PlaylistDetail) {
 export { getUserProfile, getPlaylists, getTracks, checkTracks, loveTracks, search, unloveTracks ,transfer, getArtists, getAlbums,
     setRepeatMode, setShuffleMode, getPlayingQueue, getPlaybackState, startPlayback,playTracks,
     getPlaylist, getPlaylistInfo,checkPlaylist, followPlaylist,unfollowPlaylist, getAlbum, checkAlbums,
-    followAlbum, unfollowAlbum, checkArtists, followArtists, unfollowArtists,
+    followAlbum, unfollowAlbum, checkArtists, followArtists, unfollowArtists, createPlaylist,
      getAlbumInfo, getArtistTop, getArtistAlbums, getRelatedArtist, getArtist, changePlaylistCover, changePlaylistDetail
  }

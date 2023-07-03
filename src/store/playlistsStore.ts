@@ -1,6 +1,6 @@
 import {makeAutoObservable, runInAction} from "mobx";
 import { getPlaylists } from "../api";
-import { Playlists } from "../utils/interface";
+import { Playlist, Playlists } from "../utils/interface";
 
 export class PlaylistsStore {
     playlists = {href: "",

@@ -33,17 +33,13 @@ function EditPlaylist({
   handleCommit: HandleCommit;
 }) {
   const fileInput = useRef<HTMLInputElement>(null);
-  const [imageUrl, setImageUrl] = useState(playlist.images[0].url);
+  const [imageUrl, setImageUrl] = useState(
+    playlist.images.length !== 0 ? playlist.images[0].url : "/spotify.png"
+  );
   const [name, setName] = useState(playlist.name);
   const [description, setDescription] = useState(playlist.description);
   const [errorMsg, setErrorMsg] = useState("");
 
-  // const handleCommit = function () {
-  //   if (!errorMsg) {
-  //     console.log(fileInput.current?.value);
-  //     console.log(name, description);
-  //   }
-  // };
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>编辑歌单</DialogTitle>

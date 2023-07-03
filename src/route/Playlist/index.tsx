@@ -38,7 +38,9 @@ function Playlist() {
   const device = usePlayerDevice();
   const [open, setOpen] = useState(false);
 
-  const [imageUrl, setImageUrl] = useState(playlist.images[0].url);
+  const [imageUrl, setImageUrl] = useState(
+    playlist.images.length !== 0 ? playlist.images[0].url : "/spotify.png"
+  );
   const [name, setName] = useState(playlist.name);
   const [description, setDescription] = useState(playlist.description);
 

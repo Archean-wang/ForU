@@ -101,10 +101,6 @@ export async function refreshToken() {
             return false;
         } else {
             const {access_token, refresh_token} = res;
-            // if(access_token === undefined) {
-            //     console.log(res);
-            //     return false;
-            // }
             localStorage.setItem("sp_tk", access_token);
             localStorage.setItem("sp_rt", refresh_token);
             localStorage.setItem("expire", String(3590000 + new Date().valueOf()));
