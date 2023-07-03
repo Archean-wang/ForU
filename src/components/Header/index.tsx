@@ -16,7 +16,9 @@ import {
   faAngleLeft,
   faAngleRight,
   faMagnifyingGlass,
+  faMoon,
   faRightFromBracket,
+  faSun,
 } from "@fortawesome/free-solid-svg-icons";
 import { useStore } from "../../store";
 
@@ -38,6 +40,11 @@ function Header() {
     store.loginStore.setLogin(false);
     localStorage.clear();
     navigate("/login");
+  };
+
+  const handleColorMode = () => {
+    store.colorModeStore.toggleMode();
+    setAnchorEl(null);
   };
 
   function onChange(
@@ -96,6 +103,14 @@ function Header() {
         onClose={handleClose}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
+        <MenuItem onClick={handleColorMode}>
+          <ListItemIcon>
+            <FontAwesomeIcon
+              icon={store.colorModeStore.mode === "light" ? faMoon : faSun}
+            />
+          </ListItemIcon>
+          {store.colorModeStore.mode === "light" ? "深色模式" : "浅色模式"}
+        </MenuItem>
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <FontAwesomeIcon icon={faRightFromBracket} />

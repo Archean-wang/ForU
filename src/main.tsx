@@ -24,6 +24,7 @@ import Callback from "./route/Callback";
 import ErrorPage from "./route/ErrorPage";
 import Loves from "./route/Loves";
 import Artist from "./route/Artist";
+import { ThemeProvider, createTheme } from "@mui/material";
 
 const router = createBrowserRouter([
   {
@@ -107,6 +108,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   // <React.StrictMode>
+
   <RouterProvider router={router} />
+
   // </React.StrictMode>
 );

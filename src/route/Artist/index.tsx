@@ -67,7 +67,11 @@ function Artist() {
           mb: 2,
         }}>
         <Avatar
-          src={artistInfo.images[0].url}
+          src={
+            artistInfo.images.length !== 0
+              ? artistInfo.images[0].url
+              : "/spotify.png"
+          }
           variant="rounded"
           sx={{
             height: 200,

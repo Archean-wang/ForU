@@ -127,7 +127,7 @@ function Sidebar() {
       <ListItemText
         primary={al.album.name}
         title={al.album.name}
-        sx={{ flexWrap: "nowrap" }}
+        sx={{ whiteSpace: "nowrap" }}
       />
     </ListItemButton>
   ));

@@ -2,10 +2,10 @@ import { getToken } from "./utils/authentication";
 import Main from "./components/Main";
 import { useStore } from "./store";
 import { observer } from "mobx-react-lite";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { WebPlaybackSDK } from "react-spotify-web-playback-sdk";
 import Player from "./components/Player";
-import { Box } from "@mui/material";
+import { Box, ThemeProvider, createTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 function App() {
@@ -43,19 +43,35 @@ function App() {
     });
   }
 
+  const theme = createTheme({
+    palette: {
+      mode: store.colorModeStore.mode,
+      primary: {
+        main: "#1DB954",
+      },
+      success: {
+        main: "#1DB954",
+      },
+    },
+  });
+
   return store.loginStore.login ? (
-    <Box
-      sx={{
-        overflow: "hidden",
-      }}>
-      <WebPlaybackSDK
-        initialDeviceName={"ForU"}
-        getOAuthToken={getAuthCode}
-        initialVolume={volumeTmp === null ? 0.5 : parseInt(volumeTmp) / 100}>
-        <Main />
-        <Player volumeInit={volumeTmp === null ? 50 : parseInt(volumeTmp)} />
-      </WebPlaybackSDK>
-    </Box>
+    <ThemeProvider theme={theme}>
+      <Box
+        sx={{
+          overflow: "hidden",
+          bgcolor: "background.paper",
+          color: "text.primary",
+        }}>
+        <WebPlaybackSDK
+          initialDeviceName={"ForU"}
+          getOAuthToken={getAuthCode}
+          initialVolume={volumeTmp === null ? 0.5 : parseInt(volumeTmp) / 100}>
+          <Main />
+          <Player volumeInit={volumeTmp === null ? 50 : parseInt(volumeTmp)} />
+        </WebPlaybackSDK>
+      </Box>
+    </ThemeProvider>
   ) : (
     <></>
   );

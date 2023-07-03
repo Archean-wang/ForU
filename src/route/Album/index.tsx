@@ -65,7 +65,7 @@ function Album() {
           mb: 2,
         }}>
         <Avatar
-          src={album.images[0].url}
+          src={album.images.length !== 0 ? album.images[0].url : "spotify.png"}
           variant="rounded"
           sx={{
             height: 200,

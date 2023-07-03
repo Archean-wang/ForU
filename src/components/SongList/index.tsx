@@ -44,7 +44,6 @@ export default function SongList({
         height: "100%",
         width: "100%",
         borderRadius: 2,
-        bgcolor: "#f3f2f1",
         overflow: "auto",
       }}>
       <Table padding="normal" size="small">
