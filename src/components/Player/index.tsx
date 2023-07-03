@@ -24,7 +24,7 @@ import {
   transfer,
   unloveTracks,
 } from "../../api";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { InlineArtists } from "../InlineArtists";
 import Progress from "../Progress";
 import ScrollText from "../ScrollText";
@@ -198,11 +198,18 @@ function Player({ volumeInit }: { volumeInit: number }) {
           <Skeleton variant="rounded" animation="wave" width={56} height={56} />
         )}
 
-        <Stack sx={{ gap: 1, flex: 1, minWidth: 30 }}>
+        <Stack sx={{ gap: 1, minWidth: 30 }}>
           {hasTransfer ? (
             <ScrollText>
               <Typography noWrap display={"inline-block"}>
-                {playbackState?.track_window.current_track?.name}
+                <Link
+                  to={`/album/${
+                    playbackState?.track_window.current_track.album.uri.split(
+                      ":"
+                    )[2]
+                  }`}>
+                  {playbackState?.track_window.current_track?.name}
+                </Link>
               </Typography>
             </ScrollText>
           ) : (
