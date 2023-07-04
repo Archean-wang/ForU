@@ -97,7 +97,15 @@ function Sidebar() {
             variant="rounded"
           />
         </ListItemIcon>
-        <ListItemText primary={pl.name} />
+        <ListItemText
+          primary={pl.name}
+          title={pl.name}
+          sx={{
+            whiteSpace: "nowrap",
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+          }}
+        />
       </ListItemButton>
     )
   );
@@ -111,7 +119,15 @@ function Sidebar() {
         <ListItemIcon>
           <Avatar src={ar.images[0].url} variant="rounded" />
         </ListItemIcon>
-        <ListItemText primary={ar.name} />
+        <ListItemText
+          primary={ar.name}
+          title={ar.name}
+          sx={{
+            whiteSpace: "nowrap",
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+          }}
+        />
       </ListItemButton>
     )
   );
@@ -127,7 +143,11 @@ function Sidebar() {
       <ListItemText
         primary={al.album.name}
         title={al.album.name}
-        sx={{ whiteSpace: "nowrap" }}
+        sx={{
+          whiteSpace: "nowrap",
+          textOverflow: "ellipsis",
+          overflow: "hidden",
+        }}
       />
     </ListItemButton>
   ));
@@ -139,6 +159,7 @@ function Sidebar() {
         maxWidth: 240,
         minWidth: 240,
         overflowY: "auto",
+        overflowX: "hidden",
         // borderRight: " solid 8px grey",
       }}>
       <List dense>

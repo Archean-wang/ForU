@@ -23,7 +23,8 @@ function Playing() {
       {playingList?.currently_playing !== null && (
         <Song track={playingList?.currently_playing} index={0} />
       )}
-      <Typography sx={{ fontWeight: "bold", fontSize: 20, color: "gray" }}>
+      <Typography
+        sx={{ fontWeight: "bold", fontSize: 20, color: "gray", mt: 2 }}>
         即将播放
       </Typography>
       <Box component={"div"}>{songs}</Box>

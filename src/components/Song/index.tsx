@@ -3,11 +3,14 @@ import { Link } from "react-router-dom";
 import { showTime } from "../../utils/formatter";
 import { getPlaybackState, startPlayback } from "../../api";
 import { InlineArtists } from "../InlineArtists";
+import { usePlayerDevice } from "react-spotify-web-playback-sdk";
 
 function Song({ track, index }: { track: any; index: number }) {
+  const device = usePlayerDevice();
+
   async function onDoubleClick() {
     const state = await getPlaybackState();
-    startPlayback(state.context.uri, track.uri, 0);
+    startPlayback(state.context.uri, track.uri, device?.device_id);
   }
 
   return (
@@ -15,7 +18,6 @@ function Song({ track, index }: { track: any; index: number }) {
       sx={{
         display: "flex",
         height: 60,
-        bgcolor: "#f3f2f1",
         alignItems: "center",
         paddingLeft: 2,
         paddingRight: 2,
