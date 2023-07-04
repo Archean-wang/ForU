@@ -5,7 +5,7 @@ import albumsStore, { AlbumsStore } from "./albumsStore";
 import artistsStore, { ArtistsStore } from "./artistsStore";
 import lovesStore, { LovesStore } from "./lovesStore";
 import devicesStore, { DevicesStore } from "./devicesStore";
-import colorModeStore, { ColorModeStore } from "./ColorModeStore";
+import colorModeStore, { ColorModeStore } from "./colorModeStore";
 
 
 class RootStore {

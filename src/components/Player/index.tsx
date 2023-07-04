@@ -34,7 +34,6 @@ import {
   faBars,
   faCirclePause,
   faCirclePlay,
-  faComputer,
   faDesktop,
   faForwardStep,
   faHeart,
@@ -48,6 +47,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useStore } from "../../store";
 import { Device } from "../../utils/interface";
+import { observer } from "mobx-react-lite";
 
 function Player({ volumeInit }: { volumeInit: number }) {
   const playbackState = usePlaybackState();
@@ -74,13 +74,6 @@ function Player({ volumeInit }: { volumeInit: number }) {
   useEffect(() => {
     check();
   }, [currentId]);
-
-  useEffect(() => {
-    const timer = setInterval(store.devicesStore.setDevices, 5000);
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
 
   function check() {
     if (currentId) {
@@ -152,6 +145,7 @@ function Player({ volumeInit }: { volumeInit: number }) {
   };
 
   const showDevices = (e: React.MouseEvent<SVGSVGElement>) => {
+    store.devicesStore.setDevices();
     setAnchorEl(e.currentTarget);
   };
 
@@ -371,7 +365,7 @@ function Player({ volumeInit }: { volumeInit: number }) {
           <MenuItem
             onClick={() => handleTransfer(dev.id)}
             key={dev.id}
-            sx={{ color: dev.is_active ? "green" : "black" }}>
+            sx={{ color: dev.is_active ? "green" : "text.primary" }}>
             <ListItemIcon>
               <FontAwesomeIcon
                 icon={dev.type === "Computer" ? faDesktop : faMobilePhone}
@@ -385,4 +379,4 @@ function Player({ volumeInit }: { volumeInit: number }) {
   );
 }
 
-export default Player;
+export default observer(Player);
