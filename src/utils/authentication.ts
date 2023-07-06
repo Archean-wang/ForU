@@ -1,4 +1,6 @@
 const clientID = "e04e58aec96244b686b4c7e71933b798";
+const callbackURL = "http://localhost:12138/callback";
+
 function generateRandomString(length: number) {
     let text = '';
     let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -35,7 +37,7 @@ export async function getAuthCode() {
         response_type: "code",
         client_id: clientID,
         scope: scope,
-        redirect_uri: "http://localhost:12138/callback",
+        redirect_uri: callbackURL,
         state: state,
         code_challenge_method: 'S256',
         code_challenge: codeChallenge
@@ -49,7 +51,7 @@ export async function getAccessToken(code: string) {
     params.append("client_id", clientID);
     params.append("grant_type", "authorization_code");
     params.append("code", code);
-    params.append("redirect_uri", "http://localhost:12138/callback");
+    params.append("redirect_uri", callbackURL);
     params.append("code_verifier", codeVerifier!);
 
     try {

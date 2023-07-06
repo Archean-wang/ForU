@@ -24,7 +24,6 @@ import Callback from "./route/Callback";
 import ErrorPage from "./route/ErrorPage";
 import Loves from "./route/Loves";
 import Artist from "./route/Artist";
-import { ThemeProvider, createTheme } from "@mui/material";
 
 const router = createBrowserRouter([
   {
@@ -35,11 +34,10 @@ const router = createBrowserRouter([
     loader: async () => {
       try {
         const userProfile = await getUserProfile();
-        return {
-          userProfile,
-        };
+        return { userProfile };
       } catch (err) {
-        console.log(`Error when get user library: ${err}`);
+        console.error(`Error when get user library: ${err}`);
+        return null;
       }
     },
     children: [
