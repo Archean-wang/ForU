@@ -41,7 +41,11 @@ function Search() {
             rowKey={(v) => v.id}
             items={searchResult.tracks.items}
             handDoubleClick={(n) => {
-              playTracks([searchResult.tracks.items[n].uri], device?.device_id);
+              playTracks(
+                [searchResult.tracks.items[n].uri],
+                0,
+                device?.device_id
+              );
             }}
             columns={[
               {

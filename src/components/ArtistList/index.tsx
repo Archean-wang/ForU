@@ -2,17 +2,26 @@ import { Avatar, Box, Typography } from "@mui/material";
 import { Artist } from "../../utils/interface";
 import { useNavigate } from "react-router-dom";
 
-function ArtistList({ artists }: { artists: Artist[] }) {
+function ArtistList({
+  artists,
+  wrap = "wrap",
+}: {
+  artists: Artist[];
+  wrap?: string;
+}) {
   const navigate = useNavigate();
   return (
     <Box
+      onWheel={(e) => {
+        e.currentTarget.scrollLeft += e.deltaY;
+      }}
       sx={{
         width: "100%",
-        height: "100%",
+        height: wrap == "wrap" ? "100%" : "initial",
         gap: 4,
-        padding: 2,
-        overflow: "auto",
-        flexWrap: "wrap",
+        padding: wrap == "wrap" ? 2 : 0,
+        overflowX: "hidden",
+        flexWrap: wrap,
         display: "flex",
       }}>
       {artists.map((v: Artist) => (

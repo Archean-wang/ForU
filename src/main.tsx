@@ -14,7 +14,6 @@ import {
   getPlayingQueue,
   getPlaylistInfo,
   getRelatedArtist,
-  getTracks,
   getUserProfile,
   search,
 } from "./api";
@@ -24,6 +23,8 @@ import Callback from "./route/Callback";
 import ErrorPage from "./route/ErrorPage";
 import Loves from "./route/Loves";
 import Artist from "./route/Artist";
+import Always from "./route/Always";
+import Recent from "./route/Recent";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,7 @@ const router = createBrowserRouter([
       },
       {
         index: true,
+        id: "daily",
         element: <Daily />,
       },
       {
@@ -91,6 +93,14 @@ const router = createBrowserRouter([
       {
         path: "/loves",
         element: <Loves />,
+      },
+      {
+        path: "/always",
+        element: <Always />,
+      },
+      {
+        path: "/recent",
+        element: <Recent />,
       },
     ],
   },

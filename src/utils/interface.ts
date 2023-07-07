@@ -41,6 +41,39 @@ interface Playlists {
     items: Playlist[]
 }
 
+interface History {
+    track: Track
+    played_at: string
+}
+
+interface RecentTracks {
+    href: string
+    limit: number
+    next: string
+    total: number
+    items: History[]
+}
+
+interface TopTracks {
+    href: string
+    limit: number
+    next: string
+    offset: number
+    previous: string
+    total: number
+    items: Track[]
+}
+
+interface TopArtists {
+    href: string
+    limit: number
+    next: string
+    offset: number
+    previous: string
+    total: number
+    items: Artist[]
+}
+
 interface Albums {
     href: string
     limit: number
@@ -95,4 +128,5 @@ interface SavedTrack {
     aded_at: string
 }
 
-export type {Device, Albums, Album, FollowedArtists, Artist, Track, TrackItems, Playlists, Playlist, SavedAlbum, Loves}
+export type {Device, Albums, Album, FollowedArtists, Artist, Track, TrackItems, Playlists,
+     Playlist, SavedAlbum, Loves, TopArtists, TopTracks, RecentTracks}

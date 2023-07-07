@@ -147,11 +147,12 @@ async function startPlayback(context_uri: string, offset: number | string=0,devi
     }
 }
 
-async function playTracks(uris:string[], device_id: string|null=null, position_ms: number=0) {
+async function playTracks(uris:string[], offset:string|number=0, device_id: string|null=null, position_ms: number=0) {
     try {
         const url = device_id ? `/me/player/play?device_id=${device_id}` : "/me/player/play";
+        let off = typeof offset === "number" ? {position: offset} : {uri: offset}
         const res = await http.put(url, {
-            uris, position_ms: position_ms
+            uris, position_ms: position_ms, offset: off
         });
         return res.data;
     }
@@ -381,8 +382,28 @@ async function getDevices() {
     }
 }
 
+async function getTop(type: string) {
+    try {
+        const res = await http.get(`/me/top/${type}`);
+        return res.data;
+    }
+    catch(err) {
+        return Promise.reject(`Error when get top ${type}: ${err}`);
+    }
+}
+
+async function getRecentTracks() {
+    try {
+        const res = await http.get(`/me/player/recently-played`);
+        return res.data;
+    }
+    catch(err) {
+        return Promise.reject(`Error when get recent trakcs: ${err}`);
+    }
+}
+
 export { getUserProfile, getPlaylists, getTracks, checkTracks, loveTracks, search, unloveTracks ,transfer, getArtists, getAlbums,
-    setRepeatMode, setShuffleMode, getPlayingQueue, getPlaybackState, startPlayback,playTracks,
+    setRepeatMode, setShuffleMode, getPlayingQueue, getPlaybackState, startPlayback,playTracks, getTop, getRecentTracks,
     getPlaylist, getPlaylistInfo,checkPlaylist, followPlaylist,unfollowPlaylist, getAlbum, checkAlbums,
     followAlbum, unfollowAlbum, checkArtists, followArtists, unfollowArtists, createPlaylist, getDevices,
      getAlbumInfo, getArtistTop, getArtistAlbums, getRelatedArtist, getArtist, changePlaylistCover, changePlaylistDetail

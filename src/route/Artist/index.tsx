@@ -124,7 +124,7 @@ function Artist() {
             rowKey={(v) => v.id}
             items={hotTracks.tracks}
             handDoubleClick={(n) => {
-              playTracks([hotTracks.tracks[n].uri], device?.device_id);
+              playTracks([hotTracks.tracks[n].uri], 0, device?.device_id);
             }}
             columns={[
               {

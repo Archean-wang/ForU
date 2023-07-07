@@ -40,10 +40,6 @@ function PlaylistList({ playlists }: { playlists: Playlist[] }) {
             sx={{ overflow: "hidden", textOverflow: "ellipsis" }}>
             {v.name}
           </Typography>
-          <Typography
-            noWrap
-            fontSize={10}
-            sx={{ overflow: "hidden", textOverflow: "ellipsis" }}></Typography>
         </Box>
       ))}
     </Box>
