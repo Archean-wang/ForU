@@ -88,7 +88,8 @@ function Player({ volumeInit }: { volumeInit: number }) {
 
   useEffect(() => {
     const handle = (e: MyEvent) => {
-      console.log("Player 收到love event");
+      console.log(`Player 收到love event:`, e);
+      console.log(currentId);
       if (e.id === currentId) {
         setIsLove(e.value);
       }
@@ -98,7 +99,7 @@ function Player({ volumeInit }: { volumeInit: number }) {
     return () => {
       EventBus.removeHandle("loveTrack", handle);
     };
-  }, []);
+  }, [currentId]);
 
   function shuffle() {
     let mode = !playbackState?.shuffle;

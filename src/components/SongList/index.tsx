@@ -82,7 +82,6 @@ export default function SongList({
 
   useEffect(() => {
     const handle = (e: MyEvent) => {
-      console.log("我收到啦");
       items.forEach((track, index) => {
         if (track.id === e.id) {
           let tmp = [...loves];
@@ -96,7 +95,7 @@ export default function SongList({
     return () => {
       EventBus.removeHandle("loveTrack", handle);
     };
-  }, []);
+  }, [loves]);
 
   function handleClose() {
     setMenuPos(null);
