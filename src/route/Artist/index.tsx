@@ -1,8 +1,7 @@
 import { Box, Tabs, Tab, Typography, Button, Avatar } from "@mui/material";
-import { Link, useLoaderData, useParams } from "react-router-dom";
+import { useLoaderData, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import SongList from "../../components/SongList";
-import { showTime } from "../../utils/formatter";
 import {
   checkArtists,
   followArtists,
@@ -14,13 +13,11 @@ import ArtistList from "../../components/ArtistList";
 import { useStore } from "../../store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faPlayCircle } from "@fortawesome/free-solid-svg-icons";
-import { url } from "inspector";
 import { usePlayerDevice } from "react-spotify-web-playback-sdk";
 
 function Artist() {
   // @ts-ignore
   const { hotTracks, albums, relatedArtists, artistInfo } = useLoaderData();
-  console.log(hotTracks);
   const [value, setValue] = useState(0);
 
   const params = useParams();
@@ -139,7 +136,6 @@ function Artist() {
         }}>
         {value === 0 && (
           <SongList
-            rowKey={(v) => v.id}
             items={hotTracks.tracks}
             handDoubleClick={(n) => {
               start();
@@ -148,32 +144,14 @@ function Artist() {
               {
                 header: "歌名",
                 field: "name",
-                render: (v) => <Typography noWrap>{v}</Typography>,
               },
               {
                 header: "专辑",
                 field: "album",
-                render: (v) => (
-                  <Typography
-                    noWrap={true}
-                    sx={{ color: "grey", fontSize: 14 }}>
-                    <Link to={`/album/${v.id}`}>{v.name}</Link>
-                  </Typography>
-                ),
               },
               {
                 header: "时长",
                 field: "duration_ms",
-                render: (v) => (
-                  <Typography
-                    noWrap={true}
-                    width={80}
-                    sx={{
-                      color: "grey",
-                    }}>
-                    {showTime(v)}
-                  </Typography>
-                ),
               },
             ]}
           />

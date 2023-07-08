@@ -1,8 +1,6 @@
-import { Link, useRouteLoaderData } from "react-router-dom";
+import { useRouteLoaderData } from "react-router-dom";
 import SongList from "../../components/SongList";
-import { InlineArtists } from "../../components/InlineArtists";
 import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
-import { showTime } from "../../utils/formatter";
 import { startPlayback } from "../../api";
 import { usePlayerDevice } from "react-spotify-web-playback-sdk";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -40,7 +38,6 @@ function Loves() {
           alignItems: "center",
           mb: 2,
           borderRadius: 2,
-          // background: "linear-gradient(to right, pink, #ff6b81)",
         }}>
         <Avatar
           variant="rounded"
@@ -78,8 +75,7 @@ function Loves() {
       </Box>
       <Box sx={{ flex: 1, overflow: "hidden" }}>
         <SongList
-          rowKey={(v) => v.track.id}
-          items={store.lovesStore.loves.items}
+          items={store.lovesStore.loves.items.map((v) => v.track)}
           handDoubleClick={(n) => {
             startPlayback(
               `${userProfile.uri}:collection`,
@@ -87,41 +83,6 @@ function Loves() {
               device?.device_id
             );
           }}
-          columns={[
-            {
-              header: "歌名",
-              field: "track",
-              render: (v) => <Typography noWrap>{v.name}</Typography>,
-            },
-            {
-              header: "歌手",
-              field: "track",
-              render: (v) => <InlineArtists artists={v.artists} />,
-            },
-            {
-              header: "专辑",
-              field: "track",
-              render: (v) => (
-                <Typography noWrap sx={{ color: "grey", fontSize: 14 }}>
-                  <Link to={`/album/${v.album.id}`}>{v.album.name}</Link>
-                </Typography>
-              ),
-            },
-            {
-              header: "时长",
-              field: "track",
-              render: (v) => (
-                <Typography
-                  noWrap={true}
-                  width={80}
-                  sx={{
-                    color: "grey",
-                  }}>
-                  {showTime(v.duration_ms)}
-                </Typography>
-              ),
-            },
-          ]}
         />
       </Box>
     </Box>

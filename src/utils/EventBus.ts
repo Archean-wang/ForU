@@ -1,4 +1,5 @@
-type Handle = (event:{[key:string]: string}) => any
+type Handle = (event:MyEvent) => any
+export interface MyEvent {[key:string]: any}
 
 
 class EventBus {
@@ -14,7 +15,7 @@ class EventBus {
         this.handles[name].push(handle)
     }
 
-    trigger(event:{[key:string]: string}) {
+    trigger(event:MyEvent) {
         if(Array.isArray(this.handles[event.name])) {
             this.handles[event.name].forEach(h => h(event));
         }

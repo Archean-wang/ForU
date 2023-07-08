@@ -1,13 +1,6 @@
-import {
-  Link,
-  useLoaderData,
-  useParams,
-  useRouteLoaderData,
-} from "react-router-dom";
+import { useLoaderData, useParams, useRouteLoaderData } from "react-router-dom";
 import SongList from "../../components/SongList";
 import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
-import { InlineArtists } from "../../components/InlineArtists";
-import { showTime } from "../../utils/formatter";
 import {
   changePlaylistCover,
   changePlaylistDetail,
@@ -26,6 +19,7 @@ import { useEffect, useState } from "react";
 import { useStore } from "../../store";
 import { usePlayerDevice } from "react-spotify-web-playback-sdk";
 import EditPlaylist, { PlaylistDetail } from "../../components/EditPlaylist";
+import { PlaylistTrack } from "../../utils/interface";
 
 function Playlist() {
   const params = useParams();
@@ -180,50 +174,10 @@ function Playlist() {
       </Box>
       <Box sx={{ flex: 1, overflow: "hidden" }}>
         <SongList
-          rowKey={(v) => v.track.id}
-          items={playlist.tracks.items}
+          items={playlist.tracks.items.map((v: PlaylistTrack) => v.track)}
           handDoubleClick={(n) => {
             startPlayback(playlist.uri, n, device?.device_id);
           }}
-          columns={[
-            {
-              header: "歌名",
-              field: "track",
-              render: (v) => <Typography noWrap>{v.name}</Typography>,
-            },
-            {
-              header: "歌手",
-              field: "track",
-              render: (v) => (
-                <InlineArtists artists={v.artists}></InlineArtists>
-              ),
-            },
-            {
-              header: "专辑",
-              field: "track",
-              render: (v) => (
-                <Typography
-                  noWrap={true}
-                  sx={{ flex: 1, color: "grey", fontSize: 14 }}>
-                  <Link to={`/album/${v.album.id}`}>{v.album.name}</Link>
-                </Typography>
-              ),
-            },
-            {
-              header: "时长",
-              field: "track",
-              render: (v) => (
-                <Typography
-                  noWrap={true}
-                  width={80}
-                  sx={{
-                    color: "grey",
-                  }}>
-                  {showTime(v.duration_ms)}
-                </Typography>
-              ),
-            },
-          ]}
         />
       </Box>
 

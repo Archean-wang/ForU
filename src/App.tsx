@@ -7,6 +7,7 @@ import { WebPlaybackSDK } from "react-spotify-web-playback-sdk";
 import Player from "./components/Player";
 import { Box, ThemeProvider, createTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { grey } from "@mui/material/colors";
 
 function App() {
   let rt = localStorage.getItem("sp_rt");
@@ -50,12 +51,16 @@ function App() {
       success: {
         main: "#1DB954",
       },
+      secondary: grey,
     },
   });
 
   return store.loginStore.login ? (
     <ThemeProvider theme={theme}>
       <Box
+        onContextMenu={(e) => {
+          e.preventDefault();
+        }}
         sx={{
           overflow: "hidden",
           bgcolor: "background.paper",

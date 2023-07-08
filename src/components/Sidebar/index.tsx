@@ -15,7 +15,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useNavigate, useRouteLoaderData } from "react-router-dom";
-import { Artist, Playlist, SavedAlbum } from "../../utils/interface";
+import { Anchor, Artist, Playlist, SavedAlbum } from "../../utils/interface";
 import {
   faAdd,
   faAngleDown,
@@ -51,22 +51,13 @@ function Sidebar() {
   const [artistsOpen, setArtistsOpen] = useState(false);
   const [albumsOpen, setAlbumsOpen] = useState(false);
 
-  const [playlistMenu, setPlaylistMenu] = useState<{
-    mouseX: number;
-    mouseY: number;
-  } | null>(null);
+  const [playlistMenu, setPlaylistMenu] = useState<Anchor | null>(null);
   const [playlistIdx, setPlaylistIdx] = useState(-1);
 
-  const [artistMenu, setArtistMenu] = useState<{
-    mouseX: number;
-    mouseY: number;
-  } | null>(null);
+  const [artistMenu, setArtistMenu] = useState<Anchor | null>(null);
   const [artistIdx, setArtistIdx] = useState(-1);
 
-  const [albumMenu, setAlbumMenu] = useState<{
-    mouseX: number;
-    mouseY: number;
-  } | null>(null);
+  const [albumMenu, setAlbumMenu] = useState<Anchor | null>(null);
   const [albumIdx, setAlbumIdx] = useState(-1);
 
   const navigate = useNavigate();
@@ -370,8 +361,7 @@ function Sidebar() {
           playlistMenu !== null
             ? { top: playlistMenu.mouseY, left: playlistMenu.mouseX }
             : undefined
-        }
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
+        }>
         <MenuItem onClick={playPlaylist}>
           <ListItemIcon>
             <FontAwesomeIcon icon={faPlayCircle} />
@@ -394,8 +384,7 @@ function Sidebar() {
           artistMenu !== null
             ? { top: artistMenu.mouseY, left: artistMenu.mouseX }
             : undefined
-        }
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
+        }>
         <MenuItem onClick={startArtist}>
           <ListItemIcon>
             <FontAwesomeIcon icon={faPlayCircle} />
@@ -418,8 +407,7 @@ function Sidebar() {
           albumMenu !== null
             ? { top: albumMenu.mouseY, left: albumMenu.mouseX }
             : undefined
-        }
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
+        }>
         <MenuItem onClick={startAlbum}>
           <ListItemIcon>
             <FontAwesomeIcon icon={faPlayCircle} />
@@ -438,7 +426,7 @@ function Sidebar() {
           <ListItemIcon>
             <FontAwesomeIcon icon={faHeartBroken} />
           </ListItemIcon>
-          取消关注
+          取消收藏
         </MenuItem>
       </Menu>
     </Box>

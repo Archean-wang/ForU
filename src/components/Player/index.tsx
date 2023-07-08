@@ -48,6 +48,7 @@ import {
 import { useStore } from "../../store";
 import { Device } from "../../utils/interface";
 import { observer } from "mobx-react-lite";
+import EventBus, { MyEvent } from "../../utils/EventBus";
 
 function Player({ volumeInit }: { volumeInit: number }) {
   const playbackState = usePlaybackState();
@@ -84,6 +85,20 @@ function Player({ volumeInit }: { volumeInit: number }) {
       });
     }
   }, [currentId]);
+
+  useEffect(() => {
+    const handle = (e: MyEvent) => {
+      console.log("Player 收到love event");
+      if (e.id === currentId) {
+        setIsLove(e.value);
+      }
+    };
+    EventBus.addHandle("loveTrack", handle);
+
+    return () => {
+      EventBus.removeHandle("loveTrack", handle);
+    };
+  }, []);
 
   function shuffle() {
     let mode = !playbackState?.shuffle;
@@ -131,20 +146,22 @@ function Player({ volumeInit }: { volumeInit: number }) {
     return faVolumeHigh;
   }, []);
 
-  const handLove = () => {
+  function handLove() {
     if (!currentId) return;
     if (isLove) {
       unloveTracks(currentId).then(() => {
-        setIsLove(false);
+        // setIsLove(false);
         store.lovesStore.setLoves();
+        EventBus.trigger({ name: "loveTrack", id: currentId, value: false });
       });
     } else {
       loveTracks(currentId).then(() => {
-        setIsLove(true);
+        // setIsLove(true);
         store.lovesStore.setLoves();
+        EventBus.trigger({ name: "loveTrack", id: currentId, value: true });
       });
     }
-  };
+  }
 
   const showDevices = (e: React.MouseEvent<SVGSVGElement>) => {
     store.devicesStore.setDevices();
@@ -233,13 +250,9 @@ function Player({ volumeInit }: { volumeInit: number }) {
           )}
         </Stack>
 
-        <Box sx={{ width: 20 }}>
-          <FontAwesomeIcon
-            onClick={handLove}
-            icon={faHeart}
-            color={isLove ? "#1DB954" : "grey"}
-            cursor="pointer"
-          />
+        <Box
+          sx={{ width: 20, color: isLove ? "primary.main" : "secondary.main" }}>
+          <FontAwesomeIcon onClick={handLove} icon={faHeart} cursor="pointer" />
         </Box>
       </Box>
       {/* 中部按钮 */}

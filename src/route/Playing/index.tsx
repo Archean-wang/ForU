@@ -13,9 +13,12 @@ function Playing() {
       <Song track={track} index={index} key={track.id} />
     )
   );
+
   useEffect(() => {
+    console.log(playbackState);
     store.playingStore.setPlaying();
   }, [playbackState?.track_window.current_track]);
+
   return (
     <Box
       sx={{

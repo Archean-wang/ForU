@@ -123,7 +123,6 @@ function Album() {
       </Box>
       <Box sx={{ flex: 1, overflow: "hidden" }}>
         <SongList
-          rowKey={(v) => v.id}
           items={album.tracks.items}
           handDoubleClick={(n) => {
             startPlayback(album.uri, n, device?.device_id);
@@ -132,26 +131,14 @@ function Album() {
             {
               header: "歌名",
               field: "name",
-              render: undefined,
             },
             {
               header: "歌手",
               field: "artists",
-              render: (v) => <InlineArtists artists={v}></InlineArtists>,
             },
             {
               header: "时长",
               field: "duration_ms",
-              render: (v) => (
-                <Typography
-                  noWrap={true}
-                  width={80}
-                  sx={{
-                    color: "grey",
-                  }}>
-                  {showTime(v)}
-                </Typography>
-              ),
             },
           ]}
         />

@@ -125,16 +125,28 @@ interface Image {
     url:string,
 }
 
+interface PlaylistTrack {
+    track: Track
+    added_at: string
+}
+
 // get user saved albums
 interface SavedAlbum {
     album: Album
-    aded_at: string
+    added_at: string
 }
 
 interface SavedTrack {
     track: Track
-    aded_at: string
+    added_at: string
 }
 
+// 右键菜单位置
+interface Anchor {
+    mouseX: number;
+    mouseY: number;
+}
+
+
 export type {Device, Albums, Album, FollowedArtists, Artist, Track, TrackItems, Playlists,
-     Playlist, SavedAlbum, Loves, TopArtists, TopTracks, RecentTracks, PlayingQueue}
+     Playlist, SavedAlbum, Loves, TopArtists, TopTracks, RecentTracks, PlayingQueue, Anchor, PlaylistTrack}
