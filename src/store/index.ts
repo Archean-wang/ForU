@@ -8,6 +8,7 @@ import devicesStore, { DevicesStore } from "./devicesStore";
 import colorModeStore, { ColorModeStore } from "./colorModeStore";
 import topItemsStore, { TopItemsStore } from "./topItemsStore";
 import recentStore, { RecentStore } from "./recentStore";
+import playingStore, { PlayingStore } from "./playingStore";
 
 
 class RootStore {
@@ -20,6 +21,7 @@ class RootStore {
     colorModeStore: ColorModeStore
     topItemsStore: TopItemsStore
     recentStore: RecentStore
+    playingStore: PlayingStore
     constructor() {
         this.loginStore = loginStore;
         this.playlistsStore = playlistsStore
@@ -30,6 +32,7 @@ class RootStore {
         this.colorModeStore = colorModeStore
         this.topItemsStore = topItemsStore
         this.recentStore = recentStore
+        this.playingStore = playingStore
     }
 }
 

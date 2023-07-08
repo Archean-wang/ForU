@@ -5,9 +5,9 @@ import { InlineArtists } from "../../components/InlineArtists";
 import { showTime } from "../../utils/formatter";
 import {
   checkAlbums,
-  followAlbum,
+  followAlbums,
   startPlayback,
-  unfollowAlbum,
+  unfollowAlbums,
 } from "../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlay, faHeart } from "@fortawesome/free-solid-svg-icons";
@@ -31,12 +31,12 @@ function Album() {
 
   const toggleLoved = function () {
     if (isLoved) {
-      unfollowAlbum(params.id as string).then(() => {
+      unfollowAlbums(params.id as string).then(() => {
         setIsLoved(false);
         store.albumsStore.setAlbums();
       });
     } else {
-      followAlbum(params.id as string).then(() => {
+      followAlbums(params.id as string).then(() => {
         setIsLoved(true);
         store.albumsStore.setAlbums();
       });

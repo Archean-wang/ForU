@@ -2,7 +2,7 @@ import { getToken } from "./utils/authentication";
 import Main from "./components/Main";
 import { useStore } from "./store";
 import { observer } from "mobx-react-lite";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect } from "react";
 import { WebPlaybackSDK } from "react-spotify-web-playback-sdk";
 import Player from "./components/Player";
 import { Box, ThemeProvider, createTheme } from "@mui/material";
@@ -30,9 +30,7 @@ function App() {
     }
   }, []);
 
-  async function getAuthCode(cb: Function) {
-    let rt = localStorage.getItem("sp_rt");
-    if (rt === null) throw Error("asd");
+  const getAuthCode = useCallback(async function (cb: Function) {
     getToken().then((res) => {
       if (res) {
         const token = localStorage.getItem("sp_tk");
@@ -41,7 +39,7 @@ function App() {
         console.log("error when get token for sdk");
       }
     });
-  }
+  }, []);
 
   const theme = createTheme({
     palette: {

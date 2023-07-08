@@ -6,20 +6,21 @@ import { showTime } from "../../utils/formatter";
 import {
   checkArtists,
   followArtists,
-  playTracks,
+  playArtist,
   unfollowArtists,
 } from "../../api";
 import AlbumList from "../../components/AlbumList";
 import ArtistList from "../../components/ArtistList";
 import { useStore } from "../../store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faPlayCircle } from "@fortawesome/free-solid-svg-icons";
 import { url } from "inspector";
 import { usePlayerDevice } from "react-spotify-web-playback-sdk";
 
 function Artist() {
   // @ts-ignore
   const { hotTracks, albums, relatedArtists, artistInfo } = useLoaderData();
+  console.log(hotTracks);
   const [value, setValue] = useState(0);
 
   const params = useParams();
@@ -49,6 +50,10 @@ function Artist() {
 
   function handleChange(event: React.SyntheticEvent, newValue: number) {
     setValue(newValue);
+  }
+
+  function start() {
+    playArtist(`spotify:artist:${params.id}`, device?.device_id);
   }
 
   return (
@@ -91,22 +96,35 @@ function Artist() {
           <Typography noWrap sx={{ fontSize: 20 }}>
             听众：{artistInfo.followers.total}
           </Typography>
-          <Button
-            onClick={toggleLoved}
-            variant="contained"
-            color="success"
-            startIcon={
-              <FontAwesomeIcon
-                icon={faHeart}
-                color={isLoved ? "red" : "white"}
-              />
-            }
-            sx={{
-              maxWidth: 120,
-              height: 40,
-            }}>
-            收藏
-          </Button>
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <Button
+              onClick={start}
+              variant="contained"
+              color="success"
+              startIcon={<FontAwesomeIcon icon={faPlayCircle} />}
+              sx={{
+                maxWidth: 120,
+                height: 40,
+              }}>
+              播放
+            </Button>
+            <Button
+              onClick={toggleLoved}
+              variant="contained"
+              color="success"
+              startIcon={
+                <FontAwesomeIcon
+                  icon={faHeart}
+                  color={isLoved ? "red" : "white"}
+                />
+              }
+              sx={{
+                maxWidth: 120,
+                height: 40,
+              }}>
+              收藏
+            </Button>
+          </Box>
         </Box>
       </Box>
       <Tabs value={value} onChange={handleChange}>
@@ -124,7 +142,7 @@ function Artist() {
             rowKey={(v) => v.id}
             items={hotTracks.tracks}
             handDoubleClick={(n) => {
-              playTracks([hotTracks.tracks[n].uri], 0, device?.device_id);
+              start();
             }}
             columns={[
               {

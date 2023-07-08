@@ -11,7 +11,6 @@ import {
   getArtist,
   getArtistAlbums,
   getArtistTop,
-  getPlayingQueue,
   getPlaylistInfo,
   getRelatedArtist,
   getUserProfile,
@@ -58,10 +57,6 @@ const router = createBrowserRouter([
       {
         path: "/playing",
         element: <Playing />,
-        loader: async () => {
-          const playingList = await getPlayingQueue();
-          return { playingList };
-        },
       },
       {
         path: "/playlist/:id",

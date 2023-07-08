@@ -1,13 +1,21 @@
-import { useLoaderData } from "react-router-dom";
 import Song from "../../components/Song";
 import { Box, Typography } from "@mui/material";
+import { useStore } from "../../store";
+import { useEffect } from "react";
+import { usePlaybackState } from "react-spotify-web-playback-sdk";
+import { observer } from "mobx-react-lite";
 
 function Playing() {
-  //@ts-ignore
-  const { playingList } = useLoaderData();
-  const songs = playingList?.queue.map((track: any, index: number) => (
-    <Song track={track} index={index} key={track.id} />
-  ));
+  const store = useStore();
+  const playbackState = usePlaybackState();
+  const songs = store.playingStore.playing?.queue.map(
+    (track: any, index: number) => (
+      <Song track={track} index={index} key={track.id} />
+    )
+  );
+  useEffect(() => {
+    store.playingStore.setPlaying();
+  }, [playbackState?.track_window.current_track]);
   return (
     <Box
       sx={{
@@ -20,8 +28,8 @@ function Playing() {
       <Typography sx={{ fontWeight: "bold", fontSize: 20, color: "gray" }}>
         当前播放
       </Typography>
-      {playingList?.currently_playing !== null && (
-        <Song track={playingList?.currently_playing} index={0} />
+      {store.playingStore.playing?.currently_playing && (
+        <Song track={store.playingStore.playing?.currently_playing} index={0} />
       )}
       <Typography
         sx={{ fontWeight: "bold", fontSize: 20, color: "gray", mt: 2 }}>
@@ -32,4 +40,4 @@ function Playing() {
   );
 }
 
-export default Playing;
+export default observer(Playing);

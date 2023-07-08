@@ -147,6 +147,20 @@ async function startPlayback(context_uri: string, offset: number | string=0,devi
     }
 }
 
+async function playArtist(context_uri: string, device_id: string|null=null, position_ms: number=0) {
+    try {
+        const url = device_id ? `/me/player/play?device_id=${device_id}` : "/me/player/play";
+        const res =
+        await http.put(url, {
+            context_uri: context_uri, position_ms: position_ms
+        }) ;
+        return res.data;
+    }
+    catch (err) {
+        return Promise.reject(`Error when get start state: ${err}`);
+    }
+}
+
 async function playTracks(uris:string[], offset:string|number=0, device_id: string|null=null, position_ms: number=0) {
     try {
         const url = device_id ? `/me/player/play?device_id=${device_id}` : "/me/player/play";
@@ -262,7 +276,7 @@ async function followPlaylist(pid: string) {
 }
 
 
-async function followAlbum(aids: string) {
+async function followAlbums(aids: string) {
     try {
         const res = await http.put(`/me/albums?ids=${aids}`);
         return res.data;
@@ -272,7 +286,7 @@ async function followAlbum(aids: string) {
     }
 }
 
-async function unfollowAlbum(aids: string) {
+async function unfollowAlbums(aids: string) {
     try {
         const res = await http.delete(`/me/albums?ids=${aids}`);
         return res.data;
@@ -404,7 +418,7 @@ async function getRecentTracks() {
 
 export { getUserProfile, getPlaylists, getTracks, checkTracks, loveTracks, search, unloveTracks ,transfer, getArtists, getAlbums,
     setRepeatMode, setShuffleMode, getPlayingQueue, getPlaybackState, startPlayback,playTracks, getTop, getRecentTracks,
-    getPlaylist, getPlaylistInfo,checkPlaylist, followPlaylist,unfollowPlaylist, getAlbum, checkAlbums,
-    followAlbum, unfollowAlbum, checkArtists, followArtists, unfollowArtists, createPlaylist, getDevices,
+    getPlaylist, getPlaylistInfo,checkPlaylist, followPlaylist,unfollowPlaylist, getAlbum, checkAlbums, playArtist, 
+    followAlbums, unfollowAlbums, checkArtists, followArtists, unfollowArtists, createPlaylist, getDevices,
      getAlbumInfo, getArtistTop, getArtistAlbums, getRelatedArtist, getArtist, changePlaylistCover, changePlaylistDetail
  }

@@ -64,24 +64,26 @@ function Player({ volumeInit }: { volumeInit: number }) {
   const open = Boolean(anchorEl);
 
   useEffect(() => {
-    if (device?.status === "ready" && store.devicesStore.devices.length === 1) {
-      transfer(device.device_id, false);
+    if (device?.status === "ready") {
+      store.devicesStore.setDevices();
     } else {
-      console.log(device?.status);
+      console.log(`Device status change: ${device?.status}`);
     }
   }, [device?.status]);
 
   useEffect(() => {
-    check();
-  }, [currentId]);
+    if (store.devicesStore.devices.length === 1) {
+      transfer(store.devicesStore.devices[0].id, false);
+    }
+  }, [store.devicesStore.devices]);
 
-  function check() {
+  useEffect(() => {
     if (currentId) {
       checkTracks(currentId).then((res) => {
-        res[0] ? setIsLove(true) : setIsLove(false);
+        setIsLove(res[0]);
       });
     }
-  }
+  }, [currentId]);
 
   function shuffle() {
     let mode = !playbackState?.shuffle;

@@ -9,6 +9,7 @@ interface Artist {
     name: string
     images: Image[]
     id: string
+    uri: string
 }
 
 interface Album {
@@ -16,6 +17,7 @@ interface Album {
     id: string
     images: Image[]
     release_date: string
+    uri: string
   }
   
 interface Track {
@@ -29,6 +31,11 @@ interface Track {
   
 interface TrackItems {
     track: Track
+}
+
+interface PlayingQueue {
+    currently_playing: null | Track
+    queue: Track[]
 }
 
 interface Playlists {
@@ -111,6 +118,7 @@ interface Playlist {
     id:string
     images: Image[]
     description: string
+    uri: string
 }
 
 interface Image {
@@ -129,4 +137,4 @@ interface SavedTrack {
 }
 
 export type {Device, Albums, Album, FollowedArtists, Artist, Track, TrackItems, Playlists,
-     Playlist, SavedAlbum, Loves, TopArtists, TopTracks, RecentTracks}
+     Playlist, SavedAlbum, Loves, TopArtists, TopTracks, RecentTracks, PlayingQueue}
