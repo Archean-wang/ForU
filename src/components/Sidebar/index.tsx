@@ -149,7 +149,7 @@ function Sidebar() {
               : null
           );
         }}
-        sx={{ pl: 4 }}
+        sx={{ pl: 2 }}
         key={pl.id}
         onClick={() => navigate(`/playlist/${pl.id}`)}>
         <ListItemIcon>
@@ -186,7 +186,7 @@ function Sidebar() {
               : null
           );
         }}
-        sx={{ pl: 4 }}
+        sx={{ pl: 2 }}
         key={ar.id}
         onClick={() => navigate(`/artist/${ar.id}`)}>
         <ListItemIcon>
@@ -220,7 +220,7 @@ function Sidebar() {
               : null
           );
         }}
-        sx={{ pl: 4 }}
+        sx={{ pl: 2 }}
         key={al.album.id}
         onClick={() => navigate(`/album/${al.album.id}`)}>
         <ListItemIcon>
@@ -263,8 +263,9 @@ function Sidebar() {
           <ListItemIcon
             sx={{
               alignItems: "center",
+              color: "primary.main",
             }}>
-            <FontAwesomeIcon icon={faHeart} color="#1DB954" />
+            <FontAwesomeIcon icon={faHeart} />
           </ListItemIcon>
           <ListItemText primary="我喜欢的" />
         </ListItemButton>
@@ -362,13 +363,13 @@ function Sidebar() {
             ? { top: playlistMenu.mouseY, left: playlistMenu.mouseX }
             : undefined
         }>
-        <MenuItem onClick={playPlaylist}>
+        <MenuItem onClick={playPlaylist} dense>
           <ListItemIcon>
             <FontAwesomeIcon icon={faPlayCircle} />
           </ListItemIcon>
           播放
         </MenuItem>
-        <MenuItem onClick={deletePlaylist}>
+        <MenuItem onClick={deletePlaylist} dense>
           <ListItemIcon>
             <FontAwesomeIcon icon={faDeleteLeft} />
           </ListItemIcon>
@@ -385,13 +386,13 @@ function Sidebar() {
             ? { top: artistMenu.mouseY, left: artistMenu.mouseX }
             : undefined
         }>
-        <MenuItem onClick={startArtist}>
+        <MenuItem onClick={startArtist} dense>
           <ListItemIcon>
             <FontAwesomeIcon icon={faPlayCircle} />
           </ListItemIcon>
           播放
         </MenuItem>
-        <MenuItem onClick={unfollowArtist}>
+        <MenuItem onClick={unfollowArtist} dense>
           <ListItemIcon>
             <FontAwesomeIcon icon={faHeartBroken} />
           </ListItemIcon>
@@ -408,13 +409,14 @@ function Sidebar() {
             ? { top: albumMenu.mouseY, left: albumMenu.mouseX }
             : undefined
         }>
-        <MenuItem onClick={startAlbum}>
+        <MenuItem onClick={startAlbum} dense>
           <ListItemIcon>
             <FontAwesomeIcon icon={faPlayCircle} />
           </ListItemIcon>
           播放
         </MenuItem>
         <MenuItem
+          dense
           onClick={() => {
             unfollowAlbums(
               store.albumsStore.albums.items[albumIdx].album.id

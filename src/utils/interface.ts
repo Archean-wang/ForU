@@ -119,6 +119,10 @@ interface Playlist {
     images: Image[]
     description: string
     uri: string
+    snapshot_id: string
+    owner: {
+        id:string
+    }
 }
 
 interface Image {

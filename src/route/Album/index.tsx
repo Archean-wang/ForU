@@ -101,7 +101,9 @@ function Album() {
                 boxShadow: "none",
                 "&:hover": { boxShadow: "none" },
               }}>
-              播放全部
+              <Typography noWrap sx={{ fontSize: 14 }}>
+                播放全部
+              </Typography>
             </Button>
             <Button
               onClick={toggleLoved}
@@ -116,7 +118,9 @@ function Album() {
               sx={{
                 maxWidth: 120,
               }}>
-              收藏
+              <Typography noWrap sx={{ fontSize: 14 }}>
+                收藏
+              </Typography>
             </Button>
           </Stack>
         </Box>

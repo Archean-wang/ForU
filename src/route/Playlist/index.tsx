@@ -19,7 +19,9 @@ import { useEffect, useState } from "react";
 import { useStore } from "../../store";
 import { usePlayerDevice } from "react-spotify-web-playback-sdk";
 import EditPlaylist, { PlaylistDetail } from "../../components/EditPlaylist";
-import { PlaylistTrack } from "../../utils/interface";
+import { PlaylistTrack, Track } from "../../utils/interface";
+import { observer } from "mobx-react-lite";
+import EventBus, { MyEvent } from "../../utils/EventBus";
 
 function Playlist() {
   const params = useParams();
@@ -27,6 +29,9 @@ function Playlist() {
   const { userProfile } = useRouteLoaderData("root");
   // @ts-ignore
   const { playlist } = useLoaderData();
+  const [items, setItems] = useState(
+    playlist.tracks.items.map((v: PlaylistTrack) => v.track)
+  );
   const [isLoved, setIsLoved] = useState(false);
   const store = useStore();
   const device = usePlayerDevice();
@@ -42,6 +47,21 @@ function Playlist() {
     checkPlaylist(params.id as string, userProfile.id).then((res) => {
       setIsLoved(res[0]);
     });
+    // 删除事件更新UI
+    const handle = (e: MyEvent) => {
+      if (e.action === "delete") {
+        console.log(e);
+        const tmp = items.filter((v: Track) => v.uri !== e.uri);
+        console.log(tmp);
+        setItems(tmp);
+      }
+    };
+
+    EventBus.addHandle("playlist", handle);
+
+    return () => {
+      EventBus.removeHandle("playlist", handle);
+    };
   }, []);
 
   const toggleLoved = function () {
@@ -139,7 +159,9 @@ function Playlist() {
               sx={{
                 maxWidth: 120,
               }}>
-              播放全部
+              <Typography noWrap sx={{ fontSize: 14 }}>
+                播放全部
+              </Typography>
             </Button>
             {playlist.owner.id === userProfile.id ? (
               <Button
@@ -150,7 +172,9 @@ function Playlist() {
                 sx={{
                   maxWidth: 120,
                 }}>
-                编辑
+                <Typography noWrap sx={{ fontSize: 14 }}>
+                  编辑
+                </Typography>
               </Button>
             ) : (
               <Button
@@ -166,7 +190,9 @@ function Playlist() {
                 sx={{
                   maxWidth: 120,
                 }}>
-                收藏
+                <Typography noWrap sx={{ fontSize: 14 }}>
+                  收藏
+                </Typography>
               </Button>
             )}
           </Stack>
@@ -174,7 +200,8 @@ function Playlist() {
       </Box>
       <Box sx={{ flex: 1, overflow: "hidden" }}>
         <SongList
-          items={playlist.tracks.items.map((v: PlaylistTrack) => v.track)}
+          currentPlaylist={playlist}
+          items={items}
           handDoubleClick={(n) => {
             startPlayback(playlist.uri, n, device?.device_id);
           }}
@@ -191,4 +218,4 @@ function Playlist() {
   );
 }
 
-export default Playlist;
+export default observer(Playlist);

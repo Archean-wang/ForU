@@ -68,7 +68,9 @@ function Loves() {
               sx={{
                 maxWidth: 120,
               }}>
-              播放全部
+              <Typography noWrap sx={{ fontSize: 14 }}>
+                播放全部
+              </Typography>
             </Button>
           </Stack>
         </Box>

@@ -6,18 +6,32 @@ import {
   TableCell,
   TableBody,
   Menu,
-  MenuItem,
   Typography,
+  List,
+  Collapse,
+  ListItemButton,
+  ListItemText,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useCallback, useEffect, useState } from "react";
-import { Album, Anchor, Artist, Track } from "../../utils/interface";
-import { Link } from "react-router-dom";
+import { Album, Anchor, Artist, Playlist, Track } from "../../utils/interface";
+import { Link, useRouteLoaderData } from "react-router-dom";
 import { InlineArtists } from "../InlineArtists";
 import { showTime } from "../../utils/formatter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { checkTracks, loveTracks, unloveTracks } from "../../api";
+import {
+  faAngleDown,
+  faAngleUp,
+  faHeart,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  addItemsToPlaylist,
+  addItemsToQueue,
+  checkTracks,
+  loveTracks,
+  removeItemsFromPlaylist,
+  unloveTracks,
+} from "../../api";
 import { useStore } from "../../store";
 import EventBus, { MyEvent } from "../../utils/EventBus";
 
@@ -43,6 +57,7 @@ interface Info {
   items: Track[];
   handDoubleClick: Handler;
   columns?: ColumnDefine[];
+  currentPlaylist?: Playlist | undefined;
 }
 
 const defaultColumns = [
@@ -68,11 +83,16 @@ export default function SongList({
   items,
   columns = defaultColumns,
   handDoubleClick,
+  currentPlaylist = undefined,
 }: Info) {
   const [menuPos, setMenuPos] = useState<Anchor | null>(null);
   const [idx, setIdx] = useState(-1);
   const [loves, setLoves] = useState(() => items.map((v) => false));
   const store = useStore();
+  // @ts-ignore
+  const { userProfile } = useRouteLoaderData("root");
+
+  const [playlistsOpen, setPlaylistOpen] = useState(false);
 
   useEffect(() => {
     checkTracks(items.map((v) => v.id).join(",")).then((res) => {
@@ -99,6 +119,7 @@ export default function SongList({
 
   function handleClose() {
     setMenuPos(null);
+    setPlaylistOpen(false);
   }
 
   const commonRender = useCallback(
@@ -168,6 +189,34 @@ export default function SongList({
     }
   }
 
+  function addToQueue() {
+    addItemsToQueue(items[idx].uri).then(() => {
+      console.log("add to queue");
+    });
+    setMenuPos(null);
+  }
+
+  function addToPlaylist(pid: string) {
+    addItemsToPlaylist(pid, [items[idx].uri]).then(() => {});
+    setMenuPos(null);
+  }
+
+  function deleteFromPlaylist() {
+    currentPlaylist &&
+      removeItemsFromPlaylist(
+        currentPlaylist?.id,
+        [items[idx].uri],
+        currentPlaylist?.snapshot_id
+      ).then(() => {
+        EventBus.trigger({
+          name: "playlist",
+          action: "delete",
+          uri: items[idx].uri,
+        });
+      });
+    setMenuPos(null);
+  }
+
   return (
     <TableContainer
       sx={{
@@ -222,16 +271,48 @@ export default function SongList({
       </Table>
 
       <Menu
+        slotProps={{ paper: { style: { maxHeight: 200 } } }}
         open={menuPos !== null}
         onClose={handleClose}
+        transformOrigin={{ vertical: "bottom", horizontal: "left" }}
         anchorReference="anchorPosition"
         anchorPosition={
           menuPos !== null
             ? { top: menuPos.mouseY, left: menuPos.mouseX }
             : undefined
         }>
-        <MenuItem>添加到播放队列</MenuItem>
-        <MenuItem>添加到歌单</MenuItem>
+        <List dense>
+          <ListItemButton dense onClick={addToQueue}>
+            <ListItemText primary="下一首播放" />
+          </ListItemButton>
+          {currentPlaylist !== undefined && (
+            <ListItemButton dense onClick={deleteFromPlaylist}>
+              <ListItemText primary="从歌单删除" sx={{ pr: 2 }} />
+            </ListItemButton>
+          )}
+          <ListItemButton dense onClick={() => setPlaylistOpen(!playlistsOpen)}>
+            <ListItemText primary="添加到歌单" sx={{ pr: 2 }} />
+            {playlistsOpen ? (
+              <FontAwesomeIcon icon={faAngleUp} />
+            ) : (
+              <FontAwesomeIcon icon={faAngleDown} />
+            )}
+          </ListItemButton>
+          <Collapse in={playlistsOpen}>
+            <List dense>
+              {store.playlistsStore.playlists.items
+                .filter((v) => v.owner.id === userProfile.id)
+                .map((v) => (
+                  <ListItemButton
+                    dense
+                    sx={{ pl: 4 }}
+                    onClick={() => addToPlaylist(v.id)}>
+                    <ListItemText>{v.name}</ListItemText>
+                  </ListItemButton>
+                ))}
+            </List>
+          </Collapse>
+        </List>
       </Menu>
     </TableContainer>
   );

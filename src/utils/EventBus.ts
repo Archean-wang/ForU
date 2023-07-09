@@ -1,5 +1,19 @@
 type Handle = (event:MyEvent) => any
-export interface MyEvent {[key:string]: any}
+export interface MyEvent {
+    name:string
+    [key:string]: any
+}
+
+export interface LoveEvent extends MyEvent{
+    value: boolean
+    id: string
+}
+
+export interface PlaylistEvent extends MyEvent{
+    action: "add"| "remove"
+    pid: string
+    uri:string
+}
 
 
 class EventBus {

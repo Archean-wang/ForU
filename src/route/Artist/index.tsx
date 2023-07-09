@@ -103,7 +103,9 @@ function Artist() {
                 maxWidth: 120,
                 height: 40,
               }}>
-              播放
+              <Typography noWrap sx={{ fontSize: 14 }}>
+                播放
+              </Typography>
             </Button>
             <Button
               onClick={toggleLoved}
@@ -119,7 +121,9 @@ function Artist() {
                 maxWidth: 120,
                 height: 40,
               }}>
-              收藏
+              <Typography noWrap sx={{ fontSize: 14 }}>
+                收藏
+              </Typography>
             </Button>
           </Box>
         </Box>

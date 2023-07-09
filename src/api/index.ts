@@ -175,16 +175,6 @@ async function playTracks(uris:string[], offset:string|number=0, device_id: stri
     }
 }
 
-async function getPlaylist(pid: string) {
-    try {
-        const res = await http.get(`/playlists/${pid}/tracks`)
-        return res.data;
-    }
-    catch(err) {
-        return Promise.reject(`Error when get playlist tracks: ${pid}, ${err}`)
-    }
-}
-
 async function search(kw: string, type:string="track,artist,album,playlist") {
     try {
         const res = await http.get(`/search`, {params: {q: kw, type}})
@@ -306,16 +296,6 @@ async function unfollowPlaylist(pid: string) {
     }
 }
 
-async function getAlbum(aid: string) {
-    try {
-        const res = await http.get(`/albums/${aid}/tracks`);
-        return res.data;
-    }
-    catch(err) {
-        return Promise.reject(`Error when get album tracks: ${aid}, ${err}`)
-    }
-}
-
 async function getAlbumInfo(aid: string) {
     try {
         const res = await http.get(`/albums/${aid}`)
@@ -416,9 +396,47 @@ async function getRecentTracks() {
     }
 }
 
-export { getUserProfile, getPlaylists, getTracks, checkTracks, loveTracks, search, unloveTracks ,transfer, getArtists, getAlbums,
-    setRepeatMode, setShuffleMode, getPlayingQueue, getPlaybackState, startPlayback,playTracks, getTop, getRecentTracks,
-    getPlaylist, getPlaylistInfo,checkPlaylist, followPlaylist,unfollowPlaylist, getAlbum, checkAlbums, playArtist, 
-    followAlbums, unfollowAlbums, checkArtists, followArtists, unfollowArtists, createPlaylist, getDevices,
-     getAlbumInfo, getArtistTop, getArtistAlbums, getRelatedArtist, getArtist, changePlaylistCover, changePlaylistDetail
+async function addItemsToPlaylist(pid:string, uris:string[]) {
+    try {
+        const res = await http.post(`/playlists/${pid}/tracks`, {uris});
+        return res.data;
+    }
+    catch(err) {
+        return Promise.reject(`Error when add trakcs to playlist: ${err}`);
+    }
+}
+
+async function removeItemsFromPlaylist(pid:string, uris:string[], snapshot_id: string) {
+    try {
+        const res = await http.delete(`/playlists/${pid}/tracks`, {data: {tracks: uris.map(v=>{return {uri: v}}), snapshot_id}});
+        return res.data;
+    }
+    catch(err) {
+        return Promise.reject(`Error when remove trakcs from playlist: ${err}`);
+    }
+}
+
+async function addItemsToQueue(uri:string, device_id:string|undefined=undefined) {
+    try {
+        const url = device_id ? `/me/player/queue?device_id=${device_id}&uri=${uri}` : `/me/player/queue?uri=${uri}`
+        const res = await http.post(url);
+        return res.data;
+    }
+    catch(err) {
+        return Promise.reject(`Error when add trakcs to queue: ${err}`);
+    }
+}
+
+export { getUserProfile, getTop, getPlayingQueue, getRecentTracks, search , addItemsToQueue,
+
+    getPlaylists, getPlaylistInfo,checkPlaylist, followPlaylist, unfollowPlaylist,
+    createPlaylist,changePlaylistCover, changePlaylistDetail,addItemsToPlaylist, removeItemsFromPlaylist,
+
+    getTracks, checkTracks, loveTracks, unloveTracks,
+    
+    getArtists, checkArtists, followArtists, unfollowArtists,playArtist, getArtistTop, getArtistAlbums, getRelatedArtist, getArtist,
+    
+    getAlbums, checkAlbums, followAlbums, unfollowAlbums,getAlbumInfo,
+    
+    getPlaybackState, startPlayback, playTracks, getDevices,transfer, setRepeatMode, setShuffleMode,
  }
