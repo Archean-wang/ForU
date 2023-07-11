@@ -9,7 +9,6 @@ function Content() {
       sx={{
         flex: 1,
         minWidth: 400,
-        overflow: "auto",
         height: "100%",
       }}>
       <Header></Header>
@@ -18,7 +17,6 @@ function Content() {
           width: "100%",
           padding: 4,
           height: "calc(100% - 60px)",
-          overflow: "hidden",
           position: "relative",
         }}>
         {navigation.state === "loading" ? (

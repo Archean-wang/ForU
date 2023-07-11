@@ -14,6 +14,7 @@ function Daily() {
     store.topItemsStore.setTopTracks();
     store.recentStore.setRecentTracks();
   }, []);
+
   return (
     <Box
       sx={{

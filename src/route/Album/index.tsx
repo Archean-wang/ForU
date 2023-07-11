@@ -2,7 +2,6 @@ import { useLoaderData, useParams } from "react-router-dom";
 import SongList from "../../components/SongList";
 import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
 import { InlineArtists } from "../../components/InlineArtists";
-import { showTime } from "../../utils/formatter";
 import {
   checkAlbums,
   followAlbums,
@@ -43,12 +42,10 @@ function Album() {
     }
   };
 
-  const startPlay = useCallback(
-    (index: number) => {
-      startPlayback(album.uri, index);
-    },
-    [album]
-  );
+  const startPlay = useCallback(() => {
+    startPlayback(album.uri, 0, device?.device_id);
+  }, [album, device]);
+
   return (
     <Box
       sx={{
@@ -92,7 +89,7 @@ function Album() {
           </Typography>
           <Stack direction={"row"} gap={2}>
             <Button
-              onClick={() => startPlay(0)}
+              onClick={startPlay}
               variant="contained"
               color="success"
               startIcon={<FontAwesomeIcon icon={faCirclePlay} />}

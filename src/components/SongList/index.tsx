@@ -58,6 +58,8 @@ interface Info {
   handDoubleClick: Handler;
   columns?: ColumnDefine[];
   currentPlaylist?: Playlist | undefined;
+  hideHead?: boolean;
+  fixHeight?: boolean;
 }
 
 const defaultColumns = [
@@ -84,6 +86,8 @@ export default function SongList({
   columns = defaultColumns,
   handDoubleClick,
   currentPlaylist = undefined,
+  hideHead = false,
+  fixHeight = true,
 }: Info) {
   const [menuPos, setMenuPos] = useState<Anchor | null>(null);
   const [idx, setIdx] = useState(-1);
@@ -95,6 +99,7 @@ export default function SongList({
   const [playlistsOpen, setPlaylistOpen] = useState(false);
 
   useEffect(() => {
+    console.log(items);
     checkTracks(items.map((v) => v.id).join(",")).then((res) => {
       setLoves(res);
     });
@@ -154,7 +159,7 @@ export default function SongList({
     []
   );
 
-  const filedRender = (f: string): Render => {
+  const fieldRender = (f: string): Render => {
     switch (f) {
       case "artists":
         return artistRender;
@@ -220,22 +225,25 @@ export default function SongList({
   return (
     <TableContainer
       sx={{
-        height: "100%",
+        height: fixHeight ? "100%" : "initial",
         width: "100%",
         borderRadius: 2,
         overflow: "auto",
       }}>
       <Table padding="normal" size="small">
-        <TableHead sx={{ width: "100%" }}>
-          <TableRow>
-            <TableCell align="left">#</TableCell>
-            {columns.map((v, index) => (
-              <TableCell align="left" key={index} sx={{ flex: 1 }}>
-                {v.header}
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
+        {!hideHead && (
+          <TableHead sx={{ width: "100%" }}>
+            <TableRow>
+              <TableCell align="left">#</TableCell>
+              {columns.map((v, index) => (
+                <TableCell align="left" key={index} sx={{ flex: 1 }}>
+                  {v.header}
+                </TableCell>
+              ))}
+              <TableCell align="left"></TableCell>
+            </TableRow>
+          </TableHead>
+        )}
         <TableBody>
           {items.map((item, index) => (
             <TableRow
@@ -245,7 +253,10 @@ export default function SongList({
                 setIdx(index);
                 setMenuPos({ mouseX: e.clientX, mouseY: e.clientY });
               }}
-              onDoubleClick={() => handDoubleClick(index)}>
+              onDoubleClick={(e) => {
+                handDoubleClick(index);
+                e.preventDefault();
+              }}>
               <Cell component="th" scope="row">
                 {index + 1}
               </Cell>
@@ -253,7 +264,7 @@ export default function SongList({
                 <Cell component="th" scope="row" key={index}>
                   {v.render
                     ? v.render(item[v.field])
-                    : filedRender(v.field)(item[v.field])}
+                    : fieldRender(v.field)(item[v.field])}
                 </Cell>
               ))}
               <Cell

@@ -3,7 +3,10 @@ import { getPlayingQueue } from "../api";
 import { PlayingQueue } from "../utils/interface";
 
 export class PlayingStore{
-    playing: null| PlayingQueue=null
+    playing: PlayingQueue={
+        currently_playing: null,
+        queue: []
+    }
     constructor() {
         makeAutoObservable(this);
     }

@@ -101,7 +101,7 @@ function Header() {
         open={open}
         anchorEl={anchorEl}
         onClose={handleClose}
-        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}>
         <MenuItem onClick={handleColorMode}>
           <ListItemIcon>

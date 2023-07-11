@@ -1,23 +1,38 @@
-import Song from "../../components/Song";
 import { Box, Typography } from "@mui/material";
 import { useStore } from "../../store";
-import { useEffect } from "react";
-import { usePlaybackState } from "react-spotify-web-playback-sdk";
+import { useCallback, useEffect } from "react";
+import {
+  usePlaybackState,
+  usePlayerDevice,
+  useSpotifyPlayer,
+} from "react-spotify-web-playback-sdk";
 import { observer } from "mobx-react-lite";
+import SongList from "../../components/SongList";
+import { startPlayback } from "../../api";
 
 function Playing() {
   const store = useStore();
   const playbackState = usePlaybackState();
-  const songs = store.playingStore.playing?.queue.map(
-    (track: any, index: number) => (
-      <Song track={track} index={index} key={track.id} />
-    )
-  );
+  const player = useSpotifyPlayer();
+  const songs = store.playingStore.playing.queue;
+  const device = usePlayerDevice();
 
   useEffect(() => {
     console.log(playbackState);
     store.playingStore.setPlaying();
   }, [playbackState?.track_window.current_track]);
+
+  const toggle = useCallback(function () {
+    player?.togglePlay();
+  }, []);
+
+  function onDoubleClick(n: number) {
+    startPlayback(
+      playbackState?.context.uri as string,
+      songs[n].uri,
+      device?.device_id
+    );
+  }
 
   return (
     <Box
@@ -31,14 +46,25 @@ function Playing() {
       <Typography sx={{ fontWeight: "bold", fontSize: 20, color: "gray" }}>
         当前播放
       </Typography>
-      {store.playingStore.playing?.currently_playing && (
-        <Song track={store.playingStore.playing?.currently_playing} index={0} />
+      {store.playingStore.playing.currently_playing && (
+        <SongList
+          items={[store.playingStore.playing.currently_playing]}
+          handDoubleClick={toggle}
+          fixHeight={false}
+          hideHead={true}
+        />
       )}
       <Typography
         sx={{ fontWeight: "bold", fontSize: 20, color: "gray", mt: 2 }}>
         即将播放
       </Typography>
-      <Box component={"div"}>{songs}</Box>
+
+      <SongList
+        items={songs}
+        handDoubleClick={onDoubleClick}
+        fixHeight={false}
+        hideHead={true}
+      />
     </Box>
   );
 }

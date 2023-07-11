@@ -16,5 +16,6 @@ http.interceptors.request.use(async (config) =>{
     return config;
 }, error => Promise.reject(error))
 
-http.interceptors.response.use(response => response, error => Promise.reject(`${error.response.data.error.message}`));
+http.interceptors.response.use(response => response.data, 
+    error => Promise.reject(`${error.response.data.error.message}`));
 export default http;

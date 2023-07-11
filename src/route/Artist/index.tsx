@@ -1,6 +1,6 @@
 import { Box, Tabs, Tab, Typography, Button, Avatar } from "@mui/material";
 import { useLoaderData, useParams } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import SongList from "../../components/SongList";
 import {
   checkArtists,
@@ -49,9 +49,12 @@ function Artist() {
     setValue(newValue);
   }
 
-  function start() {
-    playArtist(`spotify:artist:${params.id}`, device?.device_id);
-  }
+  const start = useCallback(
+    function () {
+      playArtist(`spotify:artist:${params.id}`, device?.device_id);
+    },
+    [device]
+  );
 
   return (
     <Box

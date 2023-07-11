@@ -2,6 +2,7 @@ import { Avatar, Box, Typography } from "@mui/material";
 import { Artist } from "../../utils/interface";
 import { useNavigate } from "react-router-dom";
 
+// wrap 用于单行显示歌手
 function ArtistList({
   artists,
   wrap = "wrap",

@@ -6,7 +6,7 @@ import { usePlayerDevice } from "react-spotify-web-playback-sdk";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlay, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useStore } from "../../store";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 
 function Loves() {
@@ -19,9 +19,12 @@ function Loves() {
     store.lovesStore.setLoves();
   }, []);
 
-  function startPlay(index: number) {
-    startPlayback(`${userProfile.uri}:collection`, index, device?.device_id);
-  }
+  const startPlay = useCallback(
+    function (index: number) {
+      startPlayback(`${userProfile.uri}:collection`, index, device?.device_id);
+    },
+    [userProfile, device]
+  );
 
   return (
     <Box

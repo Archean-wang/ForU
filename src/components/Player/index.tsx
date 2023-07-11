@@ -141,23 +141,21 @@ function Player({ volumeInit }: { volumeInit: number }) {
     }
   }
 
-  const volumeIcon = useCallback((v: number) => {
+  const volumeIcon = (v: number) => {
     if (v === 0) return faVolumeOff;
     else if (v <= 50) return faVolumeLow;
     return faVolumeHigh;
-  }, []);
+  };
 
   function handLove() {
     if (!currentId) return;
     if (isLove) {
       unloveTracks(currentId).then(() => {
-        // setIsLove(false);
         store.lovesStore.setLoves();
         EventBus.trigger({ name: "loveTrack", id: currentId, value: false });
       });
     } else {
       loveTracks(currentId).then(() => {
-        // setIsLove(true);
         store.lovesStore.setLoves();
         EventBus.trigger({ name: "loveTrack", id: currentId, value: true });
       });

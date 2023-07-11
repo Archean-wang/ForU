@@ -13,6 +13,7 @@ function Always() {
   useEffect(() => {
     store.recentStore.setRecentTracks();
   }, [playbackState?.track_window.current_track]);
+
   return <Commonlist tracks={tracks} title="最近播放"></Commonlist>;
 }
 
