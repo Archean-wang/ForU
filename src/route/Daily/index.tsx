@@ -26,7 +26,7 @@ function Daily() {
         overflowY: "auto",
       }}>
       <Typography variant="h5" sx={{ bgcolor: "primary" }}>
-        经常播放
+        最爱播放
       </Typography>
       <Box
         sx={{
@@ -92,7 +92,7 @@ function Daily() {
           </Typography>
         </Box>
       </Box>
-      <Typography variant="h5">常听歌手</Typography>
+      <Typography variant="h5">最爱的歌手</Typography>
       <ArtistList
         artists={store.topItemsStore.topArtists.items}
         wrap="nowrap"

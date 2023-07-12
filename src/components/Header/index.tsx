@@ -21,6 +21,7 @@ import {
   faSun,
 } from "@fortawesome/free-solid-svg-icons";
 import { useStore } from "../../store";
+import debounce from "../../utils/debounce";
 
 function Header() {
   const store = useStore();
@@ -79,7 +80,7 @@ function Header() {
       </Stack>
       <Input
         placeholder="搜索"
-        onChange={onChange}
+        onChange={debounce(onChange, 1000)}
         endAdornment={
           <InputAdornment position="start">
             <FontAwesomeIcon icon={faMagnifyingGlass} />
