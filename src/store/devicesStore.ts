@@ -11,7 +11,7 @@ export class DevicesStore {
     setDevices = async() =>{
         const res  = await getDevices();
         runInAction(() => {
-            this.devices = res.devices as Device[];
+            this.devices = res.devices;
         })
     }
 }

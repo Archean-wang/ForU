@@ -17,7 +17,7 @@ export class LovesStore {
     setLoves = async() =>{
         const res = await getTracks();
         runInAction(() => {
-            this.loves = res as Loves;
+            this.loves = res;
         })
     }
 }

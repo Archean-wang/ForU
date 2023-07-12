@@ -17,7 +17,7 @@ export class RecentStore {
     setRecentTracks= async() =>{
         const res  = await getRecentTracks();
         runInAction(() => {
-            this.recentTracks = res as RecentTracks;
+            this.recentTracks = res;
 
         })
     }

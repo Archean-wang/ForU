@@ -17,7 +17,7 @@ export class ArtistsStore {
     setArtists = async() =>{
         const res  = await getArtists();
         runInAction(() => {
-            this.artists = res as FollowedArtists;
+            this.artists = res;
         })
     }
 }

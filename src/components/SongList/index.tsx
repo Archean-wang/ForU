@@ -99,10 +99,12 @@ export default function SongList({
   const [playlistsOpen, setPlaylistOpen] = useState(false);
 
   useEffect(() => {
-    console.log(items);
-    checkTracks(items.map((v) => v.id).join(",")).then((res) => {
-      setLoves(res);
-    });
+    const ids = items.map((v) => v.id).join(",");
+    if (ids) {
+      checkTracks(ids).then((res) => {
+        setLoves(res);
+      });
+    }
   }, [items]);
 
   useEffect(() => {

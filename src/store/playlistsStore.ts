@@ -17,7 +17,7 @@ export class PlaylistsStore {
     setPlaylists = async() =>{
         const res  = await getPlaylists();
         runInAction(() => {
-            this.playlists = res as Playlists;
+            this.playlists = res;
         })
     }
 }

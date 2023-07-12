@@ -1,20 +1,20 @@
 import { PlaylistDetail } from "../components/EditPlaylist";
 import http from "../utils/http";
-import { PlayingQueue } from "../utils/interface";
+import { Albums, AvailableDevices, FollowedArtists, Loves, PlayingQueue, Playlists, RecentTracks, TopArtists, TopTracks } from "../utils/interface";
 
-async function getPlaylists() {
+async function getPlaylists():Promise<Playlists> {
     return await http.get("/me/playlists");
 }
 
-async function getAlbums() {
+async function getAlbums():Promise<Albums> {
     return await http.get("/me/albums");
 }
 
-async function getArtists() {
+async function getArtists():Promise<FollowedArtists> {
     return await http.get("/me/following", { params: { type: "artist" } });
 }
 
-async function getTracks(offset=0) {
+async function getTracks(offset=0):Promise<Loves> {
     return await http.get("/me/tracks", { params: { limit: 50, offset } });
 }
 
@@ -156,15 +156,15 @@ async function changePlaylistDetail(pid: string, data:PlaylistDetail) {
     return await http.put(`/playlists/${pid}`, {name:data.name, description: data.description});
 }
 
-async function getDevices() {
+async function getDevices():Promise<AvailableDevices> {
     return await http.get("/me/player/devices");
 }
 
-async function getTop(type: string) {
+async function getTop(type: string):Promise<TopTracks|TopArtists> {
     return await http.get(`/me/top/${type}`);
 }
 
-async function getRecentTracks() {
+async function getRecentTracks():Promise<RecentTracks> {
     return await http.get(`/me/player/recently-played`);
 }
 

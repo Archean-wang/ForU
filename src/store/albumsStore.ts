@@ -17,7 +17,7 @@ export class AlbumsStore {
     setAlbums = async() =>{
         const res  = await getAlbums();
         runInAction(() => {
-            this.albums = res as Albums;
+            this.albums = res;
         })
     }
 }

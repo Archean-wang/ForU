@@ -15,7 +15,7 @@ import {
   usePlayerDevice,
   useSpotifyPlayer,
 } from "react-spotify-web-playback-sdk";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   checkTracks,
   loveTracks,
@@ -67,16 +67,11 @@ function Player({ volumeInit }: { volumeInit: number }) {
   useEffect(() => {
     if (device?.status === "ready") {
       store.devicesStore.setDevices();
+      transfer(device.device_id, false);
     } else {
       console.log(`Device status change: ${device?.status}`);
     }
   }, [device?.status]);
-
-  useEffect(() => {
-    if (store.devicesStore.devices.length === 1) {
-      transfer(store.devicesStore.devices[0].id, false);
-    }
-  }, [store.devicesStore.devices]);
 
   useEffect(() => {
     if (currentId) {

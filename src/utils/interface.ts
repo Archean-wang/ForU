@@ -5,6 +5,10 @@ interface Device {
     type: string
 }
 
+interface AvailableDevices {
+    devices: Device[]
+}
+
 interface Artist {
     name: string
     images: Image[]
@@ -152,5 +156,5 @@ interface Anchor {
 }
 
 
-export type {Device, Albums, Album, FollowedArtists, Artist, Track, TrackItems, Playlists,
+export type {Device, AvailableDevices, Albums, Album, FollowedArtists, Artist, Track, TrackItems, Playlists,
      Playlist, SavedAlbum, Loves, TopArtists, TopTracks, RecentTracks, PlayingQueue, Anchor, PlaylistTrack}
