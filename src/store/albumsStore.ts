@@ -1,25 +1,27 @@
-import {makeAutoObservable, runInAction} from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import { getAlbums } from "../api";
 import { Albums } from "../utils/interface";
 
 export class AlbumsStore {
-    albums = {href: "",
-        limit: 0,
-        next: "",
-        offset: 0,
-        previous: "",
-        total: 0,
-        items: []} as Albums;
-    constructor() {
-        makeAutoObservable(this);
-    }
+  albums = {
+    href: "",
+    limit: 0,
+    next: "",
+    offset: 0,
+    previous: "",
+    total: 0,
+    items: [],
+  } as Albums;
+  constructor() {
+    makeAutoObservable(this);
+  }
 
-    setAlbums = async() =>{
-        const res  = await getAlbums();
-        runInAction(() => {
-            this.albums = res;
-        })
-    }
+  setAlbums = async () => {
+    const res = await getAlbums();
+    runInAction(() => {
+      this.albums = res;
+    });
+  };
 }
 
 export default new AlbumsStore();

@@ -1,19 +1,19 @@
-import {makeAutoObservable, runInAction} from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import { getDevices } from "../api";
 import { Device } from "../utils/interface";
 
 export class DevicesStore {
-    devices = [] as Device[];
-    constructor() {
-        makeAutoObservable(this);
-    }
+  devices = [] as Device[];
+  constructor() {
+    makeAutoObservable(this);
+  }
 
-    setDevices = async() =>{
-        const res  = await getDevices();
-        runInAction(() => {
-            this.devices = res.devices;
-        })
-    }
+  setDevices = async () => {
+    const res = await getDevices();
+    runInAction(() => {
+      this.devices = res.devices;
+    });
+  };
 }
 
 export default new DevicesStore();

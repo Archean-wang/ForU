@@ -1,26 +1,27 @@
-import {makeAutoObservable, runInAction} from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import { getRecentTracks } from "../api";
 import { RecentTracks } from "../utils/interface";
 
 export class RecentStore {
-    recentTracks = {href: "",
+  recentTracks = {
+    href: "",
     limit: 0,
     next: "",
     offset: 0,
     total: 0,
-    items: []} as RecentTracks
+    items: [],
+  } as RecentTracks;
 
-    constructor() {
-        makeAutoObservable(this);
-    }
+  constructor() {
+    makeAutoObservable(this);
+  }
 
-    setRecentTracks= async() =>{
-        const res  = await getRecentTracks();
-        runInAction(() => {
-            this.recentTracks = res;
-
-        })
-    }
+  setRecentTracks = async () => {
+    const res = await getRecentTracks();
+    runInAction(() => {
+      this.recentTracks = res;
+    });
+  };
 }
 
 export default new RecentStore();

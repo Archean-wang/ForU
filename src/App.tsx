@@ -45,13 +45,27 @@ function App() {
   const theme = createTheme({
     palette: {
       mode: store.colorModeStore.mode,
-      primary: {
-        main: "#1DB954",
-      },
-      success: {
-        main: "#1DB954",
-      },
-      secondary: grey,
+      ...(store.colorModeStore.mode === "light"
+        ? {
+            primary: {
+              main: "#1DB954",
+            },
+            success: {
+              main: "#1DB954",
+            },
+            secondary: grey,
+            popover: "#fff",
+          }
+        : {
+            primary: {
+              main: "#1DB954",
+            },
+            success: {
+              main: "#1DB954",
+            },
+            secondary: grey,
+            popover: grey[800],
+          }),
     },
   });
 

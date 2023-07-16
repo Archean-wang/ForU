@@ -5,12 +5,8 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  Menu,
   Typography,
-  List,
-  Collapse,
-  ListItemButton,
-  ListItemText,
+  MenuItem,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useCallback, useEffect, useState } from "react";
@@ -19,11 +15,7 @@ import { Link, useRouteLoaderData } from "react-router-dom";
 import { InlineArtists } from "../InlineArtists";
 import { showTime } from "../../utils/formatter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faAngleDown,
-  faAngleUp,
-  faHeart,
-} from "@fortawesome/free-solid-svg-icons";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import {
   addItemsToPlaylist,
   addItemsToQueue,
@@ -34,6 +26,8 @@ import {
 } from "../../api";
 import { useStore } from "../../store";
 import EventBus, { MyEvent } from "../../utils/EventBus";
+import SubMenu from "../SubMenu";
+import ContextMenu from "../ContextMenu";
 
 const Cell = styled(TableCell)(
   ({ theme }) => `
@@ -96,8 +90,6 @@ export default function SongList({
   // @ts-ignore
   const { userProfile } = useRouteLoaderData("root");
 
-  const [playlistsOpen, setPlaylistOpen] = useState(false);
-
   useEffect(() => {
     const ids = items.map((v) => v.id).join(",");
     if (ids) {
@@ -126,7 +118,6 @@ export default function SongList({
 
   function handleClose() {
     setMenuPos(null);
-    setPlaylistOpen(false);
   }
 
   const commonRender = useCallback(
@@ -252,6 +243,7 @@ export default function SongList({
               key={item.id}
               hover
               onContextMenu={(e) => {
+                e.preventDefault();
                 setIdx(index);
                 setMenuPos({ mouseX: e.clientX, mouseY: e.clientY });
               }}
@@ -283,50 +275,24 @@ export default function SongList({
         </TableBody>
       </Table>
 
-      <Menu
-        slotProps={{ paper: { style: { maxHeight: 200 } } }}
-        open={menuPos !== null}
-        onClose={handleClose}
-        transformOrigin={{ vertical: "bottom", horizontal: "left" }}
-        anchorReference="anchorPosition"
-        anchorPosition={
-          menuPos !== null
-            ? { top: menuPos.mouseY, left: menuPos.mouseX }
-            : undefined
-        }>
-        <List dense>
-          <ListItemButton dense onClick={addToQueue}>
-            <ListItemText primary="下一首播放" />
-          </ListItemButton>
-          {currentPlaylist !== undefined && (
-            <ListItemButton dense onClick={deleteFromPlaylist}>
-              <ListItemText primary="从歌单删除" sx={{ pr: 2 }} />
-            </ListItemButton>
-          )}
-          <ListItemButton dense onClick={() => setPlaylistOpen(!playlistsOpen)}>
-            <ListItemText primary="添加到歌单" sx={{ pr: 2 }} />
-            {playlistsOpen ? (
-              <FontAwesomeIcon icon={faAngleUp} />
-            ) : (
-              <FontAwesomeIcon icon={faAngleDown} />
-            )}
-          </ListItemButton>
-          <Collapse in={playlistsOpen}>
-            <List dense>
-              {store.playlistsStore.playlists.items
-                .filter((v) => v.owner.id === userProfile.id)
-                .map((v) => (
-                  <ListItemButton
-                    dense
-                    sx={{ pl: 4 }}
-                    onClick={() => addToPlaylist(v.id)}>
-                    <ListItemText>{v.name}</ListItemText>
-                  </ListItemButton>
-                ))}
-            </List>
-          </Collapse>
-        </List>
-      </Menu>
+      <ContextMenu onClose={handleClose} anchorPosition={menuPos}>
+        <MenuItem onClick={addToQueue} dense>
+          下一首播放
+        </MenuItem>
+        <MenuItem onClick={deleteFromPlaylist} dense>
+          从歌单删除
+        </MenuItem>
+
+        <SubMenu title="添加到">
+          {store.playlistsStore.playlists.items
+            .filter((v) => v.owner.id === userProfile.id)
+            .map((v) => (
+              <MenuItem dense onClick={() => addToPlaylist(v.id)}>
+                {v.name}
+              </MenuItem>
+            ))}
+        </SubMenu>
+      </ContextMenu>
     </TableContainer>
   );
 }
