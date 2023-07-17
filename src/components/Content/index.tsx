@@ -7,7 +7,9 @@ function Content() {
   return (
     <Box
       sx={{
-        flex: 1,
+        borderLeft: "solid 12px",
+        borderLeftColor: "divider",
+        flex: 16,
         minWidth: 400,
         height: "100%",
       }}>

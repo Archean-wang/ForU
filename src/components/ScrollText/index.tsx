@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import { ReactElement, useEffect, useRef, useState } from "react";
+import debounce from "../../utils/debounce";
 
 function ScrollText({ children }: { children: ReactElement }) {
   const ref = useRef<HTMLElement>(null);
@@ -7,9 +8,10 @@ function ScrollText({ children }: { children: ReactElement }) {
 
   useEffect(() => {
     checkScroll();
-    window.addEventListener("resize", checkScroll);
+    const tmp = debounce(checkScroll, 500);
+    window.addEventListener("resize", tmp);
     return () => {
-      window.removeEventListener("resize", checkScroll);
+      window.removeEventListener("resize", tmp);
     };
   });
 

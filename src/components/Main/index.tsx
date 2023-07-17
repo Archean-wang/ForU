@@ -6,8 +6,8 @@ function Main() {
     <Box
       sx={{
         display: "flex",
-        gap: 1,
         height: "calc(100vh - 80px)",
+        backgroundColor: "background.default",
       }}>
       <Sidebar></Sidebar>
       <Content></Content>

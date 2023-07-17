@@ -175,6 +175,9 @@ function Player({ volumeInit }: { volumeInit: number }) {
   return (
     <Box
       sx={{
+        borderTop: "solid 1px",
+        borderTopColor: "divider",
+        backgroundColor: "background.default",
         height: "80px",
         display: "flex",
         flexWrap: "nowrap",

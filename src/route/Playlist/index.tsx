@@ -22,6 +22,8 @@ import EditPlaylist, { PlaylistDetail } from "../../components/EditPlaylist";
 import { PlaylistTrack, Track } from "../../utils/interface";
 import { observer } from "mobx-react-lite";
 import EventBus, { MyEvent } from "../../utils/EventBus";
+import InfoCard from "../../components/InfoCard";
+import ContainedButton from "../../components/ContainedButton";
 
 function Playlist() {
   const params = useParams();
@@ -114,90 +116,47 @@ function Playlist() {
     <Box
       sx={{
         height: "100%",
+        width: "100%",
         display: "flex",
         flexDirection: "column",
       }}>
-      <Box
-        sx={{
-          height: 200,
-          display: "flex",
-          alignItems: "center",
-          gap: 10,
-          mb: 2,
-        }}>
-        <Avatar
-          src={imageUrl}
-          variant="rounded"
-          sx={{
-            height: 200,
-            width: 200,
-          }}
-        />
+      <InfoCard title={name} image={imageUrl} type={playlist.type}>
         <Box
           sx={{
             display: "flex",
-            height: "100%",
-            flexDirection: "column",
+            width: "100%",
             justifyContent: "space-between",
             gap: 1,
           }}>
-          <Typography noWrap sx={{ fontSize: 32 }}>
-            {name}
-          </Typography>
-          <Typography noWrap sx={{ fontSize: 14 }}>
-            详情：{description ? description : "暂无"}
-          </Typography>
-          <Typography noWrap sx={{ fontSize: 14 }}>
-            曲目： {playlist.tracks.items.length}首
-          </Typography>
-          <Stack direction={"row"} gap={2}>
-            <Button
-              onClick={() => startPlay(0)}
-              variant="contained"
-              color="success"
-              startIcon={<FontAwesomeIcon icon={faCirclePlay} />}
-              sx={{
-                maxWidth: 120,
-              }}>
-              <Typography noWrap sx={{ fontSize: 14 }}>
-                播放全部
-              </Typography>
-            </Button>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+            <Typography maxHeight="3rem" overflow="hidden">
+              {description ? description : ""}
+            </Typography>
+            <Typography noWrap sx={{ maxWidth: 200 }}>
+              {playlist.tracks.items.length}首
+            </Typography>
+          </Box>
+
+          <Stack direction={"row"} gap={2} alignItems="flex-end">
+            <ContainedButton onClick={() => startPlay(0)} icon={faCirclePlay}>
+              播放
+            </ContainedButton>
             {playlist.owner.id === userProfile.id ? (
-              <Button
-                onClick={editPlaylist}
-                variant="contained"
-                color="success"
-                startIcon={<FontAwesomeIcon icon={faEdit} />}
-                sx={{
-                  maxWidth: 120,
-                }}>
-                <Typography noWrap sx={{ fontSize: 14 }}>
-                  编辑
-                </Typography>
-              </Button>
+              <ContainedButton onClick={editPlaylist} icon={faEdit}>
+                编辑
+              </ContainedButton>
             ) : (
-              <Button
+              <ContainedButton
                 onClick={toggleLoved}
-                variant="contained"
-                color="success"
-                startIcon={
-                  <FontAwesomeIcon
-                    icon={faHeart}
-                    color={isLoved ? "red" : "white"}
-                  />
-                }
-                sx={{
-                  maxWidth: 120,
-                }}>
-                <Typography noWrap sx={{ fontSize: 14 }}>
-                  收藏
-                </Typography>
-              </Button>
+                icon={faHeart}
+                color={isLoved ? "red" : "white"}>
+                收藏
+              </ContainedButton>
             )}
           </Stack>
         </Box>
-      </Box>
+      </InfoCard>
+
       <Box sx={{ flex: 1, overflow: "hidden" }}>
         <SongList
           currentPlaylist={playlist}

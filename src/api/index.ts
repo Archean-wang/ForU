@@ -6,6 +6,7 @@ import {
   FollowedArtists,
   Loves,
   PlayingQueue,
+  Playlist,
   Playlists,
   RecentTracks,
   TopArtists,
@@ -129,7 +130,7 @@ async function checkPlaylist(pid: string, ids: string): Promise<boolean[]> {
   });
 }
 
-async function createPlaylist(uid: string) {
+async function createPlaylist(uid: string): Promise<Playlist> {
   return await http.post(`/users/${uid}/playlists`, { name: "新建歌单" });
 }
 

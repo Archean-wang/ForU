@@ -57,6 +57,10 @@ function App() {
             popover: "#fff",
           }
         : {
+            background: {
+              paper: "#191414",
+              default: grey[900],
+            },
             primary: {
               main: "#1DB954",
             },

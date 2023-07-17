@@ -1,4 +1,12 @@
-import { Box, Tabs, Tab, Typography, Button, Avatar } from "@mui/material";
+import {
+  Box,
+  Tabs,
+  Tab,
+  Typography,
+  Button,
+  Avatar,
+  Stack,
+} from "@mui/material";
 import { useLoaderData, useParams } from "react-router-dom";
 import React, { useCallback, useEffect, useState } from "react";
 import SongList from "../../components/SongList";
@@ -14,6 +22,8 @@ import { useStore } from "../../store";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faPlayCircle } from "@fortawesome/free-solid-svg-icons";
 import { usePlayerDevice } from "react-spotify-web-playback-sdk";
+import InfoCard from "../../components/InfoCard";
+import ContainedButton from "../../components/ContainedButton";
 
 function Artist() {
   // @ts-ignore
@@ -63,74 +73,27 @@ function Artist() {
         display: "flex",
         flexDirection: "column",
       }}>
-      <Box
-        sx={{
-          display: "flex",
-          gap: 4,
-          alignItems: "center",
-          height: 200,
-          mb: 2,
-        }}>
-        <Avatar
-          src={
-            artistInfo.images.length !== 0
-              ? artistInfo.images[0].url
-              : "/spotify.png"
-          }
-          variant="rounded"
-          sx={{
-            height: 200,
-            width: 200,
-          }}></Avatar>
-        <Box
-          sx={{
-            display: "flex",
-            height: "100%",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            gap: 1,
-          }}>
-          <Typography noWrap sx={{ fontSize: 32 }}>
-            {artistInfo.name}
-          </Typography>
-          <Typography noWrap sx={{ fontSize: 20 }}>
-            听众：{artistInfo.followers.total}
-          </Typography>
-          <Box sx={{ display: "flex", gap: 2 }}>
-            <Button
-              onClick={start}
-              variant="contained"
-              color="success"
-              startIcon={<FontAwesomeIcon icon={faPlayCircle} />}
-              sx={{
-                maxWidth: 120,
-                height: 40,
-              }}>
-              <Typography noWrap sx={{ fontSize: 14 }}>
-                播放
-              </Typography>
-            </Button>
-            <Button
-              onClick={toggleLoved}
-              variant="contained"
-              color="success"
-              startIcon={
-                <FontAwesomeIcon
-                  icon={faHeart}
-                  color={isLoved ? "red" : "white"}
-                />
-              }
-              sx={{
-                maxWidth: 120,
-                height: 40,
-              }}>
-              <Typography noWrap sx={{ fontSize: 14 }}>
-                收藏
-              </Typography>
-            </Button>
-          </Box>
-        </Box>
-      </Box>
+      <InfoCard
+        image={
+          artistInfo.images.length !== 0
+            ? artistInfo.images[0].url
+            : "/spotify.png"
+        }
+        type={artistInfo.type}
+        title={artistInfo.name}>
+        <Stack direction={"row"} gap={2}>
+          <ContainedButton onClick={start} icon={faPlayCircle}>
+            播放
+          </ContainedButton>
+          <ContainedButton
+            onClick={toggleLoved}
+            icon={faHeart}
+            color={isLoved ? "red" : "white"}>
+            收藏
+          </ContainedButton>
+        </Stack>
+      </InfoCard>
+
       <Tabs value={value} onChange={handleChange}>
         <Tab label="热门歌曲" />
         <Tab label="专辑" />

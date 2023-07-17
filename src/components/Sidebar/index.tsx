@@ -6,7 +6,6 @@ import {
   ListItemIcon,
   ListItemText,
   ListSubheader,
-  Collapse,
   Box,
   Menu,
   MenuItem,
@@ -18,14 +17,14 @@ import { useNavigate, useRouteLoaderData } from "react-router-dom";
 import { Anchor, Artist, Playlist, SavedAlbum } from "../../utils/interface";
 import {
   faAdd,
-  faAngleDown,
-  faAngleUp,
   faCompactDisc,
   faDeleteLeft,
+  faFolder,
   faHeadphonesSimple,
   faHeart,
   faHeartBroken,
   faHouse,
+  faMusic,
   faPlayCircle,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
@@ -40,16 +39,14 @@ import {
   unfollowAlbums,
 } from "../../api";
 import { usePlayerDevice } from "react-spotify-web-playback-sdk";
+import ListDropDownButton from "../ListDropDownButton";
+import ListButton from "../ListButton";
 
 function Sidebar() {
   // @ts-ignore
   const { userProfile } = useRouteLoaderData("root");
   const store = useStore();
   const device = usePlayerDevice();
-
-  const [playlistsOpen, setPlaylistsOpen] = useState(false);
-  const [artistsOpen, setArtistsOpen] = useState(false);
-  const [albumsOpen, setAlbumsOpen] = useState(false);
 
   const [playlistMenu, setPlaylistMenu] = useState<Anchor | null>(null);
   const [playlistIdx, setPlaylistIdx] = useState(-1);
@@ -83,7 +80,7 @@ function Sidebar() {
   function addPlaylist() {
     createPlaylist(userProfile.id).then((res) => {
       store.playlistsStore.setPlaylists();
-      setPlaylistMenu(null);
+      navigate(`/playlist/${res.id}`);
     });
   }
 
@@ -125,233 +122,147 @@ function Sidebar() {
   function deletePlaylist() {
     unfollowPlaylist(store.playlistsStore.playlists.items[playlistIdx].id).then(
       () => {
-        console.warn(
-          "对于自己创建的歌单并未真正删除，只是不在音乐库中，可以搜到"
-        );
+        store.playlistsStore.setPlaylists();
       }
     );
-
     setPlaylistMenu(null);
   }
 
   const playlistsList = store.playlistsStore.playlists.items.map(
     (pl: Playlist, index: number) => (
-      <ListItemButton
+      <ListButton
+        primary={pl.name}
         onContextMenu={(e) => {
           setPlaylistIdx(index);
           e.preventDefault();
-          setPlaylistMenu(
-            playlistMenu === null
-              ? {
-                  mouseX: e.clientX + 2,
-                  mouseY: e.clientY - 6,
-                }
-              : null
-          );
+          setPlaylistMenu({
+            mouseX: e.clientX,
+            mouseY: e.clientY,
+          });
         }}
-        sx={{ pl: 2 }}
         key={pl.id}
-        onClick={() => navigate(`/playlist/${pl.id}`)}>
-        <ListItemIcon>
+        icon={
           <Avatar
             src={pl.images.length !== 0 ? pl.images[0].url : "/spotify.png"}
             variant="rounded"
           />
-        </ListItemIcon>
-        <ListItemText
-          primary={pl.name}
-          title={pl.name}
-          sx={{
-            whiteSpace: "nowrap",
-            textOverflow: "ellipsis",
-            overflow: "hidden",
-          }}
-        />
-      </ListItemButton>
+        }
+        onClick={() => navigate(`/playlist/${pl.id}`)}
+      />
     )
   );
 
   const artistsList = store.artistsStore.artists.artists.items.map(
     (ar: Artist, index: number) => (
-      <ListItemButton
+      <ListButton
+        primary={ar.name}
         onContextMenu={(e) => {
           setArtistIdx(index);
           e.preventDefault();
-          setArtistMenu(
-            artistMenu === null
-              ? {
-                  mouseX: e.clientX + 2,
-                  mouseY: e.clientY - 6,
-                }
-              : null
-          );
+          setArtistMenu({
+            mouseX: e.clientX,
+            mouseY: e.clientY,
+          });
         }}
-        sx={{ pl: 2 }}
         key={ar.id}
-        onClick={() => navigate(`/artist/${ar.id}`)}>
-        <ListItemIcon>
-          <Avatar src={ar.images[0].url} variant="rounded" />
-        </ListItemIcon>
-        <ListItemText
-          primary={ar.name}
-          title={ar.name}
-          sx={{
-            whiteSpace: "nowrap",
-            textOverflow: "ellipsis",
-            overflow: "hidden",
-          }}
-        />
-      </ListItemButton>
+        icon={<Avatar src={ar.images[0].url} variant="rounded" />}
+        onClick={() => navigate(`/artist/${ar.id}`)}
+      />
     )
   );
 
   const albumsList = store.albumsStore.albums.items.map(
     (al: SavedAlbum, index: number) => (
-      <ListItemButton
+      <ListButton
+        icon={<Avatar src={al.album.images[0].url} variant="rounded" />}
+        primary={al.album.name}
+        onClick={() => navigate(`/album/${al.album.id}`)}
         onContextMenu={(e) => {
           setAlbumIdx(index);
           e.preventDefault();
-          setAlbumMenu(
-            albumMenu === null
-              ? {
-                  mouseX: e.clientX + 2,
-                  mouseY: e.clientY - 6,
-                }
-              : null
-          );
+          setAlbumMenu({
+            mouseX: e.clientX,
+            mouseY: e.clientY,
+          });
         }}
-        sx={{ pl: 2 }}
         key={al.album.id}
-        onClick={() => navigate(`/album/${al.album.id}`)}>
-        <ListItemIcon>
-          <Avatar src={al.album.images[0].url} variant="rounded" />
-        </ListItemIcon>
-        <ListItemText
-          primary={al.album.name}
-          title={al.album.name}
-          sx={{
-            whiteSpace: "nowrap",
-            textOverflow: "ellipsis",
-            overflow: "hidden",
-          }}
-        />
-      </ListItemButton>
+      />
     )
   );
 
   return (
     <Box
       sx={{
+        backgroundColor: "background.default",
         width: "100%",
-        maxWidth: 240,
-        minWidth: 240,
+        ml: 2,
+        mr: 2,
+        borderRadius: 1,
+        flex: 3,
         overflowY: "auto",
         overflowX: "hidden",
-        // borderRight: " solid 8px grey",
+        "@media (max-width: 800px)": {
+          minWidth: 75,
+          maxWidth: 75,
+        },
+        "@media (min-width: 800px)": {
+          maxWidth: 200,
+        },
       }}>
       <List dense>
-        <ListItemButton onClick={() => navigate("/")}>
-          <ListItemIcon
-            sx={{
-              alignItems: "center",
-            }}>
-            <FontAwesomeIcon icon={faHouse} />
-          </ListItemIcon>
-          <ListItemText primary="主页" />
-        </ListItemButton>
-        <ListItemButton divider onClick={() => navigate("/loves")}>
-          <ListItemIcon
-            sx={{
-              alignItems: "center",
-              color: "primary.main",
-            }}>
-            <FontAwesomeIcon icon={faHeart} />
-          </ListItemIcon>
-          <ListItemText primary="我喜欢的" />
-        </ListItemButton>
+        <ListButton
+          primary="主页"
+          icon={faHouse}
+          onClick={() => navigate("/")}
+        />
+        <ListButton
+          primary="我喜欢的"
+          icon={faHeart}
+          iconColor="primary.main"
+          onClick={() => navigate("/loves")}
+        />
       </List>
+      <ListSubheader
+        component="div"
+        sx={{
+          backgroundColor: "divider",
+          mt: 1,
+          mb: 1,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          "@media (max-width: 800px)": {
+            ".musicLibrary": { display: "none" },
+          },
+        }}>
+        <FontAwesomeIcon icon={faMusic} />
+        <Typography noWrap className="musicLibrary">
+          音乐库
+        </Typography>
+
+        <FontAwesomeIcon
+          title="添加歌单"
+          icon={faAdd}
+          cursor="pointer"
+          onClick={addPlaylist}
+        />
+      </ListSubheader>
       <List
         sx={{
           width: "100%",
           overflowY: "auto",
+          overflowX: "hidden",
         }}
-        component="nav"
-        subheader={
-          <ListSubheader
-            component="div"
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}>
-            <Typography>我的音乐库</Typography>
-            <FontAwesomeIcon
-              icon={faAdd}
-              cursor="pointer"
-              onClick={addPlaylist}
-            />
-          </ListSubheader>
-        }
-        dense>
-        <ListItemButton onClick={() => setPlaylistsOpen(!playlistsOpen)}>
-          <ListItemIcon
-            sx={{
-              alignItems: "center",
-            }}>
-            <FontAwesomeIcon icon={faHeadphonesSimple} />
-          </ListItemIcon>
-          <ListItemText primary="歌单" />
-          {playlistsOpen ? (
-            <FontAwesomeIcon icon={faAngleUp} />
-          ) : (
-            <FontAwesomeIcon icon={faAngleDown} />
-          )}
-        </ListItemButton>
-        <Collapse in={playlistsOpen} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding dense>
-            {playlistsList}
-          </List>
-        </Collapse>
-
-        <ListItemButton onClick={() => setArtistsOpen(!artistsOpen)}>
-          <ListItemIcon
-            sx={{
-              alignItems: "center",
-            }}>
-            <FontAwesomeIcon icon={faUser} />
-          </ListItemIcon>
-          <ListItemText primary="歌手" />
-          {artistsOpen ? (
-            <FontAwesomeIcon icon={faAngleUp} />
-          ) : (
-            <FontAwesomeIcon icon={faAngleDown} />
-          )}
-        </ListItemButton>
-        <Collapse in={artistsOpen} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding dense>
-            {artistsList}
-          </List>
-        </Collapse>
-
-        <ListItemButton onClick={() => setAlbumsOpen(!albumsOpen)}>
-          <ListItemIcon
-            sx={{
-              alignItems: "center",
-            }}>
-            <FontAwesomeIcon icon={faCompactDisc} />
-          </ListItemIcon>
-          <ListItemText primary="专辑" />
-          {albumsOpen ? (
-            <FontAwesomeIcon icon={faAngleUp} />
-          ) : (
-            <FontAwesomeIcon icon={faAngleDown} />
-          )}
-        </ListItemButton>
-        <Collapse in={albumsOpen} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding dense>
-            {albumsList}
-          </List>
-        </Collapse>
+        component="nav">
+        <ListDropDownButton title="歌单" icon={faHeadphonesSimple}>
+          {playlistsList}
+        </ListDropDownButton>
+        <ListDropDownButton title="歌手" icon={faUser}>
+          {artistsList}
+        </ListDropDownButton>
+        <ListDropDownButton title="专辑" icon={faCompactDisc}>
+          {albumsList}
+        </ListDropDownButton>
       </List>
 
       <Menu

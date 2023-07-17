@@ -30,10 +30,10 @@ function SubMenu({ children, title }: SubMenuProps) {
     <MenuItem
       dense
       sx={{ display: "flex", justifyContent: "space-between" }}
-      onMouseEnter={(e: React.MouseEvent) => {
+      onMouseEnter={() => {
         setOpen(true);
       }}
-      onMouseLeave={(e) => {
+      onMouseLeave={() => {
         setOpen(false);
       }}>
       {title}

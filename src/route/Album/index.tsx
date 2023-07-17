@@ -13,6 +13,8 @@ import { faCirclePlay, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useCallback, useEffect, useState } from "react";
 import { useStore } from "../../store";
 import { usePlayerDevice } from "react-spotify-web-playback-sdk";
+import InfoCard from "../../components/InfoCard";
+import ContainedButton from "../../components/ContainedButton";
 
 function Album() {
   const params = useParams();
@@ -53,76 +55,42 @@ function Album() {
         display: "flex",
         flexDirection: "column",
       }}>
-      <Box
-        sx={{
-          height: 200,
-          display: "flex",
-          alignItems: "center",
-          gap: 10,
-          mb: 2,
-        }}>
-        <Avatar
-          src={album.images.length !== 0 ? album.images[0].url : "spotify.png"}
-          variant="rounded"
-          sx={{
-            height: 200,
-            width: 200,
-          }}
-        />
+      <InfoCard
+        image={album.images.length === 0 ? undefined : album.images[0].url}
+        title={album.name}
+        type={album.type}>
         <Box
           sx={{
             display: "flex",
-            height: "100%",
-            flexDirection: "column",
+            width: "100%",
             justifyContent: "space-between",
             gap: 1,
           }}>
-          <Typography noWrap sx={{ fontSize: 32 }}>
-            {album.name}
-          </Typography>
-          <InlineArtists fontSize={20} artists={album.artists}></InlineArtists>
-          <Typography noWrap sx={{ fontSize: 14 }}>
-            发行时间：{album.release_date}
-          </Typography>
-          <Typography noWrap sx={{ fontSize: 14 }}>
-            曲目： {album.total_tracks}首
-          </Typography>
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <InlineArtists artists={album.artists}></InlineArtists>
+            <Typography noWrap sx={{ fontSize: 14 }}>
+              {album.release_date}
+            </Typography>
+            <Typography noWrap sx={{ fontSize: 14 }}>
+              {album.total_tracks}首
+            </Typography>
+          </Box>
+
           <Stack direction={"row"} gap={2}>
-            <Button
-              onClick={startPlay}
-              variant="contained"
-              color="success"
-              startIcon={<FontAwesomeIcon icon={faCirclePlay} />}
-              sx={{
-                maxWidth: 120,
-                boxShadow: "none",
-                "&:hover": { boxShadow: "none" },
-              }}>
-              <Typography noWrap sx={{ fontSize: 14 }}>
-                播放全部
-              </Typography>
-            </Button>
-            <Button
+            <ContainedButton onClick={startPlay} icon={faCirclePlay}>
+              播放
+            </ContainedButton>
+            <ContainedButton
               onClick={toggleLoved}
-              variant="contained"
-              color="success"
-              startIcon={
-                <FontAwesomeIcon
-                  icon={faHeart}
-                  color={isLoved ? "red" : "white"}
-                />
-              }
-              sx={{
-                maxWidth: 120,
-              }}>
-              <Typography noWrap sx={{ fontSize: 14 }}>
-                收藏
-              </Typography>
-            </Button>
+              icon={faHeart}
+              color={isLoved ? "red" : "white"}>
+              收藏
+            </ContainedButton>
           </Stack>
         </Box>
-      </Box>
-      <Box sx={{ flex: 1, overflow: "hidden" }}>
+      </InfoCard>
+
+      <Box sx={{ flex: 1 }}>
         <SongList
           items={album.tracks.items}
           handDoubleClick={(n) => {
