@@ -6,8 +6,9 @@ import { usePlayerDevice } from "react-spotify-web-playback-sdk";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlay, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useStore } from "../../store";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { observer } from "mobx-react-lite";
+import EventBus from "../../utils/EventBus";
 
 function Loves() {
   // @ts-ignore
@@ -15,17 +16,21 @@ function Loves() {
   const store = useStore();
   const device = usePlayerDevice();
 
-  useEffect(() => {
+  function handle() {
     store.lovesStore.setLoves();
+  }
+
+  useEffect(() => {
+    handle();
+    EventBus.addHandle("loveTrack", handle);
+    return () => {
+      EventBus.removeHandle("loveTrack", handle);
+    };
   }, []);
 
-  const startPlay = useCallback(
-    function (index: number) {
-      startPlayback(`${userProfile.uri}:collection`, index, device?.device_id);
-    },
-    [userProfile, device]
-  );
-
+  const startPlay = function (index: number) {
+    startPlayback(`${userProfile.uri}:collection`, index, device?.device_id);
+  };
   return (
     <Box
       sx={{
