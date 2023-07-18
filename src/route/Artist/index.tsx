@@ -1,12 +1,4 @@
-import {
-  Box,
-  Tabs,
-  Tab,
-  Typography,
-  Button,
-  Avatar,
-  Stack,
-} from "@mui/material";
+import { Box, Tabs, Tab, Stack } from "@mui/material";
 import { useLoaderData, useParams } from "react-router-dom";
 import React, { useCallback, useEffect, useState } from "react";
 import SongList from "../../components/SongList";
@@ -19,7 +11,6 @@ import {
 import AlbumList from "../../components/AlbumList";
 import ArtistList from "../../components/ArtistList";
 import { useStore } from "../../store";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faPlayCircle } from "@fortawesome/free-solid-svg-icons";
 import { usePlayerDevice } from "react-spotify-web-playback-sdk";
 import InfoCard from "../../components/InfoCard";

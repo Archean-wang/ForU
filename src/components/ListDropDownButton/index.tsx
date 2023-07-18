@@ -27,6 +27,7 @@ function ListDropDownButton({
   return (
     <>
       <ListItemButton
+        title={title}
         onClick={handleClick}
         sx={{
           gap: 2,

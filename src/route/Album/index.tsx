@@ -1,6 +1,6 @@
 import { useLoaderData, useParams } from "react-router-dom";
 import SongList from "../../components/SongList";
-import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { InlineArtists } from "../../components/InlineArtists";
 import {
   checkAlbums,
@@ -8,7 +8,6 @@ import {
   startPlayback,
   unfollowAlbums,
 } from "../../api";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlay, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useCallback, useEffect, useState } from "react";
 import { useStore } from "../../store";

@@ -2,10 +2,8 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./styles.css";
 import { Params, RouterProvider, createBrowserRouter } from "react-router-dom";
-import Search from "./route/Search";
 import Daily from "./route/Daily";
-import Playing from "./route/Playing";
-import Playlist from "./route/Playlist";
+
 import {
   getAlbumInfo,
   getArtist,
@@ -16,14 +14,20 @@ import {
   getUserProfile,
   search,
 } from "./api";
-import Album from "./route/Album";
-import Login from "./route/Login";
-import Callback from "./route/Callback";
-import ErrorPage from "./route/ErrorPage";
-import Loves from "./route/Loves";
-import Artist from "./route/Artist";
-import Always from "./route/Always";
-import Recent from "./route/Recent";
+
+import React, { Suspense, lazy } from "react";
+
+const Search = lazy(() => import("./route/Search"));
+const Album = lazy(() => import("./route/Album"));
+const Playing = lazy(() => import("./route/Playing"));
+const Playlist = lazy(() => import("./route/Playlist"));
+const Login = lazy(() => import("./route/Login"));
+const Callback = lazy(() => import("./route/Callback"));
+const ErrorPage = lazy(() => import("./route/ErrorPage"));
+const Loves = lazy(() => import("./route/Loves"));
+const Artist = lazy(() => import("./route/Artist"));
+const Always = lazy(() => import("./route/Always"));
+const Recent = lazy(() => import("./route/Recent"));
 
 const router = createBrowserRouter([
   {
@@ -43,7 +47,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/search/:kw",
-        element: <Search />,
+        element: (
+          <Suspense fallback={<div> loading</div>}>
+            <Search />
+          </Suspense>
+        ),
         loader: async ({ params }: { params: Params }) => {
           const searchResult = await search(params.kw as string);
           return { searchResult };
@@ -52,15 +60,28 @@ const router = createBrowserRouter([
       {
         index: true,
         id: "daily",
+        errorElement: (
+          <Suspense fallback={<div> loading</div>}>
+            <ErrorPage />
+          </Suspense>
+        ),
         element: <Daily />,
       },
       {
         path: "/playing",
-        element: <Playing />,
+        element: (
+          <Suspense fallback={<div> loading</div>}>
+            <Playing />
+          </Suspense>
+        ),
       },
       {
         path: "/playlist/:id",
-        element: <Playlist />,
+        element: (
+          <Suspense fallback={<div> loading</div>}>
+            <Playlist />
+          </Suspense>
+        ),
         loader: async ({ params }: { params: Params }) => {
           const playlist = await getPlaylistInfo(params.id as string);
           return { playlist };
@@ -68,7 +89,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/album/:id",
-        element: <Album />,
+        element: (
+          <Suspense fallback={<div> loading</div>}>
+            <Album />
+          </Suspense>
+        ),
         loader: async ({ params }: { params: Params }) => {
           const album = await getAlbumInfo(params.id as string);
           return { album };
@@ -76,7 +101,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/artist/:id",
-        element: <Artist />,
+        element: (
+          <Suspense fallback={<div> loading</div>}>
+            <Artist />
+          </Suspense>
+        ),
         loader: async ({ params }: { params: Params }) => {
           const albums = await getArtistAlbums(params.id as string);
           const hotTracks = await getArtistTop(params.id as string);
@@ -87,21 +116,37 @@ const router = createBrowserRouter([
       },
       {
         path: "/loves",
-        element: <Loves />,
+        element: (
+          <Suspense fallback={<div> loading</div>}>
+            <Loves />
+          </Suspense>
+        ),
       },
       {
         path: "/always",
-        element: <Always />,
+        element: (
+          <Suspense fallback={<div> loading</div>}>
+            <Always />
+          </Suspense>
+        ),
       },
       {
         path: "/recent",
-        element: <Recent />,
+        element: (
+          <Suspense fallback={<div> loading</div>}>
+            <Recent />
+          </Suspense>
+        ),
       },
     ],
   },
   {
     path: "/callback",
-    element: <Callback />,
+    element: (
+      <Suspense fallback={<div> loading</div>}>
+        <Callback />
+      </Suspense>
+    ),
   },
   {
     path: "/login",
@@ -111,8 +156,6 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   // <React.StrictMode>
-
   <RouterProvider router={router} />
-
   // </React.StrictMode>
 );

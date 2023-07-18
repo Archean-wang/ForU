@@ -25,6 +25,8 @@ function ListButton({
         onContextMenu={onContextMenu}
         onClick={onClick}
         sx={{
+          mb: 1.5,
+          height: "2rem",
           "& > .MuiListItemIcon-root": {
             minWidth: "20px",
           },
@@ -36,7 +38,6 @@ function ListButton({
           sx={{
             alignItems: "center",
             color: iconColor,
-            fontSize: "1rem",
           }}>
           {React.isValidElement(icon) ? (
             icon

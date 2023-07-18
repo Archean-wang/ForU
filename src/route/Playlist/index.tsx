@@ -1,6 +1,6 @@
 import { useLoaderData, useParams, useRouteLoaderData } from "react-router-dom";
 import SongList from "../../components/SongList";
-import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import {
   changePlaylistCover,
   changePlaylistDetail,
@@ -9,7 +9,6 @@ import {
   startPlayback,
   unfollowPlaylist,
 } from "../../api";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCirclePlay,
   faEdit,

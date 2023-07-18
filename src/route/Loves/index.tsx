@@ -60,7 +60,7 @@ function Loves() {
             gap: 1,
           }}>
           <Typography noWrap sx={{ fontSize: 32, fontWeight: "bolder" }}>
-            我的喜欢
+            我喜欢的
           </Typography>
           <Stack direction={"row"} gap={2}>
             <Button

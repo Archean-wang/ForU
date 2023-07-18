@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 import {
   Avatar,
   List,
-  ListItemButton,
   ListItemIcon,
-  ListItemText,
   ListSubheader,
   Box,
   Menu,
@@ -19,7 +17,6 @@ import {
   faAdd,
   faCompactDisc,
   faDeleteLeft,
-  faFolder,
   faHeadphonesSimple,
   faHeart,
   faHeartBroken,
@@ -195,9 +192,9 @@ function Sidebar() {
       sx={{
         backgroundColor: "background.default",
         width: "100%",
-        ml: 2,
-        mr: 2,
-        borderRadius: 1,
+        ml: 1,
+        mr: 1,
+        borderRadius: 2,
         flex: 3,
         overflowY: "auto",
         overflowX: "hidden",
@@ -225,18 +222,19 @@ function Sidebar() {
       <ListSubheader
         component="div"
         sx={{
+          height: "2rem",
           backgroundColor: "divider",
-          mt: 1,
-          mb: 1,
+          pt: 1,
+          pb: 1,
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
           "@media (max-width: 800px)": {
+            "&>svg": { mr: "auto" },
             ".musicLibrary": { display: "none" },
           },
         }}>
         <FontAwesomeIcon icon={faMusic} />
-        <Typography noWrap className="musicLibrary">
+        <Typography noWrap className="musicLibrary" sx={{ ml: 2, mr: "auto" }}>
           音乐库
         </Typography>
 
