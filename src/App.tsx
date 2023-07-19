@@ -11,9 +11,11 @@ import { grey } from "@mui/material/colors";
 
 function App() {
   let rt = localStorage.getItem("sp_rt");
-  const volumeTmp = localStorage.getItem("volume");
+  const volume = localStorage.getItem("volume");
   const store = useStore();
   const navigate = useNavigate();
+
+  console.log(store.loginStore.login);
 
   useEffect(() => {
     if (!store.loginStore.login) {
@@ -87,9 +89,9 @@ function App() {
         <WebPlaybackSDK
           initialDeviceName={"ForU"}
           getOAuthToken={getAuthCode}
-          initialVolume={volumeTmp === null ? 0.5 : parseInt(volumeTmp) / 100}>
+          initialVolume={volume === null ? 0.5 : parseInt(volume) / 100}>
           <Main />
-          <Player volumeInit={volumeTmp === null ? 50 : parseInt(volumeTmp)} />
+          <Player />
         </WebPlaybackSDK>
       </Box>
     </ThemeProvider>

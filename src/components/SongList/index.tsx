@@ -32,7 +32,7 @@ import ContextMenu from "../ContextMenu";
 const Cell = styled(TableCell)(
   ({ theme }) => `
             border: 0;
-            max-width: 200px;
+            max-width: 100px;
             overflow: hidden;
         `
 );
@@ -221,7 +221,6 @@ export default function SongList({
         height: fixHeight ? "100%" : "initial",
         width: "100%",
         borderRadius: 2,
-        overflow: "auto",
       }}>
       <Table padding="normal" size="small">
         {!hideHead && (
@@ -240,7 +239,7 @@ export default function SongList({
         <TableBody>
           {items.map((item, index) => (
             <TableRow
-              key={item.id}
+              key={index}
               hover
               onContextMenu={(e) => {
                 e.preventDefault();

@@ -71,7 +71,11 @@ function PlaybackControl() {
 
         <FontAwesomeIcon
           onClick={() => player?.togglePlay()}
-          icon={!playbackState?.paused ? faCirclePause : faCirclePlay}
+          icon={
+            playbackState === null || playbackState.paused
+              ? faCirclePlay
+              : faCirclePause
+          }
           cursor="pointer"
         />
 

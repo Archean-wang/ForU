@@ -14,7 +14,6 @@ function Commonlist({
   const device = usePlayerDevice();
 
   function startPlay(index: number) {
-    console.log(device);
     playTracks(
       tracks.map((v) => v.uri),
       tracks[index].uri,

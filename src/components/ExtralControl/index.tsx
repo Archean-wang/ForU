@@ -18,6 +18,7 @@ import {
 } from "react-spotify-web-playback-sdk";
 import { Device } from "../../utils/interface";
 import { transfer } from "../../api";
+import { observer } from "mobx-react-lite";
 
 function getVolumeFromLocalStorage(): number {
   let v = localStorage.getItem("volume");
@@ -32,8 +33,6 @@ function ExtralControl() {
   const [volume, setVolume] = useState(getVolumeFromLocalStorage);
   const [anchorEl, setAnchorEl] = useState<SVGSVGElement | null>(null);
   const open = Boolean(anchorEl);
-
-  console.log("extra render");
 
   const showDevices = (e: React.MouseEvent<SVGSVGElement>) => {
     store.devicesStore.setDevices();
@@ -118,6 +117,7 @@ function ExtralControl() {
       />
 
       <Menu
+        autoFocus={false}
         open={open}
         anchorEl={anchorEl}
         onClose={() => setAnchorEl(null)}
@@ -125,6 +125,7 @@ function ExtralControl() {
         anchorOrigin={{ horizontal: "right", vertical: "top" }}>
         {store.devicesStore.devices.map((dev: Device) => (
           <MenuItem
+            autoFocus={false}
             onClick={() => handleTransfer(dev.id)}
             key={dev.id}
             sx={{ color: dev.is_active ? "green" : "text.primary" }}>
@@ -141,4 +142,4 @@ function ExtralControl() {
   );
 }
 
-export default ExtralControl;
+export default observer(ExtralControl);

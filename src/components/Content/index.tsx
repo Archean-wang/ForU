@@ -1,8 +1,9 @@
 import Header from "../Header";
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, useTheme } from "@mui/material";
 import { Outlet, useNavigation } from "react-router-dom";
 
 function Content() {
+  const theme = useTheme();
   const navigation = useNavigation();
   return (
     <Box
@@ -12,6 +13,7 @@ function Content() {
         flex: 16,
         minWidth: 400,
         height: "100%",
+        background: `linear-gradient(to top, ${theme.palette.background.paper}, ${theme.palette.divider})}`,
       }}>
       <Header></Header>
       <Box
