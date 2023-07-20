@@ -1,5 +1,5 @@
 function tr(n: number) {
-  return n > 9 ? n.toString() : `0${n}`;
+  return n.toString().padStart(2, "0");
 }
 
 function showTime(time: number | undefined) {

@@ -1,9 +1,9 @@
 import Header from "../Header";
-import { Box, CircularProgress, useTheme } from "@mui/material";
+import { Box } from "@mui/material";
 import { Outlet, useNavigation } from "react-router-dom";
+import Loading from "../Loading";
 
 function Content() {
-  const theme = useTheme();
   const navigation = useNavigation();
   return (
     <Box
@@ -13,7 +13,6 @@ function Content() {
         flex: 16,
         minWidth: 400,
         height: "100%",
-        background: `linear-gradient(to top, ${theme.palette.background.paper}, ${theme.palette.divider})}`,
       }}>
       <Header></Header>
       <Box
@@ -23,18 +22,7 @@ function Content() {
           height: "calc(100% - 60px)",
           position: "relative",
         }}>
-        {navigation.state === "loading" ? (
-          <CircularProgress
-            sx={{
-              position: "absolute",
-              left: "50%",
-              top: "50%",
-              transform: "translate(-50%, -50%)",
-            }}
-          />
-        ) : (
-          <Outlet></Outlet>
-        )}
+        {navigation.state === "loading" ? <Loading /> : <Outlet></Outlet>}
       </Box>
     </Box>
   );
