@@ -1,5 +1,5 @@
 import { useLoaderData, useParams, useRouteLoaderData } from "react-router-dom";
-import SongList from "../../components/SongList";
+import SongList from "../../components/itemsList/SongList";
 import { Box, Stack, Typography } from "@mui/material";
 import {
   changePlaylistCover,
@@ -16,13 +16,16 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useStore } from "../../store";
-import { usePlayerDevice } from "react-spotify-web-playback-sdk";
-import EditPlaylist, { PlaylistDetail } from "../../components/EditPlaylist";
+
+import EditPlaylist, {
+  PlaylistDetail,
+} from "../../components/common/EditPlaylist";
 import { PlaylistTrack, Track } from "../../utils/interface";
 import { observer } from "mobx-react-lite";
 import EventBus, { MyEvent } from "../../utils/EventBus";
-import InfoCard from "../../components/InfoCard";
-import ContainedButton from "../../components/ContainedButton";
+import InfoCard from "../../components/common/InfoCard";
+import ContainedButton from "../../components/common/ContainedButton";
+import { useSpotifyDevice } from "spotify-web-playback-sdk-for-react";
 
 function Playlist() {
   const params = useParams();
@@ -35,7 +38,7 @@ function Playlist() {
   );
   const [isLoved, setIsLoved] = useState(false);
   const store = useStore();
-  const device = usePlayerDevice();
+  const device = useSpotifyDevice();
   const [open, setOpen] = useState(false);
 
   const [imageUrl, setImageUrl] = useState(

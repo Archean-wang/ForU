@@ -1,4 +1,4 @@
-import Commonlist from "../../components/CommonList";
+import Commonlist from "../../components/itemsList/CommonList";
 import { useStore } from "../../store";
 
 function Always() {

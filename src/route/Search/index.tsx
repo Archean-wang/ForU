@@ -1,18 +1,19 @@
 import { Box, Tabs, Tab } from "@mui/material";
 import { useLoaderData } from "react-router-dom";
 import React, { useState } from "react";
-import SongList from "../../components/SongList";
+import SongList from "../../components/itemsList/SongList";
 import { playTracks } from "../../api";
-import AlbumList from "../../components/AlbumList";
-import ArtistList from "../../components/ArtistList";
-import PlaylistList from "../../components/PlaylistList";
-import { usePlayerDevice } from "react-spotify-web-playback-sdk";
+import AlbumList from "../../components/itemsList/AlbumList";
+
+import { useSpotifyDevice } from "spotify-web-playback-sdk-for-react";
+import ArtistList from "../../components/itemsList/ArtistList";
+import PlaylistList from "../../components/itemsList/PlaylistList";
 
 function Search() {
   // @ts-ignore
   const { searchResult } = useLoaderData();
   const [value, setValue] = useState(0);
-  const device = usePlayerDevice();
+  const device = useSpotifyDevice();
 
   function handleChange(event: React.SyntheticEvent, newValue: number) {
     setValue(newValue);

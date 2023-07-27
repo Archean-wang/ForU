@@ -1,20 +1,21 @@
 import { useRouteLoaderData } from "react-router-dom";
-import SongList from "../../components/SongList";
+import SongList from "../../components/itemsList/SongList";
 import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
 import { startPlayback } from "../../api";
-import { usePlayerDevice } from "react-spotify-web-playback-sdk";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlay, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useStore } from "../../store";
 import { useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import EventBus from "../../utils/EventBus";
+import { useSpotifyDevice } from "spotify-web-playback-sdk-for-react";
 
 function Loves() {
   // @ts-ignore
   const { userProfile } = useRouteLoaderData("root");
   const store = useStore();
-  const device = usePlayerDevice();
+  const device = useSpotifyDevice();
 
   function handle() {
     store.lovesStore.setLoves();

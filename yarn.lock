@@ -640,11 +640,6 @@
   resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.3.tgz#cef09e3ec9af1d63d2a6cc5b383a737e24e6dcf5"
   integrity sha512-5cJ8CB4yAx7BH1oMvdU0Jh9lrEXyPkar6F9G/ERswkCuvP4KQZfZkSjcMbAICCpQTN4OuZn8tz0HiKv9TGZgrQ==
 
-"@types/spotify-web-playback-sdk@^0.1.12":
-  version "0.1.15"
-  resolved "https://registry.yarnpkg.com/@types/spotify-web-playback-sdk/-/spotify-web-playback-sdk-0.1.15.tgz#32b5cb317b8df1c17ab8d4012eb02da500dc6616"
-  integrity sha512-DBXmPajTtrm4Ykf2waHZAW6UR6Jqv8fKRTTDfXcSkse2VzF9uDdj7gb4mcwKMxdDrjJ4npy4EbnxH/xxuiKtoQ==
-
 "@vitejs/plugin-react@^3.0.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@vitejs/plugin-react/-/plugin-react-3.1.0.tgz#d1091f535eab8b83d6e74034d01e27d73c773240"
@@ -1094,13 +1089,6 @@ react-router@6.14.2:
   dependencies:
     "@remix-run/router" "1.7.2"
 
-react-spotify-web-playback-sdk@^3.0.1:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/react-spotify-web-playback-sdk/-/react-spotify-web-playback-sdk-3.0.2.tgz#80aa3d17f0c3ae4251d5870292dee9120981e99b"
-  integrity sha512-FqCgDEAZkNk6qJ80L38YyxIa0B/SBBaaStvKiYtf5CT+dVCMNEFhDDMUml2JQ7EIiuGraHNaae7Q6ZEmnv9vCA==
-  dependencies:
-    "@types/spotify-web-playback-sdk" "^0.1.12"
-
 react-transition-group@^4.4.5:
   version "4.4.5"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-4.4.5.tgz#e53d4e3f3344da8521489fbef8f2581d42becdd1"
@@ -1165,6 +1153,14 @@ source-map@^0.5.7:
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.7.tgz#8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
   integrity sha512-LbrmJOMUSdEVxIKvdcJzQC+nQhe8FUZQTXQy6+I75skNgn3OoQ0DZA8YnFa7gp8tqtL3KPf1kmo0R5DoApeSGQ==
+
+spotify-web-playback-sdk-for-react@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/spotify-web-playback-sdk-for-react/-/spotify-web-playback-sdk-for-react-1.1.2.tgz#dda6d0eb367a126a6365b915b0ca8f66bdbf8104"
+  integrity sha512-IecEsV62RVD1o/rBz+xMmA5zhGc4bzid56gQNtCXlMhxznE8RsqIgphRk2BeUMUB9c34lmDLygBEmTuDX/5xTg==
+  dependencies:
+    react "^18.2.0"
+    react-dom "^18.2.0"
 
 stylis@4.2.0:
   version "4.2.0"

@@ -12,7 +12,7 @@ import {
   getUserProfile,
   search,
 } from "../api";
-import Loading from "../components/Loading";
+import Loading from "../components/common/Loading";
 
 const Search = lazy(() => import("./Search"));
 const Album = lazy(() => import("./Album"));

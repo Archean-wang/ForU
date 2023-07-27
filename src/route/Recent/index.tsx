@@ -1,18 +1,18 @@
 import { observer } from "mobx-react-lite";
-import Commonlist from "../../components/CommonList";
+import Commonlist from "../../components/itemsList/CommonList";
 import { useStore } from "../../store";
-import { usePlaybackState } from "react-spotify-web-playback-sdk";
 import { useEffect } from "react";
+import { useCurrentTrack } from "spotify-web-playback-sdk-for-react";
 
 function Always() {
   //@ts-ignore
   const store = useStore();
-  const playbackState = usePlaybackState();
+  const currentTrack = useCurrentTrack();
   const tracks = store.recentStore.recentTracks.items.map((v) => v.track);
 
   useEffect(() => {
     store.recentStore.setRecentTracks();
-  }, [playbackState?.track_window.current_track]);
+  }, [currentTrack]);
 
   return <Commonlist tracks={tracks} title="最近播放"></Commonlist>;
 }

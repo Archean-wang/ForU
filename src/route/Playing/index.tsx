@@ -1,26 +1,28 @@
 import { Box, Typography } from "@mui/material";
 import { useStore } from "../../store";
 import { useCallback, useEffect } from "react";
-import {
-  usePlaybackState,
-  usePlayerDevice,
-  useSpotifyPlayer,
-} from "react-spotify-web-playback-sdk";
+
 import { observer } from "mobx-react-lite";
-import SongList from "../../components/SongList";
+import SongList from "../../components/itemsList/SongList";
 import { startPlayback } from "../../api";
+import {
+  useCurrentTrack,
+  useSpotifyDevice,
+  useSpotifyPlayer,
+  useSpotifyState,
+} from "spotify-web-playback-sdk-for-react";
 
 function Playing() {
   const store = useStore();
-  const playbackState = usePlaybackState();
+  const playbackState = useSpotifyState();
+  const currentTrack = useCurrentTrack();
   const player = useSpotifyPlayer();
   const songs = store.playingStore.playing.queue;
-  const device = usePlayerDevice();
+  const device = useSpotifyDevice();
 
   useEffect(() => {
-    console.log(playbackState);
     store.playingStore.setPlaying();
-  }, [playbackState?.track_window.current_track]);
+  }, [currentTrack]);
 
   const toggle = useCallback(function () {
     player?.togglePlay();

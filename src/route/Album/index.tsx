@@ -1,7 +1,7 @@
 import { useLoaderData, useParams } from "react-router-dom";
-import SongList from "../../components/SongList";
+import SongList from "../../components/itemsList/SongList";
 import { Box, Stack, Typography } from "@mui/material";
-import { InlineArtists } from "../../components/InlineArtists";
+import { InlineArtists } from "../../components/common/InlineArtists";
 import {
   checkAlbums,
   followAlbums,
@@ -11,9 +11,9 @@ import {
 import { faCirclePlay, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useCallback, useEffect, useState } from "react";
 import { useStore } from "../../store";
-import { usePlayerDevice } from "react-spotify-web-playback-sdk";
-import InfoCard from "../../components/InfoCard";
-import ContainedButton from "../../components/ContainedButton";
+import InfoCard from "../../components/common/InfoCard";
+import ContainedButton from "../../components/common/ContainedButton";
+import { useSpotifyDevice } from "spotify-web-playback-sdk-for-react";
 
 function Album() {
   const params = useParams();
@@ -21,7 +21,7 @@ function Album() {
   const { album } = useLoaderData();
   const [isLoved, setIsLoved] = useState(false);
   const store = useStore();
-  const device = usePlayerDevice();
+  const device = useSpotifyDevice();
 
   useEffect(() => {
     checkAlbums(params.id as string).then((res) => {

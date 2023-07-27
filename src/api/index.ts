@@ -1,4 +1,4 @@
-import { PlaylistDetail } from "../components/EditPlaylist";
+import { PlaylistDetail } from "../components/common/EditPlaylist";
 import http from "../utils/http";
 import {
   Albums,

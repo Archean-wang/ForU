@@ -1,20 +1,22 @@
 import { Box, Tabs, Tab, Stack } from "@mui/material";
 import { useLoaderData, useParams } from "react-router-dom";
 import React, { useCallback, useEffect, useState } from "react";
-import SongList from "../../components/SongList";
+import SongList from "../../components/itemsList/SongList";
 import {
   checkArtists,
   followArtists,
   playArtist,
   unfollowArtists,
 } from "../../api";
-import AlbumList from "../../components/AlbumList";
-import ArtistList from "../../components/ArtistList";
+import AlbumList from "../../components/itemsList/AlbumList";
+
 import { useStore } from "../../store";
 import { faHeart, faPlayCircle } from "@fortawesome/free-solid-svg-icons";
-import { usePlayerDevice } from "react-spotify-web-playback-sdk";
-import InfoCard from "../../components/InfoCard";
-import ContainedButton from "../../components/ContainedButton";
+
+import InfoCard from "../../components/common/InfoCard";
+import ContainedButton from "../../components/common/ContainedButton";
+import { useSpotifyDevice } from "spotify-web-playback-sdk-for-react";
+import ArtistList from "../../components/itemsList/ArtistList";
 
 function Artist() {
   // @ts-ignore
@@ -24,7 +26,7 @@ function Artist() {
   const params = useParams();
   const [isLoved, setIsLoved] = useState(false);
   const store = useStore();
-  const device = usePlayerDevice();
+  const device = useSpotifyDevice();
 
   useEffect(() => {
     checkArtists(params.id as string).then((res) => {

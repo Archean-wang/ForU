@@ -1,9 +1,10 @@
 import { Avatar, Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import ArtistList from "../../components/ArtistList";
+
 import { useStore } from "../../store";
 import { useEffect } from "react";
 import { observer } from "mobx-react-lite";
+import ArtistList from "../../components/itemsList/ArtistList";
 
 function Daily() {
   const store = useStore();

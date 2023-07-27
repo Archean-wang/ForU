@@ -1,13 +1,15 @@
 import { getToken } from "./utils/authentication";
-import Main from "./components/Main";
+
 import { useStore } from "./store";
 import { observer } from "mobx-react-lite";
 import { useCallback, useEffect } from "react";
-import { WebPlaybackSDK } from "react-spotify-web-playback-sdk";
-import Player from "./components/Player";
+
+import Player from "./components/frame/Player";
 import { Box, ThemeProvider, createTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { grey } from "@mui/material/colors";
+import { SpotifyWebSDK } from "spotify-web-playback-sdk-for-react";
+import Main from "./components/frame/Main";
 
 function App() {
   let rt = localStorage.getItem("sp_rt");
@@ -86,13 +88,13 @@ function App() {
           bgcolor: "background.paper",
           color: "text.primary",
         }}>
-        <WebPlaybackSDK
-          initialDeviceName={"ForU"}
+        <SpotifyWebSDK
+          name={"ForU"}
           getOAuthToken={getAuthCode}
-          initialVolume={volume === null ? 0.5 : parseInt(volume) / 100}>
+          volume={volume === null ? 0.5 : parseInt(volume) / 100}>
           <Main />
           <Player />
-        </WebPlaybackSDK>
+        </SpotifyWebSDK>
       </Box>
     </ThemeProvider>
   ) : (
