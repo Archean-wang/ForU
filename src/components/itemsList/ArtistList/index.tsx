@@ -47,7 +47,7 @@ function ArtistList({
           />
           <Typography
             noWrap
-            fontSize={10}
+            fontSize="1rem"
             sx={{ overflow: "hidden", textOverflow: "ellipsis" }}>
             {v.name}
           </Typography>

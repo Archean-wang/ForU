@@ -13,7 +13,7 @@ function ScrollText({ children }: { children: ReactElement }) {
     return () => {
       window.removeEventListener("resize", tmp);
     };
-  });
+  }, []);
 
   function checkScroll() {
     if (ref.current) {

@@ -6,7 +6,7 @@ function Main() {
     <Box
       sx={{
         display: "flex",
-        height: "calc(100vh - 80px)",
+        height: "calc(100vh - 64px)",
         backgroundColor: "background.default",
       }}>
       <Sidebar></Sidebar>

@@ -223,19 +223,14 @@ function Sidebar() {
       <ListSubheader
         component="div"
         sx={{
-          height: "2rem",
-          backgroundColor: "divider",
-          pt: 1,
-          pb: 1,
+          borderBottom: "solid 1px",
+          borderBottomColor: "divider",
+          background: "transparent",
+          padding: 0,
           display: "flex",
           alignItems: "center",
-          "@media (max-width: 800px)": {
-            "&>svg": { mr: "auto" },
-            ".musicLibrary": { display: "none" },
-          },
         }}>
-        <FontAwesomeIcon icon={faMusic} />
-        <Typography noWrap className="musicLibrary" sx={{ ml: 2, mr: "auto" }}>
+        <Typography noWrap className="musicLibrary" sx={{ mr: "auto" }}>
           音乐库
         </Typography>
 

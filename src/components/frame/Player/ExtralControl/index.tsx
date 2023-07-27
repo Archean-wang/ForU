@@ -16,10 +16,7 @@ import { useStore } from "../../../../store";
 import { Device } from "../../../../utils/interface";
 import { transfer } from "../../../../api";
 import { observer } from "mobx-react-lite";
-import {
-  useSpotifyDevice,
-  useSpotifyPlayer,
-} from "spotify-web-playback-sdk-for-react";
+import { useSpotifyPlayer } from "spotify-web-playback-sdk-for-react";
 
 function getVolumeFromLocalStorage(): number {
   let v = localStorage.getItem("volume");
@@ -28,7 +25,6 @@ function getVolumeFromLocalStorage(): number {
 
 function ExtralControl() {
   const navigate = useNavigate();
-  const device = useSpotifyDevice();
   const player = useSpotifyPlayer();
   const store = useStore();
   const [volume, setVolume] = useState(getVolumeFromLocalStorage);

@@ -47,7 +47,8 @@ function PlaybackControl() {
         display: "flex",
         flexFlow: "column",
         justifyContent: "center",
-        gap: 1,
+        mt: 1,
+        mb: 1,
       }}>
       <Box
         sx={{
@@ -55,7 +56,7 @@ function PlaybackControl() {
           justifyContent: "center",
           alignItems: "center",
           gap: 3,
-          fontSize: 20,
+          fontSize: "1.5rem",
           position: "relative",
         }}>
         <FontAwesomeIcon

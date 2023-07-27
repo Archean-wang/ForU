@@ -37,11 +37,25 @@ function InfoCard({ image, title, type, children }: InfoCardProps) {
           height: 120,
           flexDirection: "column",
           gap: 1,
-          justifyContent: "flex-end",
+          justifyContent: "flex-start",
         }}>
-        <Typography fontSize="0.5rem">{types.get(type)}</Typography>
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Typography fontSize={32}>{title}</Typography>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+          }}>
+          <Typography
+            sx={{
+              padding: "2px",
+              lineHeight: "1.2rem",
+              bgcolor: "primary.main",
+              borderRadius: 1,
+              fontSize: "1rem",
+            }}>
+            {types.get(type)}
+          </Typography>
+          <Typography fontSize={"2rem"}>{title}</Typography>
         </Box>
         {children}
       </Box>

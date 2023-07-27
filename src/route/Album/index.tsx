@@ -62,15 +62,16 @@ function Album() {
           sx={{
             display: "flex",
             width: "100%",
+            flexDirection: "column",
             justifyContent: "space-between",
             gap: 1,
           }}>
           <Box sx={{ display: "flex", gap: 1 }}>
             <InlineArtists artists={album.artists}></InlineArtists>
-            <Typography noWrap sx={{ fontSize: 14 }}>
+            <Typography noWrap sx={{ fontSize: "1rem" }}>
               {album.release_date}
             </Typography>
-            <Typography noWrap sx={{ fontSize: 14 }}>
+            <Typography noWrap sx={{ fontSize: "1rem" }}>
               {album.total_tracks}首
             </Typography>
           </Box>
@@ -89,7 +90,7 @@ function Album() {
         </Box>
       </InfoCard>
 
-      <Box sx={{ flex: 1 }}>
+      <Box sx={{ flex: 1, overflow: "hidden" }}>
         <SongList
           items={album.tracks.items}
           handDoubleClick={(n) => {

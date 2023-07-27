@@ -127,12 +127,13 @@ function Playlist() {
           sx={{
             display: "flex",
             width: "100%",
-            justifyContent: "space-between",
+            flexDirection: "column",
+            justifyContent: "space-start",
             gap: 1,
           }}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
             <Typography maxHeight="3rem" overflow="hidden">
-              {description ? description : ""}
+              简介: {description ? description : "暂无"}
             </Typography>
             <Typography noWrap sx={{ maxWidth: 200 }}>
               {playlist.tracks.items.length}首

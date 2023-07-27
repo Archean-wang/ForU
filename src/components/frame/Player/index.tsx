@@ -26,7 +26,7 @@ function Player() {
         borderTop: "solid 1px",
         borderTopColor: "divider",
         backgroundColor: "background.default",
-        height: "80px",
+        height: "64px",
         display: "flex",
         flexWrap: "nowrap",
         justifyContent: "space-between",

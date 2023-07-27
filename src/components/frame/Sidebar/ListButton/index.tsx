@@ -25,8 +25,7 @@ function ListButton({
         onContextMenu={onContextMenu}
         onClick={onClick}
         sx={{
-          mb: 1.5,
-          height: "2rem",
+          mb: 1,
           "& > .MuiListItemIcon-root": {
             minWidth: "20px",
           },

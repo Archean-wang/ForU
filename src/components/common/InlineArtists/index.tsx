@@ -10,10 +10,10 @@ interface CurrentArtist {
 // show artists names separated by ','
 function InlineArtists({
   artists,
-  fontSize = 14,
+  fontSize = "1rem",
 }: {
   artists: Artist[] | undefined | CurrentArtist[];
-  fontSize?: number;
+  fontSize?: number | string;
 }) {
   if (artists === undefined) return <Typography></Typography>;
   const ars = artists.map((ar: any) => (

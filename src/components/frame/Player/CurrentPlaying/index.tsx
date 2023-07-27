@@ -57,7 +57,7 @@ function CurrentPlaying() {
         display: "flex",
         alignItems: "center",
         overflow: "hidden",
-        minWidth: 58,
+        minWidth: 56,
         pl: 1,
         pr: 1,
         gap: 1,
@@ -66,16 +66,16 @@ function CurrentPlaying() {
         <Avatar
           src={currentTrack?.album.images[0].url}
           variant="rounded"
-          sx={{ width: 56, height: 56 }}
+          sx={{ width: 48, height: 48 }}
         />
       ) : (
-        <Skeleton variant="rounded" animation="wave" width={56} height={56} />
+        <Skeleton variant="rounded" animation="wave" width={48} height={48} />
       )}
 
-      <Stack sx={{ gap: 1, minWidth: 30 }}>
+      <Stack sx={{ gap: 1, minWidth: 30, height: 48 }}>
         {currentTrack ? (
           <ScrollText>
-            <Typography noWrap display={"inline-block"}>
+            <Typography fontSize="1.2rem" noWrap display={"inline-block"}>
               <Link to={`/album/${currentTrack.album.uri.split(":")[2]}`}>
                 {currentTrack.name}
               </Link>

@@ -57,13 +57,12 @@ function Progress() {
         justifyContent: "center",
         alignItems: "center",
         gap: 2,
-        // mb: 1,
       }}>
       <Typography
         noWrap
         sx={{
           color: "primary",
-          fontSize: 12,
+          fontSize: "1rem",
         }}>
         {showTime(position)}
       </Typography>
@@ -94,7 +93,7 @@ function Progress() {
         noWrap
         sx={{
           color: "primary",
-          fontSize: 10,
+          fontSize: "1rem",
         }}>
         {showTime(playbackState?.duration)}
       </Typography>

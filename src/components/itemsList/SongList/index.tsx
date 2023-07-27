@@ -137,7 +137,7 @@ export default function SongList({
 
   const albumRender = useCallback(
     (album: Album) => (
-      <Typography noWrap sx={{ color: "grey", fontSize: 14 }}>
+      <Typography noWrap sx={{ color: "grey", fontSize: "1rem" }}>
         <Link to={`/album/${album.id}`}>{album.name}</Link>
       </Typography>
     ),
@@ -150,6 +150,7 @@ export default function SongList({
         noWrap={true}
         width={80}
         sx={{
+          fontSize: "1rem",
           color: "grey",
         }}>
         {showTime(duration)}

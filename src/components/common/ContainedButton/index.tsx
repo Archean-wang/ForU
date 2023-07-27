@@ -18,12 +18,12 @@ function ContainedButton({
     <Button
       onClick={onClick}
       variant="contained"
+      size="small"
       color="success"
       sx={{
         gap: 1,
-        padding: 2,
-        minWidth: 20,
-        height: "2rem",
+        padding: 1.5,
+        height: "1.5rem",
         "@media (max-width: 700px)": {
           ".buttonText": { display: "none" },
         },

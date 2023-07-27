@@ -36,13 +36,13 @@ function AlbumList({ albums }: { albums: Album[] }) {
           />
           <Typography
             noWrap
-            fontSize={10}
+            fontSize="1rem"
             sx={{ overflow: "hidden", textOverflow: "ellipsis" }}>
             {v.name}
           </Typography>
           <Typography
             noWrap
-            fontSize={10}
+            fontSize="1rem"
             sx={{ overflow: "hidden", textOverflow: "ellipsis" }}>
             {v.release_date}
           </Typography>
