@@ -18,7 +18,7 @@ function Content() {
       <Box
         sx={{
           width: "100%",
-          padding: 4,
+          padding: 2,
           height: "calc(100% - 60px)",
           position: "relative",
         }}>

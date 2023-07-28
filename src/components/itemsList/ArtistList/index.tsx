@@ -1,57 +1,37 @@
-import { Avatar, Box, Typography } from "@mui/material";
-
-import { useNavigate } from "react-router-dom";
+import { Box } from "@mui/material";
 import { Artist } from "../../../utils/interface";
+import EntityCard from "../../common/EntityCard";
 
-// wrap 用于单行显示歌手
-function ArtistList({
-  artists,
-  wrap = "wrap",
-}: {
+interface ArtistListProps {
   artists: Artist[];
-  wrap?: string;
-}) {
-  const navigate = useNavigate();
+  wrap?: "wrap" | "nowrap"; // nowrap 用于单行显示歌手
+}
+
+function ArtistList({ artists, wrap = "wrap" }: ArtistListProps) {
   return (
     <Box
       onWheel={(e) => {
-        e.currentTarget.scrollLeft += e.deltaY;
+        if (wrap === "nowrap") {
+          e.currentTarget.scrollLeft += e.deltaY;
+          e.preventDefault();
+        }
       }}
       sx={{
         width: "100%",
         height: wrap == "wrap" ? "100%" : "initial",
-        gap: 4,
+        gap: 2,
         padding: wrap == "wrap" ? 2 : 0,
         overflowX: "hidden",
         flexWrap: wrap,
         display: "flex",
       }}>
       {artists.map((v: Artist) => (
-        <Box
-          onClick={() => navigate(`/artist/${v.id}`)}
+        <EntityCard
           key={v.id}
-          sx={{
-            height: 200,
-            width: 160,
-            borderRadius: 2,
-            display: "flex",
-            flexDirection: "column",
-            cursor: "pointer",
-            gap: 1,
-            padding: 1,
-          }}>
-          <Avatar
-            variant="rounded"
-            src={v.images.length !== 0 ? v.images[0].url : "/spotify.png"}
-            sx={{ width: 140, height: 140, alignSelf: "center" }}
-          />
-          <Typography
-            noWrap
-            fontSize="1rem"
-            sx={{ overflow: "hidden", textOverflow: "ellipsis" }}>
-            {v.name}
-          </Typography>
-        </Box>
+          url={`/artist/${v.id}`}
+          image={v.images.length !== 0 ? v.images[0].url : "/spotify.png"}
+          title={[v.name]}
+        />
       ))}
     </Box>
   );
