@@ -1,6 +1,4 @@
-import { Avatar, Box, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-
+import { Box, Typography } from "@mui/material";
 import { useStore } from "../../store";
 import { useEffect } from "react";
 import { observer } from "mobx-react-lite";
@@ -9,7 +7,6 @@ import EntityCard from "../../components/common/EntityCard";
 
 function Daily() {
   const store = useStore();
-  const navigate = useNavigate();
 
   useEffect(() => {
     store.topItemsStore.setTopArtists();

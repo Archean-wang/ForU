@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { getAlbums } from "../api";
-import { Albums } from "../utils/interface";
+import { SavedAlbums } from "../utils/interface";
 
 export class AlbumsStore {
   albums = {
@@ -11,7 +11,7 @@ export class AlbumsStore {
     previous: "",
     total: 0,
     items: [],
-  } as Albums;
+  } as SavedAlbums;
   constructor() {
     makeAutoObservable(this);
   }

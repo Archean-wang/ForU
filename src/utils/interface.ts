@@ -1,3 +1,5 @@
+import { search } from "../api";
+
 interface Device {
   id: string;
   is_active: boolean;
@@ -24,6 +26,20 @@ interface Album {
   uri: string;
 }
 
+interface SearchTracks {
+  tracks: Tracks;
+}
+
+interface Tracks {
+  href: string;
+  limit: number;
+  next: string;
+  offset: number;
+  previous: string;
+  total: number;
+  items: Track[];
+}
+
 interface Track {
   name: string;
   artists: Array<Artist>;
@@ -40,6 +56,10 @@ interface TrackItems {
 interface PlayingQueue {
   currently_playing: null | Track;
   queue: Track[];
+}
+
+interface SearchPlaylists {
+  playlists: Playlists;
 }
 
 interface Playlists {
@@ -75,7 +95,11 @@ interface TopTracks {
   items: Track[];
 }
 
-interface TopArtists {
+interface SearchArtists {
+  artists: Artists;
+}
+
+interface Artists {
   href: string;
   limit: number;
   next: string;
@@ -85,7 +109,7 @@ interface TopArtists {
   items: Artist[];
 }
 
-interface Albums {
+interface SavedAlbums {
   href: string;
   limit: number;
   next: string;
@@ -93,6 +117,20 @@ interface Albums {
   previous: string;
   total: number;
   items: SavedAlbum[];
+}
+
+interface SearchAlbums {
+  albums: Albums;
+}
+
+interface Albums {
+  href: string;
+  limit: number;
+  next: string;
+  offset: number;
+  previous: string;
+  total: number;
+  items: Album[];
 }
 
 interface Loves {
@@ -133,6 +171,16 @@ interface Image {
   url: string;
 }
 
+interface PlaylistTracks {
+  href: string;
+  total: number;
+  limit: number;
+  next: string | null;
+  offset: number;
+  previous: string | null;
+  items: PlaylistTrack[];
+}
+
 interface PlaylistTrack {
   track: Track;
   added_at: string;
@@ -158,6 +206,7 @@ interface Anchor {
 export type {
   Device,
   AvailableDevices,
+  SavedAlbums,
   Albums,
   Album,
   FollowedArtists,
@@ -168,10 +217,16 @@ export type {
   Playlist,
   SavedAlbum,
   Loves,
-  TopArtists,
+  Artists,
   TopTracks,
   RecentTracks,
   PlayingQueue,
   Anchor,
   PlaylistTrack,
+  PlaylistTracks,
+  Tracks,
+  SearchAlbums,
+  SearchTracks,
+  SearchArtists,
+  SearchPlaylists,
 };

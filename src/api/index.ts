@@ -1,7 +1,6 @@
 import { PlaylistDetail } from "../components/common/EditPlaylist";
 import http from "../utils/http";
 import {
-  Albums,
   AvailableDevices,
   FollowedArtists,
   Loves,
@@ -9,7 +8,8 @@ import {
   Playlist,
   Playlists,
   RecentTracks,
-  TopArtists,
+  SavedAlbums,
+  Artists,
   TopTracks,
 } from "../utils/interface";
 
@@ -17,7 +17,7 @@ async function getPlaylists(): Promise<Playlists> {
   return await http.get("/me/playlists");
 }
 
-async function getAlbums(): Promise<Albums> {
+async function getAlbums(): Promise<SavedAlbums> {
   return await http.get("/me/albums");
 }
 
@@ -117,7 +117,7 @@ async function search(
   kw: string,
   type: string = "track,artist,album,playlist"
 ) {
-  return await http.get(`/search`, { params: { q: kw, type } });
+  return await http.get(`/search`, { params: { q: kw, type, limit: 50 } });
 }
 
 async function getPlaylistInfo(pid: string) {
@@ -207,7 +207,7 @@ async function getDevices(): Promise<AvailableDevices> {
   return await http.get("/me/player/devices");
 }
 
-async function getTop(type: string): Promise<TopTracks | TopArtists> {
+async function getTop(type: string): Promise<TopTracks | Artists> {
   return await http.get(`/me/top/${type}`);
 }
 

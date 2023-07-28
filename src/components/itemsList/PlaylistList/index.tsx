@@ -1,13 +1,26 @@
-import { Avatar, Box, Typography } from "@mui/material";
-
-import { useNavigate } from "react-router-dom";
+import { Box } from "@mui/material";
 import { Playlist } from "../../../utils/interface";
 import EntityCard from "../../common/EntityCard";
+import debounce from "../../../utils/debounce";
 
-function PlaylistList({ playlists }: { playlists: Playlist[] }) {
-  const navigate = useNavigate();
+interface PlaylistListProps {
+  playlists: Playlist[];
+  loadMore?: Function;
+}
+
+function PlaylistList({ playlists, loadMore }: PlaylistListProps) {
+  const deLoadMore = loadMore && debounce(loadMore, 1000);
   return (
     <Box
+      onScroll={
+        loadMore
+          ? (e) => {
+              const el = e.target as HTMLElement;
+              if (el.scrollTop + el.offsetHeight > el.scrollHeight - 100)
+                deLoadMore && deLoadMore();
+            }
+          : undefined
+      }
       sx={{
         width: "100%",
         height: "100%",

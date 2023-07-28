@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { getTop } from "../api";
-import { TopArtists, TopTracks } from "../utils/interface";
+import { Artists, TopTracks } from "../utils/interface";
 
 export class TopItemsStore {
   topTracks = {
@@ -21,7 +21,7 @@ export class TopItemsStore {
     previous: "",
     total: 0,
     items: [],
-  } as TopArtists;
+  } as Artists;
   constructor() {
     makeAutoObservable(this);
   }
@@ -36,7 +36,7 @@ export class TopItemsStore {
   setTopArtists = async () => {
     const res = await getTop("artists");
     runInAction(() => {
-      this.topArtists = res as TopArtists;
+      this.topArtists = res as Artists;
     });
   };
 }

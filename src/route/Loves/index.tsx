@@ -6,7 +6,7 @@ import { startPlayback } from "../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlay, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useStore } from "../../store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import EventBus from "../../utils/EventBus";
 import { useSpotifyDevice } from "spotify-web-playback-sdk-for-react";
@@ -16,6 +16,7 @@ function Loves() {
   const { userProfile } = useRouteLoaderData("root");
   const store = useStore();
   const device = useSpotifyDevice();
+  const [loading, setLoading] = useState(false);
 
   function handle() {
     store.lovesStore.setLoves();
@@ -32,6 +33,13 @@ function Loves() {
   const startPlay = function (index: number) {
     startPlayback(`${userProfile.uri}:collection`, index, device?.device_id);
   };
+
+  function loadNext() {
+    setLoading(true);
+    store.lovesStore.next().then(() => {
+      setLoading(false);
+    });
+  }
   return (
     <Box
       sx={{
@@ -86,6 +94,7 @@ function Loves() {
       </Box>
       <Box sx={{ flex: 1, overflow: "hidden" }}>
         <SongList
+          loadMore={loadNext}
           items={store.lovesStore.loves.items.map((v) => v.track)}
           handDoubleClick={(n) => {
             startPlayback(
@@ -96,6 +105,7 @@ function Loves() {
           }}
         />
       </Box>
+      {loading && <Typography height="1.5rem">加载中...</Typography>}
     </Box>
   );
 }

@@ -9,24 +9,26 @@ import {
   unfollowArtists,
 } from "../../api";
 import AlbumList from "../../components/itemsList/AlbumList";
-
 import { useStore } from "../../store";
 import { faHeart, faPlayCircle } from "@fortawesome/free-solid-svg-icons";
-
 import InfoCard from "../../components/common/InfoCard";
 import ContainedButton from "../../components/common/ContainedButton";
 import { useSpotifyDevice } from "spotify-web-playback-sdk-for-react";
 import ArtistList from "../../components/itemsList/ArtistList";
+import http from "../../utils/http";
+import { Albums } from "../../utils/interface";
 
 function Artist() {
   // @ts-ignore
   const { hotTracks, albums, relatedArtists, artistInfo } = useLoaderData();
+  const [albumItems, setAlbumItems] = useState(albums.items);
   const [value, setValue] = useState(0);
 
   const params = useParams();
   const [isLoved, setIsLoved] = useState(false);
   const store = useStore();
   const device = useSpotifyDevice();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     checkArtists(params.id as string).then((res) => {
@@ -58,6 +60,17 @@ function Artist() {
     },
     [device]
   );
+
+  function loadNextAlbums() {
+    if (albums.next) {
+      setLoading(true);
+      http.get<any, Albums>(albums.next).then((res) => {
+        albums.next = res.next;
+        setAlbumItems([...albumItems, ...res.items]);
+        setLoading(false);
+      });
+    }
+  }
 
   return (
     <Box
@@ -119,7 +132,9 @@ function Artist() {
             ]}
           />
         )}
-        {value == 1 && <AlbumList albums={albums.items} />}
+        {value == 1 && (
+          <AlbumList albums={albumItems} loadMore={loadNextAlbums} />
+        )}
         {value == 2 && <ArtistList artists={relatedArtists.artists} />}
       </Box>
     </Box>

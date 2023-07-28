@@ -20,12 +20,13 @@ import { useStore } from "../../store";
 import EditPlaylist, {
   PlaylistDetail,
 } from "../../components/common/EditPlaylist";
-import { PlaylistTrack, Track } from "../../utils/interface";
+import { PlaylistTrack, PlaylistTracks, Track } from "../../utils/interface";
 import { observer } from "mobx-react-lite";
 import EventBus, { MyEvent } from "../../utils/EventBus";
 import InfoCard from "../../components/common/InfoCard";
 import ContainedButton from "../../components/common/ContainedButton";
 import { useSpotifyDevice } from "spotify-web-playback-sdk-for-react";
+import http from "../../utils/http";
 
 function Playlist() {
   const params = useParams();
@@ -40,6 +41,7 @@ function Playlist() {
   const store = useStore();
   const device = useSpotifyDevice();
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [imageUrl, setImageUrl] = useState(
     playlist.images.length !== 0 ? playlist.images[0].url : "/spotify.png"
@@ -111,9 +113,20 @@ function Playlist() {
   };
 
   function startPlay(index: number) {
-    console.log(device);
     startPlayback(playlist.uri, index, device?.device_id);
   }
+
+  function loadNext() {
+    if (playlist.tracks.next) {
+      setLoading(true);
+      http.get<any, PlaylistTracks>(playlist.tracks.next).then((res) => {
+        playlist.tracks.next = res.next;
+        setItems([...items, ...res.items.map((v: PlaylistTrack) => v.track)]);
+        setLoading(false);
+      });
+    }
+  }
+
   return (
     <Box
       sx={{
@@ -136,7 +149,7 @@ function Playlist() {
               简介: {description ? description : "暂无"}
             </Typography>
             <Typography noWrap sx={{ maxWidth: 200 }}>
-              {playlist.tracks.items.length}首
+              {playlist.tracks.total}首
             </Typography>
           </Box>
 
@@ -167,8 +180,12 @@ function Playlist() {
           handDoubleClick={(n) => {
             startPlayback(playlist.uri, n, device?.device_id);
           }}
+          loadMore={() => {
+            loadNext();
+          }}
         />
       </Box>
+      {loading && <Typography height="1.5rem">加载中...</Typography>}
 
       <EditPlaylist
         open={open}

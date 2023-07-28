@@ -9,7 +9,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Album,
   Anchor,
@@ -34,6 +34,7 @@ import { useStore } from "../../../store";
 import EventBus, { MyEvent } from "../../../utils/EventBus";
 import SubMenu from "../../common/SubMenu";
 import ContextMenu from "../../common/ContextMenu";
+import debounce from "../../../utils/debounce";
 
 const Cell = styled(TableCell)(
   ({ theme }) => `
@@ -53,13 +54,14 @@ interface ColumnDefine {
 
 type Handler = (v: number) => any;
 
-interface Info {
+interface SongListProps {
   items: Track[];
   handDoubleClick: Handler;
   columns?: ColumnDefine[];
   currentPlaylist?: Playlist | undefined;
   hideHead?: boolean;
   fixHeight?: boolean;
+  loadMore?: Function;
 }
 
 const defaultColumns = [
@@ -88,21 +90,29 @@ export default function SongList({
   currentPlaylist = undefined,
   hideHead = false,
   fixHeight = true,
-}: Info) {
+  loadMore,
+}: SongListProps) {
   const [menuPos, setMenuPos] = useState<Anchor | null>(null);
   const [idx, setIdx] = useState(-1);
-  const [loves, setLoves] = useState(() => items.map((v) => false));
+  const [loves, setLoves] = useState(Array(items.length).fill(false));
   const store = useStore();
   // @ts-ignore
   const { userProfile } = useRouteLoaderData("root");
+  const deLoadMore = loadMore && debounce(loadMore, 1000);
 
   useEffect(() => {
-    const ids = items.map((v) => v.id).join(",");
-    if (ids) {
-      checkTracks(ids).then((res) => {
-        setLoves(res);
-      });
+    // at most 50 ids once
+    const ids = items.map((v) => v.id);
+    const slices = [];
+    for (let i = 0; i < ids.length; i += 50) {
+      slices.push(ids.slice(i, i + 50));
     }
+    let result = Promise.all(slices.map((v) => checkTracks(v.join(","))));
+    result
+      .then((res) => {
+        setLoves(res.flat());
+      })
+      .catch((e) => console.log(e));
   }, [items]);
 
   useEffect(() => {
@@ -224,6 +234,15 @@ export default function SongList({
 
   return (
     <TableContainer
+      onScroll={
+        loadMore
+          ? (e) => {
+              const el = e.target as HTMLElement;
+              if (el.scrollTop + el.offsetHeight > el.scrollHeight - 100)
+                deLoadMore && deLoadMore();
+            }
+          : undefined
+      }
       sx={{
         height: fixHeight ? "100%" : "initial",
         width: "100%",

@@ -1,10 +1,27 @@
 import { Box } from "@mui/material";
 import { Album } from "../../../utils/interface";
 import EntityCard from "../../common/EntityCard";
+import debounce from "../../../utils/debounce";
 
-function AlbumList({ albums }: { albums: Album[] }) {
+interface AlbumListProps {
+  albums: Album[];
+  loadMore?: Function;
+}
+
+function AlbumList({ albums, loadMore }: AlbumListProps) {
+  const deLoadMore = loadMore && debounce(loadMore, 1000);
+
   return (
     <Box
+      onScroll={
+        loadMore
+          ? (e) => {
+              const el = e.target as HTMLElement;
+              if (el.scrollTop + el.offsetHeight > el.scrollHeight - 100)
+                deLoadMore && deLoadMore();
+            }
+          : undefined
+      }
       sx={{
         width: "100%",
         height: "100%",
