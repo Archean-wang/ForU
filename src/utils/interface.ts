@@ -1,5 +1,3 @@
-import { search } from "../api";
-
 interface Device {
   id: string;
   is_active: boolean;
@@ -97,16 +95,6 @@ interface TopTracks {
 
 interface SearchArtists {
   artists: Artists;
-}
-
-interface Artists {
-  href: string;
-  limit: number;
-  next: string;
-  offset: number;
-  previous: string;
-  total: number;
-  items: Artist[];
 }
 
 interface SavedAlbums {

@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import { computed, makeAutoObservable, runInAction } from "mobx";
 import { getTop } from "../api";
 import { Artists, TopTracks } from "../utils/interface";
 import http from "../utils/http";
@@ -24,7 +24,9 @@ export class TopItemsStore {
     items: [],
   } as Artists;
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {
+      tracks: computed,
+    });
   }
 
   setTopTracks = async () => {

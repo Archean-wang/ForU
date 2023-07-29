@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import { computed, makeAutoObservable, runInAction } from "mobx";
 import { getRecentTracks } from "../api";
 import { RecentTracks } from "../utils/interface";
 import http from "../utils/http";
@@ -14,7 +14,9 @@ export class RecentStore {
   } as RecentTracks;
 
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {
+      tracks: computed,
+    });
   }
 
   setRecentTracks = async () => {
