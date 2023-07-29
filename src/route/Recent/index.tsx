@@ -1,20 +1,34 @@
 import { observer } from "mobx-react-lite";
-import Commonlist from "../../components/itemsList/CommonList";
+import CommonList from "../../components/itemsList/CommonList";
 import { useStore } from "../../store";
-import { useEffect } from "react";
-import { useCurrentTrack } from "spotify-web-playback-sdk-for-react";
+import { useEffect, useState } from "react";
+import { Typography } from "@mui/material";
 
 function Always() {
-  //@ts-ignore
   const store = useStore();
-  const currentTrack = useCurrentTrack();
-  const tracks = store.recentStore.recentTracks.items.map((v) => v.track);
+  const tracks = store.recentStore.tracks;
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     store.recentStore.setRecentTracks();
-  }, [currentTrack]);
+  }, []);
 
-  return <Commonlist tracks={tracks} title="最近播放"></Commonlist>;
+  function loadNext() {
+    setLoading(true);
+    store.lovesStore.next().then(() => {
+      setLoading(false);
+    });
+  }
+
+  return (
+    <>
+      <CommonList
+        tracks={tracks}
+        title="最近播放"
+        loadMore={loadNext}></CommonList>
+      {loading && <Typography height="1.5rem">加载中...</Typography>}
+    </>
+  );
 }
 
 export default observer(Always);

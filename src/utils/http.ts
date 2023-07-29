@@ -20,7 +20,14 @@ http.interceptors.request.use(
 
 http.interceptors.response.use(
   (response) => response.data,
-  (error) => Promise.reject(`${error.response.data.error.message}`)
+  (error) =>
+    Promise.reject(
+      `${
+        typeof error.response.data === "object"
+          ? error.response.data.error.message
+          : error.response.data
+      }`
+    )
 );
 
 export default http;

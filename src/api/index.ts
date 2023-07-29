@@ -212,7 +212,7 @@ async function getTop(type: string): Promise<TopTracks | Artists> {
 }
 
 async function getRecentTracks(): Promise<RecentTracks> {
-  return await http.get(`/me/player/recently-played`);
+  return await http.get(`/me/player/recently-played?limit=50`);
 }
 
 async function addItemsToPlaylist(pid: string, uris: string[]) {

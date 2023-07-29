@@ -1,6 +1,6 @@
 import { useRouteLoaderData } from "react-router-dom";
 import SongList from "../../components/itemsList/SongList";
-import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
+import { Avatar, Box, Stack, Typography } from "@mui/material";
 import { startPlayback } from "../../api";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import EventBus from "../../utils/EventBus";
 import { useSpotifyDevice } from "spotify-web-playback-sdk-for-react";
+import ContainedButton from "../../components/common/ContainedButton";
 
 function Loves() {
   // @ts-ignore
@@ -63,7 +64,7 @@ function Loves() {
             width: 200,
             background: "#f3f2f1",
           }}>
-          <FontAwesomeIcon icon={faHeart} color={"red"} fontSize={80} />
+          <FontAwesomeIcon icon={faHeart} color={"red"} fontSize="5rem" />
         </Avatar>
         <Box
           sx={{
@@ -73,22 +74,13 @@ function Loves() {
             justifyContent: "space-between",
             gap: 1,
           }}>
-          <Typography noWrap sx={{ fontSize: 32, fontWeight: "bolder" }}>
+          <Typography noWrap sx={{ fontSize: "2rem", fontWeight: "bolder" }}>
             我喜欢的
           </Typography>
           <Stack direction={"row"} gap={2}>
-            <Button
-              onClick={() => startPlay(0)}
-              variant="contained"
-              color="success"
-              startIcon={<FontAwesomeIcon icon={faCirclePlay} />}
-              sx={{
-                maxWidth: 120,
-              }}>
-              <Typography noWrap sx={{ fontSize: 14 }}>
-                播放全部
-              </Typography>
-            </Button>
+            <ContainedButton onClick={() => startPlay(0)} icon={faCirclePlay}>
+              播放
+            </ContainedButton>
           </Stack>
         </Box>
       </Box>

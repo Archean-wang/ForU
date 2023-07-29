@@ -312,7 +312,7 @@ export default function SongList({
           {store.playlistsStore.playlists.items
             .filter((v) => v.owner.id === userProfile.id)
             .map((v) => (
-              <MenuItem dense onClick={() => addToPlaylist(v.id)}>
+              <MenuItem key={v.id} dense onClick={() => addToPlaylist(v.id)}>
                 {v.name}
               </MenuItem>
             ))}

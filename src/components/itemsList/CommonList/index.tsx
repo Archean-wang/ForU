@@ -4,13 +4,13 @@ import { playTracks } from "../../../api";
 import { Track } from "../../../utils/interface";
 import { useSpotifyDevice } from "spotify-web-playback-sdk-for-react";
 
-function Commonlist({
-  tracks,
-  title = "列表",
-}: {
+interface CommonListProps {
   tracks: Track[];
   title?: string;
-}) {
+  loadMore?: Function;
+}
+
+function CommonList({ tracks, title = "列表", loadMore }: CommonListProps) {
   const device = useSpotifyDevice();
 
   function startPlay(index: number) {
@@ -36,10 +36,11 @@ function Commonlist({
           handDoubleClick={(n) => {
             startPlay(n);
           }}
+          loadMore={loadMore}
         />
       </Box>
     </Box>
   );
 }
 
-export default Commonlist;
+export default CommonList;

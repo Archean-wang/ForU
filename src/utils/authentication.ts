@@ -1,4 +1,4 @@
-const clientID = "e04e58aec96244b686b4c7e71933b798";
+const clientID = "7418af20d42b4bca82c23c6523a103e6";
 const callbackURL = "http://localhost:12138/callback";
 
 function generateRandomString(length: number) {

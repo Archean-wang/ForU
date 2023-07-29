@@ -95,7 +95,10 @@ function Header() {
           fontSize: 16,
           gap: 1,
         }}>
-        <Avatar src={userProfile?.images[0].url}></Avatar>
+        <Avatar
+          src={
+            userProfile?.images.length !== 0 ? userProfile?.images[0].url : ""
+          }></Avatar>
       </IconButton>
 
       <Menu

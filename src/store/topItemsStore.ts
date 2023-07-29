@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { getTop } from "../api";
 import { Artists, TopTracks } from "../utils/interface";
+import http from "../utils/http";
 
 export class TopItemsStore {
   topTracks = {
@@ -38,6 +39,30 @@ export class TopItemsStore {
     runInAction(() => {
       this.topArtists = res as Artists;
     });
+  };
+
+  get tracks() {
+    return this.topTracks.items;
+  }
+
+  nextTopArtists = async () => {
+    if (this.topArtists.next) {
+      const res = await http.get<any, Artists>(this.topArtists.next);
+      runInAction(() => {
+        this.topArtists.next = res.next;
+        this.topArtists.items = [...this.topArtists.items, ...res.items];
+      });
+    }
+  };
+
+  nextTopTracks = async () => {
+    if (this.topTracks.next) {
+      const res = await http.get<any, TopTracks>(this.topTracks.next);
+      runInAction(() => {
+        this.topTracks.next = res.next;
+        this.topTracks.items = [...this.topTracks.items, ...res.items];
+      });
+    }
   };
 }
 
