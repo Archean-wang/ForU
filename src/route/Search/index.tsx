@@ -1,4 +1,4 @@
-import { Box, Tabs, Tab, Typography } from "@mui/material";
+import { Box, Tabs, Tab } from "@mui/material";
 import { useLoaderData } from "react-router-dom";
 import React, { useState } from "react";
 import SongList from "../../components/itemsList/SongList";
@@ -15,6 +15,7 @@ import {
   SearchPlaylists,
   SearchTracks,
 } from "../../utils/interface";
+import Loading from "../../components/common/Loading";
 
 function Search() {
   const {
@@ -115,7 +116,7 @@ function Search() {
           />
         )}
       </Box>
-      {loading && <Typography height="1.5rem">加载中...</Typography>}
+      {loading && <Loading />}
     </Box>
   );
 }

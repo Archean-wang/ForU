@@ -17,6 +17,7 @@ import { useSpotifyDevice } from "spotify-web-playback-sdk-for-react";
 import ArtistList from "../../components/itemsList/ArtistList";
 import http from "../../utils/http";
 import { Albums } from "../../utils/interface";
+import Loading from "../../components/common/Loading";
 
 function Artist() {
   // @ts-ignore
@@ -137,6 +138,7 @@ function Artist() {
         )}
         {value == 2 && <ArtistList artists={relatedArtists.artists} />}
       </Box>
+      {loading && <Loading />}
     </Box>
   );
 }

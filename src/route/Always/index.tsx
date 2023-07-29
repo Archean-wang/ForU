@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Commonlist from "../../components/itemsList/CommonList";
 import { useStore } from "../../store";
-import { Typography } from "@mui/material";
+import Loading from "../../components/common/Loading";
 
 function Always() {
   const store = useStore();
@@ -20,7 +20,7 @@ function Always() {
         tracks={store.topItemsStore.tracks}
         loadMore={loadNext}
         title="最多播放"></Commonlist>
-      {loading && <Typography height="1.5rem">加载中...</Typography>}
+      {loading && <Loading />}
     </>
   );
 }

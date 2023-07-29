@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite";
 import CommonList from "../../components/itemsList/CommonList";
 import { useStore } from "../../store";
 import { useEffect, useState } from "react";
-import { Typography } from "@mui/material";
+import Loading from "../../components/common/Loading";
 
 function Always() {
   const store = useStore();
@@ -26,7 +26,7 @@ function Always() {
         tracks={tracks}
         title="最近播放"
         loadMore={loadNext}></CommonList>
-      {loading && <Typography height="1.5rem">加载中...</Typography>}
+      {loading && <Loading />}
     </>
   );
 }

@@ -11,6 +11,7 @@ import { observer } from "mobx-react-lite";
 import EventBus from "../../utils/EventBus";
 import { useSpotifyDevice } from "spotify-web-playback-sdk-for-react";
 import ContainedButton from "../../components/common/ContainedButton";
+import Loading from "../../components/common/Loading";
 
 function Loves() {
   // @ts-ignore
@@ -97,7 +98,7 @@ function Loves() {
           }}
         />
       </Box>
-      {loading && <Typography height="1.5rem">加载中...</Typography>}
+      {loading && <Loading />}
     </Box>
   );
 }

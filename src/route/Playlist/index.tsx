@@ -27,6 +27,7 @@ import InfoCard from "../../components/common/InfoCard";
 import ContainedButton from "../../components/common/ContainedButton";
 import { useSpotifyDevice } from "spotify-web-playback-sdk-for-react";
 import http from "../../utils/http";
+import Loading from "../../components/common/Loading";
 
 function Playlist() {
   const params = useParams();
@@ -184,8 +185,8 @@ function Playlist() {
             loadNext();
           }}
         />
+        {loading && <Loading />}
       </Box>
-      {loading && <Typography height="1.5rem">加载中...</Typography>}
 
       <EditPlaylist
         open={open}
