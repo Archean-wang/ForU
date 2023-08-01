@@ -11,6 +11,7 @@ import {
   SavedAlbums,
   Artists,
   TopTracks,
+  Profile,
 } from "../utils/interface";
 
 async function getPlaylists(): Promise<Playlists> {
@@ -41,7 +42,7 @@ async function unloveTracks(ids: string) {
   return await http.delete(`/me/tracks?ids=${ids}`);
 }
 
-async function getUserProfile() {
+async function getUserProfile(): Promise<Profile> {
   return await http.get("/me");
 }
 

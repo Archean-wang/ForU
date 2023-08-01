@@ -9,7 +9,6 @@ import {
   getArtistTop,
   getPlaylistInfo,
   getRelatedArtist,
-  getUserProfile,
   search,
 } from "../api";
 import Loading from "../components/common/Loading";
@@ -32,15 +31,6 @@ const router = createBrowserRouter([
     element: <App />,
     errorElement: <ErrorPage />,
     id: "root",
-    loader: async () => {
-      try {
-        const userProfile = await getUserProfile();
-        return { userProfile };
-      } catch (err) {
-        console.error(`Error when get user library: ${err}`);
-        return null;
-      }
-    },
     children: [
       {
         path: "/search/:kw",

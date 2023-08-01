@@ -9,6 +9,7 @@ import colorModeStore, { ColorModeStore } from "./colorModeStore";
 import topItemsStore, { TopItemsStore } from "./topItemsStore";
 import recentStore, { RecentStore } from "./recentStore";
 import playingStore, { PlayingStore } from "./playingStore";
+import userProfileStore, { UserProfileStore } from "./userProfileStore";
 
 class RootStore {
   loginStore: LoginStore;
@@ -21,6 +22,7 @@ class RootStore {
   topItemsStore: TopItemsStore;
   recentStore: RecentStore;
   playingStore: PlayingStore;
+  userProfilseStore: UserProfileStore;
   constructor() {
     this.loginStore = loginStore;
     this.playlistsStore = playlistsStore;
@@ -32,6 +34,7 @@ class RootStore {
     this.topItemsStore = topItemsStore;
     this.recentStore = recentStore;
     this.playingStore = playingStore;
+    this.userProfilseStore = userProfileStore;
   }
 }
 

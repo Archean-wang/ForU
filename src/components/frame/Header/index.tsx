@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Input,
   InputAdornment,
@@ -10,7 +10,7 @@ import {
   ListItemIcon,
   Stack,
 } from "@mui/material";
-import { useNavigate, useRouteLoaderData } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAngleLeft,
@@ -22,14 +22,17 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useStore } from "../../../store";
 import debounce from "../../../utils/debounce";
+import { observer } from "mobx-react-lite";
 
 function Header() {
   const store = useStore();
-  // @ts-ignore
-  const { userProfile } = useRouteLoaderData("root");
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
+  useEffect(() => {
+    store.userProfilseStore.getUserProfile();
+  }, []);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -90,14 +93,16 @@ function Header() {
 
       <IconButton
         onClick={handleClick}
-        title={userProfile?.display_name}
+        title={store.userProfilseStore.userProfile?.display_name}
         sx={{
           fontSize: 16,
           gap: 1,
         }}>
         <Avatar
           src={
-            userProfile?.images.length !== 0 ? userProfile?.images[0].url : ""
+            store.userProfilseStore.userProfile?.images.length !== 0
+              ? store.userProfilseStore.userProfile?.images[0].url
+              : ""
           }></Avatar>
       </IconButton>
 
@@ -126,4 +131,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default observer(Header);

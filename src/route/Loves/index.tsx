@@ -1,4 +1,3 @@
-import { useRouteLoaderData } from "react-router-dom";
 import SongList from "../../components/itemsList/SongList";
 import { Avatar, Box, Stack, Typography } from "@mui/material";
 import { startPlayback } from "../../api";
@@ -14,8 +13,6 @@ import ContainedButton from "../../components/common/ContainedButton";
 import Loading from "../../components/common/Loading";
 
 function Loves() {
-  // @ts-ignore
-  const { userProfile } = useRouteLoaderData("root");
   const store = useStore();
   const device = useSpotifyDevice();
   const [loading, setLoading] = useState(false);
@@ -33,7 +30,11 @@ function Loves() {
   }, []);
 
   const startPlay = function (index: number) {
-    startPlayback(`${userProfile.uri}:collection`, index, device?.device_id);
+    startPlayback(
+      `${store.userProfilseStore.userProfile!.uri}:collection`,
+      index,
+      device?.device_id
+    );
   };
 
   function loadNext() {
@@ -91,7 +92,7 @@ function Loves() {
           items={store.lovesStore.loves.items.map((v) => v.track)}
           handDoubleClick={(n) => {
             startPlayback(
-              `${userProfile.uri}:collection`,
+              `${store.userProfilseStore.userProfile!.uri}:collection`,
               store.lovesStore.loves.items[n].track.uri,
               device?.device_id
             );

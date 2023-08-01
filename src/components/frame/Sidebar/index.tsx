@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { useNavigate, useRouteLoaderData } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Anchor, Artist, Playlist, SavedAlbum } from "../../../utils/interface";
 import {
   faAdd,
@@ -41,8 +41,6 @@ import ListButton from "./ListButton";
 import { useSpotifyDevice } from "spotify-web-playback-sdk-for-react";
 
 function Sidebar() {
-  // @ts-ignore
-  const { userProfile } = useRouteLoaderData("root");
   const store = useStore();
   const device = useSpotifyDevice();
 
@@ -76,7 +74,7 @@ function Sidebar() {
   }
 
   function addPlaylist() {
-    createPlaylist(userProfile.id).then((res) => {
+    createPlaylist(store.userProfilseStore.userProfile!.id).then((res) => {
       store.playlistsStore.setPlaylists();
       navigate(`/playlist/${res.id}`);
     });

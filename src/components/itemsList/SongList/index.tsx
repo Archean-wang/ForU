@@ -17,7 +17,7 @@ import {
   Playlist,
   Track,
 } from "../../../utils/interface";
-import { Link, useRouteLoaderData } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { InlineArtists } from "../../common/InlineArtists";
 import { showTime } from "../../../utils/formatter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -35,6 +35,7 @@ import EventBus, { MyEvent } from "../../../utils/EventBus";
 import SubMenu from "../../common/SubMenu";
 import ContextMenu from "../../common/ContextMenu";
 import debounce from "../../../utils/debounce";
+import { observer } from "mobx-react-lite";
 
 const Cell = styled(TableCell)(
   ({ theme }) => `
@@ -83,7 +84,7 @@ const defaultColumns = [
   },
 ] as ColumnDefine[];
 
-export default function SongList({
+function SongList({
   items,
   columns = defaultColumns,
   handDoubleClick,
@@ -96,8 +97,6 @@ export default function SongList({
   const [idx, setIdx] = useState(-1);
   const [loves, setLoves] = useState(Array(items.length).fill(false));
   const store = useStore();
-  // @ts-ignore
-  const { userProfile } = useRouteLoaderData("root");
   const deLoadMore = loadMore && debounce(loadMore, 1000);
 
   useEffect(() => {
@@ -310,7 +309,9 @@ export default function SongList({
 
         <SubMenu title="添加到">
           {store.playlistsStore.playlists.items
-            .filter((v) => v.owner.id === userProfile.id)
+            .filter(
+              (v) => v.owner.id === store.userProfilseStore.userProfile!.id
+            )
             .map((v) => (
               <MenuItem key={v.id} dense onClick={() => addToPlaylist(v.id)}>
                 {v.name}
@@ -321,3 +322,5 @@ export default function SongList({
     </TableContainer>
   );
 }
+
+export default observer(SongList);

@@ -1,4 +1,4 @@
-import { useLoaderData, useParams, useRouteLoaderData } from "react-router-dom";
+import { useLoaderData, useParams } from "react-router-dom";
 import SongList from "../../components/itemsList/SongList";
 import { Box, Stack, Typography } from "@mui/material";
 import {
@@ -32,8 +32,6 @@ import Loading from "../../components/common/Loading";
 function Playlist() {
   const params = useParams();
   // @ts-ignore
-  const { userProfile } = useRouteLoaderData("root");
-  // @ts-ignore
   const { playlist } = useLoaderData();
   const [items, setItems] = useState(
     playlist.tracks.items.map((v: PlaylistTrack) => v.track)
@@ -51,7 +49,10 @@ function Playlist() {
   const [description, setDescription] = useState(playlist.description);
 
   useEffect(() => {
-    checkPlaylist(params.id as string, userProfile.id).then((res) => {
+    checkPlaylist(
+      params.id as string,
+      store.userProfilseStore.userProfile!.id
+    ).then((res) => {
       setIsLoved(res[0]);
     });
     // 删除事件更新UI
@@ -158,7 +159,7 @@ function Playlist() {
             <ContainedButton onClick={() => startPlay(0)} icon={faCirclePlay}>
               播放
             </ContainedButton>
-            {playlist.owner.id === userProfile.id ? (
+            {playlist.owner.id === store.userProfilseStore.userProfile!.id ? (
               <ContainedButton onClick={editPlaylist} icon={faEdit}>
                 编辑
               </ContainedButton>
