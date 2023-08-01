@@ -2,7 +2,19 @@
   "name": "foru",
   "private": true,
   "version": "0.0.0",
+  "author": {
+    "name": "Archean",
+    "email": "1091876908@qq.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Archean-wang/ForU.git"
+  },
   "type": "module",
+  "keywords": [
+    "react",
+    "spotify"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
