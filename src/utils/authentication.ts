@@ -1,5 +1,5 @@
 const clientID = "7418af20d42b4bca82c23c6523a103e6";
-const callbackURL = "http://localhost:12138/callback";
+const callbackURL = "http://localhost:12138/ForU/callback";
 
 function generateRandomString(length: number) {
   let text = "";

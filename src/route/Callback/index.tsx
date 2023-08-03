@@ -19,12 +19,12 @@ function Callback() {
           store.loginStore.setLogin(true);
         });
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     }
   }, [store.loginStore.login]);
 
-  return <>{`登录中...${store.loginStore.login}`}</>;
+  return <>{store.loginStore.login ? `登录成功` : `登录中...`}</>;
 }
 
 export default observer(Callback);

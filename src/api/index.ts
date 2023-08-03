@@ -9,7 +9,7 @@ import {
   Playlists,
   RecentTracks,
   SavedAlbums,
-  Artists,
+  PageArtist,
   TopTracks,
   Profile,
 } from "../utils/interface";
@@ -208,7 +208,7 @@ async function getDevices(): Promise<AvailableDevices> {
   return await http.get("/me/player/devices");
 }
 
-async function getTop(type: string): Promise<TopTracks | Artists> {
+async function getTop(type: string): Promise<TopTracks | PageArtist> {
   return await http.get(`/me/top/${type}`);
 }
 

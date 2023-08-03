@@ -20,7 +20,7 @@ import { useStore } from "../../store";
 import EditPlaylist, {
   PlaylistDetail,
 } from "../../components/common/EditPlaylist";
-import { PlaylistTrack, PlaylistTracks, Track } from "../../utils/interface";
+import { PlaylistTrack, PagePlaylistTrack, Track } from "../../utils/interface";
 import { observer } from "mobx-react-lite";
 import EventBus, { MyEvent } from "../../utils/EventBus";
 import InfoCard from "../../components/common/InfoCard";
@@ -121,7 +121,7 @@ function Playlist() {
   function loadNext() {
     if (playlist.tracks.next) {
       setLoading(true);
-      http.get<any, PlaylistTracks>(playlist.tracks.next).then((res) => {
+      http.get<any, PagePlaylistTrack>(playlist.tracks.next).then((res) => {
         playlist.tracks.next = res.next;
         setItems([...items, ...res.items.map((v: PlaylistTrack) => v.track)]);
         setLoading(false);
