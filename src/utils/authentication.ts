@@ -57,7 +57,6 @@ export async function getAccessToken(code: string) {
   params.append("code", code);
   params.append("redirect_uri", callbackURL);
   params.append("code_verifier", codeVerifier!);
-
   try {
     let result = await fetch("https://accounts.spotify.com/api/token", {
       method: "POST",
@@ -76,7 +75,7 @@ export async function getAccessToken(code: string) {
       return true;
     }
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return false;
   }
 }
@@ -89,7 +88,7 @@ export async function refreshToken() {
   params.append("client_id", clientID);
   params.append("grant_type", "refresh_token");
   params.append("refresh_token", rt);
-  console.log("refresh params: " + params);
+  console.log("refresh token...");
   if (refreshing) return false;
   try {
     refreshing = true;
@@ -101,14 +100,12 @@ export async function refreshToken() {
     const res = await response.json();
     if (res.error) {
       console.error(`${res.error} :${res.error_description}`);
-      refreshing = false;
       return false;
     } else {
       const { access_token, refresh_token } = res;
       localStorage.setItem("sp_tk", access_token);
       localStorage.setItem("sp_rt", refresh_token);
       localStorage.setItem("expire", String(3590000 + new Date().valueOf()));
-      refreshing = false;
       return true;
     }
   } catch (err) {
