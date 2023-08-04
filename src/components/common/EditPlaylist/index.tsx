@@ -18,7 +18,7 @@ type HandleCommit = ({ imageUrl, name, description }: PlaylistDetail) => void;
 export interface PlaylistDetail {
   imageUrl: string;
   name: string;
-  description: string;
+  description: string | null;
 }
 
 function EditPlaylist({

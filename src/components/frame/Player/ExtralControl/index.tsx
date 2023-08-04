@@ -122,7 +122,7 @@ function ExtralControl() {
         {store.devicesStore.devices.map((dev: Device) => (
           <MenuItem
             autoFocus={false}
-            onClick={() => handleTransfer(dev.id)}
+            onClick={() => handleTransfer(dev.id as string)}
             key={dev.id}
             sx={{ color: dev.is_active ? "green" : "text.primary" }}>
             <ListItemIcon>

@@ -3,15 +3,7 @@ import { getPlaylists } from "../api";
 import { Playlists } from "../utils/interface";
 
 export class PlaylistsStore {
-  playlists = {
-    href: "",
-    limit: 0,
-    next: "",
-    offset: 0,
-    previous: "",
-    total: 0,
-    items: [],
-  } as Playlists;
+  playlists: Playlists | null = null;
   constructor() {
     makeAutoObservable(this);
   }

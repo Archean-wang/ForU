@@ -308,8 +308,8 @@ function SongList({
         </MenuItem>
 
         <SubMenu title="添加到">
-          {store.playlistsStore.playlists.items
-            .filter(
+          {store.playlistsStore
+            .playlists!.items.filter(
               (v) => v.owner.id === store.userProfilseStore.userProfile!.id
             )
             .map((v) => (

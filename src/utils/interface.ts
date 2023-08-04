@@ -244,11 +244,13 @@ interface TopTracks extends Page {
   items: Track[];
 }
 
+interface SavedAlbumsItem {
+  added_at: string;
+  album: SavedAlbum;
+}
+
 interface SavedAlbums extends Page {
-  items: {
-    added_at: string;
-    album: SavedAlbum;
-  };
+  items: SavedAlbumsItem[];
 }
 
 interface Albums extends Page {
@@ -355,4 +357,6 @@ export type {
   SearchArtists,
   SearchPlaylists,
   Profile,
+  SimplePlaylist,
+  SavedAlbumsItem,
 };

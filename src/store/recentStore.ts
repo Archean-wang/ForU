@@ -9,6 +9,10 @@ export class RecentStore {
     limit: 0,
     next: "",
     offset: 0,
+    cursor: {
+      after: "",
+      before: "",
+    },
     total: 0,
     items: [],
   } as RecentTracks;

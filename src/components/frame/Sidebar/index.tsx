@@ -12,7 +12,14 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useNavigate } from "react-router-dom";
-import { Anchor, Artist, Playlist, SavedAlbum } from "../../../utils/interface";
+import {
+  Anchor,
+  Artist,
+  Playlist,
+  SavedAlbum,
+  SavedAlbumsItem,
+  SimplePlaylist,
+} from "../../../utils/interface";
 import {
   faAdd,
   faCompactDisc,
@@ -21,7 +28,6 @@ import {
   faHeart,
   faHeartBroken,
   faHouse,
-  faMusic,
   faPlayCircle,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
@@ -81,34 +87,40 @@ function Sidebar() {
   }
 
   function playPlaylist() {
-    startPlayback(
-      store.playlistsStore.playlists.items[playlistIdx].uri,
-      0,
-      device?.device_id
-    );
+    if (store.playlistsStore.playlists) {
+      startPlayback(
+        store.playlistsStore.playlists.items[playlistIdx].uri,
+        0,
+        device?.device_id
+      );
+    }
     setPlaylistMenu(null);
   }
 
   function startArtist() {
-    playArtist(
-      store.artistsStore.artists.artists.items[artistIdx].uri,
-      device?.device_id
-    );
+    if (store.artistsStore.artists) {
+      playArtist(
+        store.artistsStore.artists.artists.items[artistIdx].uri,
+        device?.device_id
+      );
+    }
     setArtistMenu(null);
   }
 
   function startAlbum() {
-    startPlayback(
-      store.albumsStore.albums.items[albumIdx].album.uri,
-      0,
-      device?.device_id
-    );
+    if (store.albumsStore.albums) {
+      startPlayback(
+        store.albumsStore.albums.items[albumIdx].album.uri,
+        0,
+        device?.device_id
+      );
+    }
     setAlbumMenu(null);
   }
 
   function unfollowArtist() {
     unfollowArtists(
-      store.artistsStore.artists.artists.items[artistIdx].id
+      store.artistsStore.artists!.artists.items[artistIdx].id
     ).then(() => {
       store.artistsStore.setArtists();
     });
@@ -116,16 +128,16 @@ function Sidebar() {
   }
 
   function deletePlaylist() {
-    unfollowPlaylist(store.playlistsStore.playlists.items[playlistIdx].id).then(
-      () => {
-        store.playlistsStore.setPlaylists();
-      }
-    );
+    unfollowPlaylist(
+      store.playlistsStore.playlists!.items[playlistIdx].id
+    ).then(() => {
+      store.playlistsStore.setPlaylists();
+    });
     setPlaylistMenu(null);
   }
 
-  const playlistsList = store.playlistsStore.playlists.items.map(
-    (pl: Playlist, index: number) => (
+  const playlistsList = store.playlistsStore.playlists?.items.map(
+    (pl: SimplePlaylist, index: number) => (
       <ListButton
         primary={pl.name}
         onContextMenu={(e) => {
@@ -148,7 +160,7 @@ function Sidebar() {
     )
   );
 
-  const artistsList = store.artistsStore.artists.artists.items.map(
+  const artistsList = store.artistsStore.artists?.artists.items.map(
     (ar: Artist, index: number) => (
       <ListButton
         primary={ar.name}
@@ -167,8 +179,8 @@ function Sidebar() {
     )
   );
 
-  const albumsList = store.albumsStore.albums.items.map(
-    (al: SavedAlbum, index: number) => (
+  const albumsList = store.albumsStore.albums?.items.map(
+    (al: SavedAlbumsItem, index: number) => (
       <ListButton
         icon={<Avatar src={al.album.images[0].url} variant="rounded" />}
         primary={al.album.name}
@@ -322,7 +334,7 @@ function Sidebar() {
           dense
           onClick={() => {
             unfollowAlbums(
-              store.albumsStore.albums.items[albumIdx].album.id
+              store.albumsStore.albums!.items[albumIdx].album.id
             ).then(() => {
               store.albumsStore.setAlbums();
             });

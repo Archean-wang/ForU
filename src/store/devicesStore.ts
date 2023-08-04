@@ -3,7 +3,7 @@ import { getDevices } from "../api";
 import { Device } from "../utils/interface";
 
 export class DevicesStore {
-  devices = [] as Device[];
+  devices: Device[] = [];
   constructor() {
     makeAutoObservable(this);
   }
