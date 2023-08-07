@@ -1,5 +1,6 @@
 import axios from "axios";
-import { refreshToken } from "./authentication";
+import { getToken } from "./authentication";
+import sleep from "./sleep";
 
 const http = axios.create({
   baseURL: "https://api.spotify.com/v1",
@@ -10,8 +11,9 @@ const http = axios.create({
 });
 
 http.interceptors.request.use(
-  (config) => {
-    config.headers.Authorization = `Bearer ${localStorage.getItem("sp_tk")}`;
+  async (config) => {
+    const token = await getToken();
+    config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
   (error) => Promise.reject(error)
@@ -19,26 +21,21 @@ http.interceptors.request.use(
 
 http.interceptors.response.use(
   (response) => response.data,
-  (error) => {
+  async (error) => {
     if (error.response) {
-      if (error.response.status === 401) {
-        return refreshToken().then(() => http(error.config));
-      } else {
-        let config = error.config;
-        if (!config || !config.retryTimes) return Promise.reject(error);
-        const { retryCount = 0, retryTimes, retryDelay = 300 } = config;
-        config.retryCount = retryCount;
-        if (retryCount >= retryTimes) {
-          return Promise.reject(error);
-        }
-        config.retryCount++;
-        const delay = new Promise((resolve) => {
-          setTimeout(resolve, retryDelay);
-        });
-        return delay.then(() => http(config));
+      let config = error.config;
+      if (!config || !config.retryTimes) {
+        throw new Error(error);
       }
+      const { retryCount = 0, retryTimes, retryDelay = 300 } = config;
+      if (retryCount >= retryTimes) {
+        throw new Error(error);
+      }
+      config.retryCount = retryCount + 1;
+      await sleep(retryDelay);
+      return http(config);
     }
-    return Promise.reject(error);
+    throw new Error(error);
   }
 );
 

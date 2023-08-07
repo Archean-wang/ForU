@@ -21,29 +21,19 @@ function App() {
 
   useEffect(() => {
     if (!store.loginStore.login) {
-      if (rt !== null) {
-        getToken()
-          .then((res) => {
-            res && store.loginStore.setLogin(true);
-          })
-          .catch(() => {
-            navigate("/login");
-          });
-      } else {
-        navigate("/login");
-      }
+      getToken()
+        .then(() => {
+          store.loginStore.setLogin(true);
+        })
+        .catch(() => {
+          navigate("/login");
+        });
     }
   }, []);
 
   const getAuthCode = useCallback(async function (cb: Function) {
-    getToken().then((res) => {
-      if (res) {
-        const token = localStorage.getItem("sp_tk");
-        cb(token);
-      } else {
-        console.log("error when get token for sdk");
-      }
-    });
+    const token = getToken();
+    cb(token);
   }, []);
 
   const theme = createTheme({

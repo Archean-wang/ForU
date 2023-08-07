@@ -1,5 +1,7 @@
-const clientID = "7418af20d42b4bca82c23c6523a103e6";
-const callbackURL = "http://localhost:12138/ForU/callback";
+import sleep from "./sleep";
+
+const clientID = import.meta.env.VITE_CLIENT_ID;
+const callbackURL = import.meta.env.VITE_CALLBACK;
 
 function generateRandomString(length: number) {
   let text = "";
@@ -57,70 +59,65 @@ export async function getAccessToken(code: string) {
   params.append("code", code);
   params.append("redirect_uri", callbackURL);
   params.append("code_verifier", codeVerifier!);
-  try {
-    let result = await fetch("https://accounts.spotify.com/api/token", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: params,
-    });
-    const res = await result.json();
-    if (res.error) {
-      console.error(`${res.error} :${res.error_description}`);
-      return false;
-    } else {
-      const { access_token, refresh_token } = res;
-      localStorage.setItem("sp_tk", access_token);
-      localStorage.setItem("sp_rt", refresh_token);
-      localStorage.setItem("expire", String(3590000 + new Date().valueOf()));
-      return true;
-    }
-  } catch (err) {
-    console.error(err);
-    return false;
+
+  let result = await fetch("https://accounts.spotify.com/api/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: params,
+  });
+  const res = await result.json();
+  if (res.error) {
+    throw new Error(`${res.error} :${res.error_description}`);
+  } else {
+    const { access_token, refresh_token } = res;
+    localStorage.setItem("sp_tk", access_token);
+    localStorage.setItem("sp_rt", refresh_token);
+    localStorage.setItem("expire", String(3590000 + new Date().valueOf()));
   }
 }
 
-let refreshing = false;
-export async function refreshToken() {
+async function refreshToken() {
   let rt = localStorage.getItem("sp_rt");
-  if (rt === null) throw Error();
+  if (rt === null) throw Error("No refresh token found!");
   const params = new URLSearchParams();
   params.append("client_id", clientID);
   params.append("grant_type", "refresh_token");
   params.append("refresh_token", rt);
   console.log("refresh token...");
-  if (refreshing) return false;
-  try {
-    refreshing = true;
-    const response = await fetch("https://accounts.spotify.com/api/token", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: params,
-    });
-    const res = await response.json();
-    if (res.error) {
-      console.error(`${res.error} :${res.error_description}`);
-      return false;
-    } else {
-      const { access_token, refresh_token } = res;
-      localStorage.setItem("sp_tk", access_token);
-      localStorage.setItem("sp_rt", refresh_token);
-      localStorage.setItem("expire", String(3590000 + new Date().valueOf()));
-      return true;
-    }
-  } catch (err) {
-    console.error(err);
-    return false;
-  } finally {
-    refreshing = false;
+  const response = await fetch("https://accounts.spotify.com/api/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: params,
+  });
+  const res = await response.json();
+  if (res.error) {
+    throw new Error(`${res.error} :${res.error_description}`);
+  } else {
+    const { access_token, refresh_token } = res;
+    localStorage.setItem("sp_tk", access_token);
+    localStorage.setItem("sp_rt", refresh_token);
+    localStorage.setItem("expire", String(3590000 + new Date().valueOf()));
   }
 }
 
-export async function getToken() {
+let isRefreshing = false;
+
+export async function getToken(): Promise<string> {
   const expire = Number(localStorage.getItem("expire"));
-  if (expire > new Date().valueOf()) {
-    return true;
-  } else {
-    return await refreshToken();
+  if (expire < new Date().valueOf()) {
+    if (isRefreshing) {
+      await sleep(300);
+      return await getToken();
+    } else {
+      isRefreshing = true;
+      try {
+        refreshToken();
+      } finally {
+        isRefreshing = false;
+      }
+    }
   }
+  const token = localStorage.getItem("sp_tk");
+  if (!token) throw new Error("Error when get token");
+  return token;
 }

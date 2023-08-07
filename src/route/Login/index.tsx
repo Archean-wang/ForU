@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useStore } from "../../store";
 import { useNavigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";
+import logoURL from "../../assets/spotify_logo.png";
 
 function Login() {
   const store = useStore();
@@ -34,7 +35,7 @@ function Login() {
           alignItems: "center",
           gap: 8,
         }}>
-        <img src="/spotify_logo.png" width={200}></img>
+        <img src={logoURL} width={200}></img>
         <Button variant="contained" sx={{ width: 100 }} onClick={handlogin}>
           授权登录
         </Button>
