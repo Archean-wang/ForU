@@ -32,7 +32,7 @@ function App() {
   }, []);
 
   const getAuthCode = useCallback(async function (cb: Function) {
-    const token = getToken();
+    const token = await getToken();
     cb(token);
   }, []);
 

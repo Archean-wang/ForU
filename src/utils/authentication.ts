@@ -111,7 +111,7 @@ export async function getToken(): Promise<string> {
     } else {
       isRefreshing = true;
       try {
-        refreshToken();
+        await refreshToken();
       } finally {
         isRefreshing = false;
       }
