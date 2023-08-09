@@ -7,6 +7,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   onNext: (cb) => ipcRenderer.on("tray-next", cb),
   onPrevious: (cb) => ipcRenderer.on("tray-previous", cb),
   sendStatus: (puased: boolean) => ipcRenderer.send("is-paused", puased),
-  removeEventListener: (name, listener) =>
-    ipcRenderer.removeListener(name, listener),
+  removeAllListeners: (name) => ipcRenderer.removeAllListeners(name),
+  onVolumeAdd: (cb) => ipcRenderer.on("volume-add", cb),
+  onVolumeSub: (cb) => ipcRenderer.on("volume-sub", cb),
 });

@@ -6,19 +6,76 @@ import {
   components,
   Tray,
   Menu,
+  globalShortcut,
 } from "electron";
 import path from "path";
 import express from "express";
 import appIcon from "../../resources/logo.png?asset";
 
 let paused = true;
+let window: null | BrowserWindow = null;
+
+const action = {
+  previous: () => window?.webContents.send("tray-previous"),
+  toggle: () => window?.webContents.send("tray-toggle"),
+  next: () => window?.webContents.send("tray-next"),
+  toggleShow: () => {
+    if (!window) return;
+    if (window.isVisible()) {
+      window.hide();
+      window.setSkipTaskbar(true);
+    } else {
+      window.show();
+    }
+  },
+  volumeAdd: () => window?.webContents.send("volume-add"),
+  volumeSub: () => window?.webContents.send("volume-sub"),
+};
+
+const createWindowMenu = () => {
+  const menu = Menu.buildFromTemplate([
+    {
+      label: "control",
+      submenu: [
+        {
+          label: "toggle",
+          accelerator: "Space",
+          click: action.toggle,
+        },
+        {
+          label: "previous",
+          accelerator: "Left",
+          click: action.previous,
+        },
+        {
+          label: "next",
+          accelerator: "Right",
+          click: action.next,
+        },
+        {
+          label: "volumeUp",
+          accelerator: "Up",
+          click: action.volumeAdd,
+        },
+        {
+          label: "volumeDonw",
+          accelerator: "Down",
+          click: action.volumeSub,
+        },
+      ],
+    },
+  ]);
+  Menu.setApplicationMenu(menu);
+};
 
 const createWindow = () => {
-  const window = new BrowserWindow({
+  window = new BrowserWindow({
     icon: appIcon,
     title: "ForU",
     width: 960,
-    height: 800,
+    height: 720,
+    minWidth: 960,
+    minHeight: 720,
     autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, "../preload/index.js"),
@@ -28,7 +85,7 @@ const createWindow = () => {
   const server = express();
   server.get("/callback", (req, res) => {
     const code = req.query.code;
-    window.webContents.send("code-ready", code);
+    window?.webContents.send("code-ready", code);
     res.send("登录成功");
   });
   server.listen(12138);
@@ -43,60 +100,56 @@ const createWindow = () => {
   } else {
     window.loadFile(path.join(__dirname, "../renderer/index.html"));
   }
+
+  window?.webContents.openDevTools();
+
   // 退出最小化到托盘
   window.on("close", (event) => {
     event.preventDefault();
-    window.hide();
-    window.setSkipTaskbar(true);
+    window?.hide();
+    window?.setSkipTaskbar(true);
   });
-  return window;
 };
 
-const createTrayMenu = (window: BrowserWindow) =>
+const createTrayMenu = () =>
   Menu.buildFromTemplate([
     {
       label: "上一首",
-      click: () => {
-        window.webContents.send("tray-previous");
-      },
+      click: action.previous,
     },
     {
       label: paused ? "播放" : "暂停",
-      click: () => {
-        window.webContents.send("tray-toggle");
-      },
+      click: action.toggle,
     },
     {
       label: "下一首",
-      click: () => {
-        window.webContents.send("tray-next");
-      },
+      click: action.next,
     },
     {
       label: "退出",
       click: () => {
-        window.destroy();
+        window?.destroy();
       },
     },
   ]);
 
-const createTray = (window: BrowserWindow) => {
+const createTray = () => {
   const tray = new Tray(appIcon);
   tray.setToolTip("Foru");
   tray.setTitle("Foru");
-  tray.on("click", () => {
-    window.show();
-  });
+  tray.on("click", action.toggleShow);
   ipcMain.on("is-paused", (_event, status) => {
     paused = status;
-    tray.setContextMenu(createTrayMenu(window));
+    tray.setContextMenu(createTrayMenu());
   });
-  tray.setContextMenu(createTrayMenu(window));
+  tray.setContextMenu(createTrayMenu());
 };
 
 app.whenReady().then(async () => {
   await components.whenReady();
   console.log("components ready:", components.status());
-  const window = createWindow();
-  createTray(window);
+  globalShortcut.register("Alt+CommandOrControl+S", action.toggleShow);
+  createWindow();
+  createWindowMenu();
+  createTray();
 });

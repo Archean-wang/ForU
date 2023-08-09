@@ -1,14 +1,17 @@
+interface Callback {
+  (event: IpcRendererEvent): void;
+}
+
 interface Window {
   electronAPI: {
     onCodeReady: (cb: (event: IpcRendererEvent, code: string) => void) => void;
     openURL: (url: string) => void;
-    onToggle: (cb: (event: IpcRendererEvent) => void) => void;
-    onNext: (cb: (event: IpcRendererEvent) => void) => void;
-    onPrevious: (cb: (event: IpcRendererEvent) => void) => void;
+    onToggle: (cb: Callback) => void;
+    onNext: (cb: Callback) => void;
+    onPrevious: (cb: Callback) => void;
     sendStatus: (puased: boolean) => void;
-    removeEventListener: (
-      name: string,
-      cb: (event: IpcRendererEvent) => void
-    ) => void;
+    removeAllListeners: (name: string) => void;
+    onVolumeAdd: (cb: Callback) => void;
+    onVolumeSub: (cb: Callback) => void;
   };
 }

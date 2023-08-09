@@ -15,7 +15,7 @@ import {
   useSpotifyState,
 } from "spotify-web-playback-sdk-for-react";
 import { setRepeatMode, setShuffleMode } from "../../../../api";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 function PlaybackControl() {
   const playbackState = useSpotifyState();
@@ -27,9 +27,10 @@ function PlaybackControl() {
     window.electronAPI.onNext(next);
     window.electronAPI.onPrevious(previous);
     return () => {
-      window.electronAPI.removeEventListener("tray-toggle", toggle);
-      window.electronAPI.removeEventListener("tray-next", next);
-      window.electronAPI.removeEventListener("tray-previous", previous);
+      console.log("clean");
+      window.electronAPI.removeAllListeners("tray-toggle");
+      window.electronAPI.removeAllListeners("tray-next");
+      window.electronAPI.removeAllListeners("tray-previous");
     };
   }, [player]);
 
@@ -37,17 +38,24 @@ function PlaybackControl() {
     window.electronAPI.sendStatus(playbackState?.paused ?? true);
   }, [playbackState]);
 
-  function toggle() {
-    player?.togglePlay();
-  }
+  const toggle = useCallback(
+    function () {
+      console.log("toggle");
+      player?.togglePlay();
+    },
+    [player]
+  );
 
-  function next() {
-    player?.nextTrack();
-  }
+  const next = useCallback(
+    function () {
+      player?.nextTrack();
+    },
+    [player]
+  );
 
-  function previous() {
+  const previous = useCallback(function () {
     player?.previousTrack();
-  }
+  }, []);
 
   function shuffle() {
     let mode = !playbackState?.shuffle;

@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Box, ListItemIcon, Menu, MenuItem, Slider } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../../../../store";
 
@@ -31,6 +31,27 @@ function ExtralControl() {
   const [anchorEl, setAnchorEl] = useState<SVGSVGElement | null>(null);
   const open = Boolean(anchorEl);
 
+  useEffect(() => {
+    window.electronAPI.onVolumeAdd(onVolumeAdd);
+    window.electronAPI.onVolumeSub(onVolumeSub);
+    return () => {
+      window.electronAPI.removeAllListeners("volume-add");
+      window.electronAPI.removeAllListeners("volume-sub");
+    };
+  }, [player]);
+
+  function onVolumeAdd() {
+    player?.getVolume().then((v) => {
+      changeVolume(Math.floor(v * 100) + 5);
+    });
+  }
+
+  function onVolumeSub() {
+    player?.getVolume().then((v) => {
+      changeVolume(Math.floor(v * 100) - 5);
+    });
+  }
+
   const showDevices = (e: React.MouseEvent<SVGSVGElement>) => {
     store.devicesStore.setDevices();
     setAnchorEl(e.currentTarget);
@@ -42,14 +63,20 @@ function ExtralControl() {
     return faVolumeHigh;
   };
 
-  function changeVolume(_: Event, value: number | Array<number>) {
+  function handleVolume(_: Event, value: number | Array<number>) {
     if (typeof value === "number") {
-      const v = value / 100;
-      player?.setVolume(v).then(() => {
-        localStorage.setItem("volume", value.toString());
-        setVolume(value);
-      });
+      changeVolume(value);
     }
+  }
+
+  function changeVolume(volume: number) {
+    volume = volume < 0 ? 0 : volume;
+    volume = volume > 100 ? 100 : volume;
+    let v = volume / 100;
+    player?.setVolume(v).then(() => {
+      localStorage.setItem("volume", volume.toString());
+      setVolume(volume);
+    });
   }
 
   function mute() {
@@ -109,7 +136,7 @@ function ExtralControl() {
         size="small"
         valueLabelDisplay="auto"
         value={volume}
-        onChange={changeVolume}
+        onChange={handleVolume}
       />
 
       <Menu
@@ -124,7 +151,7 @@ function ExtralControl() {
             autoFocus={false}
             onClick={() => handleTransfer(dev.id as string)}
             key={dev.id}
-            sx={{ color: dev.is_active ? "green" : "text.primary" }}>
+            sx={{ color: dev.is_active ? "primary.main" : "text.primary" }}>
             <ListItemIcon>
               <FontAwesomeIcon
                 icon={dev.type === "Computer" ? faDesktop : faMobilePhone}
