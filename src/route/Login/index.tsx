@@ -1,5 +1,5 @@
 import { Box, Button } from "@mui/material";
-import { getAuthCode } from "../../utils/authentication";
+import { getAccessToken, getAuthCode } from "../../utils/authentication";
 import { useEffect } from "react";
 import { useStore } from "../../store";
 import { useNavigate } from "react-router-dom";
@@ -9,12 +9,24 @@ import logoURL from "../../assets/spotify_logo.png";
 function Login() {
   const store = useStore();
   const navigate = useNavigate();
+
   useEffect(() => {
     if (store.loginStore.login) navigate("/");
   }, [store.loginStore.login]);
 
+  useEffect(() => {
+    //@ts-ignore
+    window.electronAPI.onCodeReady((_event, code: string) => {
+      getAccessToken(code).then(() => {
+        store.loginStore.setLogin(true);
+      });
+    });
+  }, []);
+
   const handlogin = async () => {
-    await getAuthCode();
+    const url = await getAuthCode();
+    //@ts-ignore
+    window.electronAPI.openURL(url);
   };
 
   return (

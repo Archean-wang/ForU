@@ -46,9 +46,10 @@ export async function getAuthCode() {
     code_challenge_method: "S256",
     code_challenge: codeChallenge,
   });
-  window.location.href =
+  return (
     "https://accounts.spotify.com/authorize/?" +
-    auth_query_parameters.toString();
+    auth_query_parameters.toString()
+  );
 }
 
 export async function getAccessToken(code: string) {

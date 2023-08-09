@@ -25,127 +25,124 @@ const Artist = lazy(() => import("./Artist"));
 const Always = lazy(() => import("./Always"));
 const Recent = lazy(() => import("./Recent"));
 
-const router = createBrowserRouter(
-  [
-    {
-      path: "/",
-      element: <App />,
-      errorElement: <ErrorPage />,
-      id: "root",
-      children: [
-        {
-          path: "/search/:kw",
-          element: (
-            <Suspense fallback={<Loading />}>
-              <Search />
-            </Suspense>
-          ),
-          loader: async ({ params }: { params: Params }) => {
-            const searchResult = await search(params.kw as string);
-            return { searchResult };
-          },
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    errorElement: <ErrorPage />,
+    id: "root",
+    children: [
+      {
+        path: "/search/:kw",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Search />
+          </Suspense>
+        ),
+        loader: async ({ params }: { params: Params }) => {
+          const searchResult = await search(params.kw as string);
+          return { searchResult };
         },
-        {
-          index: true,
-          id: "daily",
-          errorElement: (
-            <Suspense fallback={<Loading />}>
-              <ErrorPage />
-            </Suspense>
-          ),
-          element: <Daily />,
+      },
+      {
+        index: true,
+        id: "daily",
+        errorElement: (
+          <Suspense fallback={<Loading />}>
+            <ErrorPage />
+          </Suspense>
+        ),
+        element: <Daily />,
+      },
+      {
+        path: "/playing",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Playing />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/playlist/:id",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Playlist />
+          </Suspense>
+        ),
+        loader: async ({ params }: { params: Params }) => {
+          const playlist = await getPlaylistInfo(params.id as string);
+          return { playlist };
         },
-        {
-          path: "/playing",
-          element: (
-            <Suspense fallback={<Loading />}>
-              <Playing />
-            </Suspense>
-          ),
+      },
+      {
+        path: "/album/:id",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Album />
+          </Suspense>
+        ),
+        loader: async ({ params }: { params: Params }) => {
+          const album = await getAlbumInfo(params.id as string);
+          return { album };
         },
-        {
-          path: "/playlist/:id",
-          element: (
-            <Suspense fallback={<Loading />}>
-              <Playlist />
-            </Suspense>
-          ),
-          loader: async ({ params }: { params: Params }) => {
-            const playlist = await getPlaylistInfo(params.id as string);
-            return { playlist };
-          },
+      },
+      {
+        path: "/artist/:id",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Artist />
+          </Suspense>
+        ),
+        loader: async ({ params }: { params: Params }) => {
+          const albums = await getArtistAlbums(params.id as string);
+          const hotTracks = await getArtistTop(params.id as string);
+          const relatedArtists = await getRelatedArtist(params.id as string);
+          const artistInfo = await getArtist(params.id as string);
+          return { hotTracks, albums, relatedArtists, artistInfo };
         },
-        {
-          path: "/album/:id",
-          element: (
-            <Suspense fallback={<Loading />}>
-              <Album />
-            </Suspense>
-          ),
-          loader: async ({ params }: { params: Params }) => {
-            const album = await getAlbumInfo(params.id as string);
-            return { album };
-          },
-        },
-        {
-          path: "/artist/:id",
-          element: (
-            <Suspense fallback={<Loading />}>
-              <Artist />
-            </Suspense>
-          ),
-          loader: async ({ params }: { params: Params }) => {
-            const albums = await getArtistAlbums(params.id as string);
-            const hotTracks = await getArtistTop(params.id as string);
-            const relatedArtists = await getRelatedArtist(params.id as string);
-            const artistInfo = await getArtist(params.id as string);
-            return { hotTracks, albums, relatedArtists, artistInfo };
-          },
-        },
-        {
-          path: "/loves",
-          element: (
-            <Suspense fallback={<Loading />}>
-              <Loves />
-            </Suspense>
-          ),
-        },
-        {
-          path: "/always",
-          element: (
-            <Suspense fallback={<Loading />}>
-              <Always />
-            </Suspense>
-          ),
-        },
-        {
-          path: "/recent",
-          element: (
-            <Suspense fallback={<Loading />}>
-              <Recent />
-            </Suspense>
-          ),
-        },
-      ],
-    },
-    {
-      path: "/callback",
-      element: (
-        <Suspense fallback={<Loading />}>
-          <Callback />
-        </Suspense>
-      ),
-    },
-    {
-      path: "/login",
-      element: (
-        <Suspense fallback={<Loading />}>
-          <Login />
-        </Suspense>
-      ),
-    },
-  ],
-  { basename: "/ForU/" }
-);
+      },
+      {
+        path: "/loves",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Loves />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/always",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Always />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/recent",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Recent />
+          </Suspense>
+        ),
+      },
+    ],
+  },
+  {
+    path: "/callback",
+    element: (
+      <Suspense fallback={<Loading />}>
+        <Callback />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/login",
+    element: (
+      <Suspense fallback={<Loading />}>
+        <Login />
+      </Suspense>
+    ),
+  },
+]);
 
 export { router };
