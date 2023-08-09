@@ -8,20 +8,46 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Box } from "@mui/material";
-
 import Progress from "../Progress";
-
 import {
   useSpotifyDevice,
   useSpotifyPlayer,
   useSpotifyState,
 } from "spotify-web-playback-sdk-for-react";
 import { setRepeatMode, setShuffleMode } from "../../../../api";
+import { useEffect } from "react";
 
 function PlaybackControl() {
   const playbackState = useSpotifyState();
   const player = useSpotifyPlayer();
   const device = useSpotifyDevice();
+
+  useEffect(() => {
+    window.electronAPI.onToggle(toggle);
+    window.electronAPI.onNext(next);
+    window.electronAPI.onPrevious(previous);
+    return () => {
+      window.electronAPI.removeEventListener("tray-toggle", toggle);
+      window.electronAPI.removeEventListener("tray-next", next);
+      window.electronAPI.removeEventListener("tray-previous", previous);
+    };
+  }, [player]);
+
+  useEffect(() => {
+    window.electronAPI.sendStatus(playbackState?.paused ?? true);
+  }, [playbackState]);
+
+  function toggle() {
+    player?.togglePlay();
+  }
+
+  function next() {
+    player?.nextTrack();
+  }
+
+  function previous() {
+    player?.previousTrack();
+  }
 
   function shuffle() {
     let mode = !playbackState?.shuffle;
@@ -67,13 +93,13 @@ function PlaybackControl() {
         />
 
         <FontAwesomeIcon
-          onClick={() => player?.previousTrack()}
+          onClick={previous}
           icon={faBackwardStep}
           cursor="pointer"
         />
 
         <FontAwesomeIcon
-          onClick={() => player?.togglePlay()}
+          onClick={toggle}
           icon={
             playbackState === null || playbackState.paused
               ? faCirclePlay
@@ -82,11 +108,7 @@ function PlaybackControl() {
           cursor="pointer"
         />
 
-        <FontAwesomeIcon
-          onClick={() => player?.nextTrack()}
-          icon={faForwardStep}
-          cursor="pointer"
-        />
+        <FontAwesomeIcon onClick={next} icon={faForwardStep} cursor="pointer" />
 
         <Box
           sx={{

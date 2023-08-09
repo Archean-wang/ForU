@@ -15,8 +15,7 @@ function Login() {
   }, [store.loginStore.login]);
 
   useEffect(() => {
-    //@ts-ignore
-    window.electronAPI.onCodeReady((_event, code: string) => {
+    window.electronAPI.onCodeReady((_event, code) => {
       getAccessToken(code).then(() => {
         store.loginStore.setLogin(true);
       });
@@ -25,7 +24,6 @@ function Login() {
 
   const handlogin = async () => {
     const url = await getAuthCode();
-    //@ts-ignore
     window.electronAPI.openURL(url);
   };
 

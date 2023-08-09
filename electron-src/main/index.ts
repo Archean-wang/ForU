@@ -6,11 +6,12 @@ import {
   components,
   Tray,
   Menu,
-  nativeImage,
 } from "electron";
 import path from "path";
 import express from "express";
 import appIcon from "../../resources/logo.png?asset";
+
+let paused = true;
 
 const createWindow = () => {
   const window = new BrowserWindow({
@@ -42,6 +43,7 @@ const createWindow = () => {
   } else {
     window.loadFile(path.join(__dirname, "../renderer/index.html"));
   }
+  // 退出最小化到托盘
   window.on("close", (event) => {
     event.preventDefault();
     window.hide();
@@ -50,14 +52,26 @@ const createWindow = () => {
   return window;
 };
 
-const createTray = (window: BrowserWindow) => {
-  const tray = new Tray(appIcon);
-  tray.setToolTip("Foru");
-  tray.setTitle("Foru");
-  tray.on("click", () => {
-    window.show();
-  });
-  const contextMenu = Menu.buildFromTemplate([
+const createTrayMenu = (window: BrowserWindow) =>
+  Menu.buildFromTemplate([
+    {
+      label: "上一首",
+      click: () => {
+        window.webContents.send("tray-previous");
+      },
+    },
+    {
+      label: paused ? "播放" : "暂停",
+      click: () => {
+        window.webContents.send("tray-toggle");
+      },
+    },
+    {
+      label: "下一首",
+      click: () => {
+        window.webContents.send("tray-next");
+      },
+    },
     {
       label: "退出",
       click: () => {
@@ -66,7 +80,18 @@ const createTray = (window: BrowserWindow) => {
     },
   ]);
 
-  tray.setContextMenu(contextMenu);
+const createTray = (window: BrowserWindow) => {
+  const tray = new Tray(appIcon);
+  tray.setToolTip("Foru");
+  tray.setTitle("Foru");
+  tray.on("click", () => {
+    window.show();
+  });
+  ipcMain.on("is-paused", (_event, status) => {
+    paused = status;
+    tray.setContextMenu(createTrayMenu(window));
+  });
+  tray.setContextMenu(createTrayMenu(window));
 };
 
 app.whenReady().then(async () => {
