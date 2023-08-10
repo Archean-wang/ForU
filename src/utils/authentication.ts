@@ -1,7 +1,6 @@
 import sleep from "./sleep";
 
-const clientID = import.meta.env.VITE_CLIENT_ID;
-const callbackURL = import.meta.env.VITE_CALLBACK;
+const callbackURL = "http://localhost:12138/callback";
 
 function generateRandomString(length: number) {
   let text = "";
@@ -29,7 +28,7 @@ async function generateCodeChallenge(codeVerifier: string) {
   return base64encode(digest);
 }
 
-export async function getAuthCode() {
+export async function getAuthCode(clientID: string) {
   let codeVerifier = generateRandomString(128);
   const codeChallenge = await generateCodeChallenge(codeVerifier);
   localStorage.setItem("verifier", codeVerifier);
@@ -53,6 +52,8 @@ export async function getAuthCode() {
 }
 
 export async function getAccessToken(code: string) {
+  const clientID = localStorage.getItem("client_id");
+  if (clientID === null) throw Error("No client id found!");
   const codeVerifier = localStorage.getItem("verifier");
   const params = new URLSearchParams();
   params.append("client_id", clientID);
@@ -78,8 +79,10 @@ export async function getAccessToken(code: string) {
 }
 
 async function refreshToken() {
-  let rt = localStorage.getItem("sp_rt");
+  const rt = localStorage.getItem("sp_rt");
   if (rt === null) throw Error("No refresh token found!");
+  const clientID = localStorage.getItem("client_id");
+  if (clientID === null) throw Error("No client id found!");
   const params = new URLSearchParams();
   params.append("client_id", clientID);
   params.append("grant_type", "refresh_token");

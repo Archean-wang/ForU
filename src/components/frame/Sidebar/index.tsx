@@ -15,8 +15,6 @@ import { useNavigate } from "react-router-dom";
 import {
   Anchor,
   Artist,
-  Playlist,
-  SavedAlbum,
   SavedAlbumsItem,
   SimplePlaylist,
 } from "../../../utils/interface";

@@ -11,6 +11,20 @@ import {
 import path from "path";
 import express from "express";
 import appIcon from "../../resources/logo.png?asset";
+import Conf from "conf";
+
+const schema = {
+  exitToTray: {
+    type: "boolean",
+    default: true,
+  },
+  cleintId: {
+    type: "string",
+    default: "",
+  },
+};
+
+const config = new Conf({ projectName: "foru", schema });
 
 let paused = true;
 let window: null | BrowserWindow = null;
@@ -64,6 +78,11 @@ const createWindowMenu = () => {
         },
       ],
     },
+    {
+      label: "devTool",
+      accelerator: "Alt+CommandOrControl+I",
+      click: () => window?.webContents.openDevTools(),
+    },
   ]);
   Menu.setApplicationMenu(menu);
 };
@@ -101,13 +120,15 @@ const createWindow = () => {
     window.loadFile(path.join(__dirname, "../renderer/index.html"));
   }
 
-  window?.webContents.openDevTools();
+  window.webContents.openDevTools();
 
   // 退出最小化到托盘
   window.on("close", (event) => {
-    event.preventDefault();
-    window?.hide();
-    window?.setSkipTaskbar(true);
+    if (config.get("exitToTray")) {
+      event.preventDefault();
+      window?.hide();
+      window?.setSkipTaskbar(true);
+    }
   });
 };
 
@@ -149,6 +170,16 @@ app.whenReady().then(async () => {
   await components.whenReady();
   console.log("components ready:", components.status());
   globalShortcut.register("Alt+CommandOrControl+S", action.toggleShow);
+
+  ipcMain.handle("get-setting", (_event, key) => config.get(key));
+  ipcMain.handle("set-settings", (_event, key, value) => {
+    console.log(key, value);
+    config.set(key, value);
+  });
+  ipcMain.handle("get-settings", (_event) => {
+    return config.store;
+  });
+
   createWindow();
   createWindowMenu();
   createTray();

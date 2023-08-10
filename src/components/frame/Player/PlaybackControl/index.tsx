@@ -27,7 +27,6 @@ function PlaybackControl() {
     window.electronAPI.onNext(next);
     window.electronAPI.onPrevious(previous);
     return () => {
-      console.log("clean");
       window.electronAPI.removeAllListeners("tray-toggle");
       window.electronAPI.removeAllListeners("tray-next");
       window.electronAPI.removeAllListeners("tray-previous");
@@ -40,7 +39,6 @@ function PlaybackControl() {
 
   const toggle = useCallback(
     function () {
-      console.log("toggle");
       player?.togglePlay();
     },
     [player]

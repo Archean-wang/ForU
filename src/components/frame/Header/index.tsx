@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAngleLeft,
   faAngleRight,
+  faGear,
   faMagnifyingGlass,
   faMoon,
   faRightFromBracket,
@@ -37,13 +38,20 @@ function Header() {
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   const handleLogout = () => {
     store.loginStore.setLogin(false);
     localStorage.clear();
     navigate("/login");
+  };
+
+  const handleSettings = () => {
+    navigate("/settings");
+    setAnchorEl(null);
   };
 
   const handleColorMode = () => {
@@ -103,7 +111,8 @@ function Header() {
             store.userProfilseStore.userProfile?.images.length !== 0
               ? store.userProfilseStore.userProfile?.images[0].url
               : ""
-          }></Avatar>
+          }
+        />
       </IconButton>
 
       <Menu
@@ -119,6 +128,12 @@ function Header() {
             />
           </ListItemIcon>
           {store.colorModeStore.mode === "light" ? "深色模式" : "浅色模式"}
+        </MenuItem>
+        <MenuItem onClick={handleSettings}>
+          <ListItemIcon>
+            <FontAwesomeIcon icon={faGear} />
+          </ListItemIcon>
+          设置
         </MenuItem>
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>

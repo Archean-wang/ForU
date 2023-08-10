@@ -10,6 +10,7 @@ import topItemsStore, { TopItemsStore } from "./topItemsStore";
 import recentStore, { RecentStore } from "./recentStore";
 import playingStore, { PlayingStore } from "./playingStore";
 import userProfileStore, { UserProfileStore } from "./userProfileStore";
+import settingsStore, { SettingsStore } from "./settingsStore";
 
 class RootStore {
   loginStore: LoginStore;
@@ -23,6 +24,7 @@ class RootStore {
   recentStore: RecentStore;
   playingStore: PlayingStore;
   userProfilseStore: UserProfileStore;
+  settingsStore: SettingsStore;
   constructor() {
     this.loginStore = loginStore;
     this.playlistsStore = playlistsStore;
@@ -35,6 +37,7 @@ class RootStore {
     this.recentStore = recentStore;
     this.playingStore = playingStore;
     this.userProfilseStore = userProfileStore;
+    this.settingsStore = settingsStore;
   }
 }
 

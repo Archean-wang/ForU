@@ -4,9 +4,16 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin()],
+    plugins: [externalizeDepsPlugin({ exclude: ["conf"] })],
     build: {
       rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes("conf")) {
+              return "conf";
+            }
+          },
+        },
         input: {
           index: resolve(__dirname, "electron-src/main/index.ts"),
         },

@@ -10,4 +10,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   removeAllListeners: (name) => ipcRenderer.removeAllListeners(name),
   onVolumeAdd: (cb) => ipcRenderer.on("volume-add", cb),
   onVolumeSub: (cb) => ipcRenderer.on("volume-sub", cb),
+  getSetting: (key: string) => ipcRenderer.invoke("get-setting", key),
+  getSettings: () => ipcRenderer.invoke("get-settings"),
+  setSettings: (key, value) => ipcRenderer.invoke("set-settings", key, value),
 });

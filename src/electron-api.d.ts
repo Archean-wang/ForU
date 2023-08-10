@@ -13,5 +13,8 @@ interface Window {
     removeAllListeners: (name: string) => void;
     onVolumeAdd: (cb: Callback) => void;
     onVolumeSub: (cb: Callback) => void;
+    getSetting: (key: string) => Promise<any>;
+    getSettings: () => Promise<any>;
+    setSettings: (key: string, value: any) => void;
   };
 }

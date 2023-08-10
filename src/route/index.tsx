@@ -18,12 +18,12 @@ const Album = lazy(() => import("./Album"));
 const Playing = lazy(() => import("./Playing"));
 const Playlist = lazy(() => import("./Playlist"));
 const Login = lazy(() => import("./Login"));
-const Callback = lazy(() => import("./Callback"));
 const ErrorPage = lazy(() => import("./ErrorPage"));
 const Loves = lazy(() => import("./Loves"));
 const Artist = lazy(() => import("./Artist"));
 const Always = lazy(() => import("./Always"));
 const Recent = lazy(() => import("./Recent"));
+const Settings = lazy(() => import("./Settings"));
 
 const router = createBrowserRouter([
   {
@@ -125,15 +125,15 @@ const router = createBrowserRouter([
           </Suspense>
         ),
       },
+      {
+        path: "/settings",
+        element: (
+          <Suspense fallback={<Loading />}>
+            <Settings />
+          </Suspense>
+        ),
+      },
     ],
-  },
-  {
-    path: "/callback",
-    element: (
-      <Suspense fallback={<Loading />}>
-        <Callback />
-      </Suspense>
-    ),
   },
   {
     path: "/login",

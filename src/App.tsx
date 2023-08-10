@@ -12,13 +12,17 @@ import { SpotifyWebSDK } from "spotify-web-playback-sdk-for-react";
 import Main from "./components/frame/Main";
 
 function App() {
-  let rt = localStorage.getItem("sp_rt");
   const volume = localStorage.getItem("volume");
   const store = useStore();
   const navigate = useNavigate();
 
-  console.log(store.loginStore.login);
+  useEffect(() => {
+    window.electronAPI
+      .getSettings()
+      .then((res) => store.settingsStore.setSettings(res));
+  }, []);
 
+  // 自动登录
   useEffect(() => {
     if (!store.loginStore.login) {
       getToken()
