@@ -78,10 +78,14 @@ function Sidebar() {
   }
 
   function addPlaylist() {
-    createPlaylist(store.userProfilseStore.userProfile!.id).then((res) => {
-      store.playlistsStore.setPlaylists();
-      navigate(`/playlist/${res.id}`);
-    });
+    createPlaylist(store.userProfilseStore.userProfile!.id)
+      .then((res) => {
+        store.playlistsStore.setPlaylists();
+        navigate(`/playlist/${res.id}`);
+      })
+      .catch(() => {
+        store.globalToastStore.setErrorMessage("创建失败");
+      });
   }
 
   function playPlaylist() {

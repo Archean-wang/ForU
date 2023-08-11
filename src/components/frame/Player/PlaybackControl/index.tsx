@@ -56,6 +56,7 @@ function PlaybackControl() {
   }, []);
 
   function shuffle() {
+    if (!device) return;
     let mode = !playbackState?.shuffle;
     setShuffleMode(mode, device?.device_id).then((res) => {
       console.log(`set shuffle: ${mode}`);
@@ -64,6 +65,7 @@ function PlaybackControl() {
 
   const modes = ["off", "context", "track"];
   function repeat() {
+    if (!device) return;
     if (playbackState?.shuffle === undefined) return;
     let mode = (playbackState?.repeat_mode + 1) % 3;
     setRepeatMode(modes[mode], device?.device_id).then((res) => {
@@ -79,15 +81,14 @@ function PlaybackControl() {
         display: "flex",
         flexFlow: "column",
         justifyContent: "center",
-        mt: 1,
-        mb: 1,
+        mt: "4px",
       }}>
       <Box
         sx={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          gap: 3,
+          gap: 2,
           fontSize: "1.5rem",
           position: "relative",
         }}>
@@ -105,6 +106,7 @@ function PlaybackControl() {
         />
 
         <FontAwesomeIcon
+          fontSize="2rem"
           onClick={toggle}
           icon={
             playbackState === null || playbackState.paused

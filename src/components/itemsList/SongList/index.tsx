@@ -204,14 +204,24 @@ function SongList({
   }
 
   function addToQueue() {
-    addItemsToQueue(items[idx].uri).then(() => {
-      console.log("add to queue");
-    });
+    addItemsToQueue(items[idx].uri)
+      .then(() => {
+        store.globalToastStore.setSuccessMessage("添加成功");
+      })
+      .catch(() => {
+        store.globalToastStore.setErrorMessage("添加失败");
+      });
     setMenuPos(null);
   }
 
   function addToPlaylist(pid: string) {
-    addItemsToPlaylist(pid, [items[idx].uri]).then(() => {});
+    addItemsToPlaylist(pid, [items[idx].uri])
+      .then(() => {
+        store.globalToastStore.setSuccessMessage("添加成功");
+      })
+      .catch(() => {
+        store.globalToastStore.setErrorMessage("添加失败");
+      });
     setMenuPos(null);
   }
 
@@ -303,9 +313,12 @@ function SongList({
         <MenuItem onClick={addToQueue} dense>
           下一首播放
         </MenuItem>
-        <MenuItem onClick={deleteFromPlaylist} dense>
-          从歌单删除
-        </MenuItem>
+        {currentPlaylist?.owner.id ===
+          store.userProfilseStore.userProfile?.id && (
+          <MenuItem onClick={deleteFromPlaylist} dense>
+            从歌单删除
+          </MenuItem>
+        )}
 
         <SubMenu title="添加到">
           {store.playlistsStore
@@ -315,6 +328,15 @@ function SongList({
             .map((v) => (
               <MenuItem key={v.id} dense onClick={() => addToPlaylist(v.id)}>
                 {v.name}
+              </MenuItem>
+            ))}
+        </SubMenu>
+        <SubMenu title="歌手">
+          {items.length > 0 &&
+            idx != -1 &&
+            items[idx].artists.map((ar) => (
+              <MenuItem key={ar.id}>
+                <Link to={`/artist/${ar.id}`}>{ar.name}</Link>
               </MenuItem>
             ))}
         </SubMenu>

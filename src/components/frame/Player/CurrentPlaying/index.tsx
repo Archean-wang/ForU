@@ -9,8 +9,10 @@ import EventBus, { MyEvent } from "../../../../utils/EventBus";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useCurrentTrack } from "spotify-web-playback-sdk-for-react";
 import ScrollText from "../../../common/ScrollText";
+import { useStore } from "../../../../store";
 
 function CurrentPlaying() {
+  const store = useStore();
   const currentTrack = useCurrentTrack();
   const [isLove, setIsLove] = useState(false);
   const currentId = currentTrack?.id;
@@ -57,7 +59,7 @@ function CurrentPlaying() {
         display: "flex",
         alignItems: "center",
         overflow: "hidden",
-        minWidth: 56,
+        minWidth: "4rem",
         pl: 1,
         pr: 1,
         gap: 1,
@@ -66,13 +68,24 @@ function CurrentPlaying() {
         <Avatar
           src={currentTrack?.album.images[0].url}
           variant="rounded"
-          sx={{ width: 48, height: 48 }}
+          sx={{ width: "4rem", height: "4rem" }}
         />
       ) : (
-        <Skeleton variant="rounded" animation="wave" width={48} height={48} />
+        <Skeleton
+          variant="rounded"
+          animation="wave"
+          width="4rem"
+          height="4rem"
+        />
       )}
 
-      <Stack sx={{ gap: 1, minWidth: 30, height: 48 }}>
+      <Stack
+        sx={{
+          gap: 1,
+          minWidth: "1rem",
+          height: "4rem",
+          justifyContent: "space-between",
+        }}>
         {currentTrack ? (
           <ScrollText>
             <Typography fontSize="1.2rem" noWrap display={"inline-block"}>
@@ -82,20 +95,28 @@ function CurrentPlaying() {
             </Typography>
           </ScrollText>
         ) : (
-          <Skeleton variant="text" animation="wave" width={100} height="1em" />
+          <Skeleton variant="text" animation="wave" width="4rem" />
         )}
         {currentTrack ? (
           <ScrollText>
-            <InlineArtists fontSize={12} artists={currentTrack.artists} />
+            <InlineArtists fontSize="1rem" artists={currentTrack.artists} />
           </ScrollText>
         ) : (
-          <Skeleton variant="text" animation="wave" width={100} height="1em" />
+          <Skeleton variant="text" animation="wave" width="4rem" />
         )}
       </Stack>
 
       <Box
-        sx={{ width: 20, color: isLove ? "primary.main" : "secondary.main" }}>
-        <FontAwesomeIcon onClick={handLove} icon={faHeart} cursor="pointer" />
+        sx={{
+          width: "1rem",
+          height: "1rem",
+          color: isLove ? "primary.main" : "secondary.main",
+        }}>
+        {currentTrack ? (
+          <FontAwesomeIcon onClick={handLove} icon={faHeart} cursor="pointer" />
+        ) : (
+          <Skeleton variant="circular" animation="wave" />
+        )}
       </Box>
     </Box>
   );

@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { grey } from "@mui/material/colors";
 import { SpotifyWebSDK } from "spotify-web-playback-sdk-for-react";
 import Main from "./components/frame/Main";
+import GlobalToast from "./components/common/GlobalToast";
 
 function App() {
   const volume = localStorage.getItem("volume");
@@ -88,6 +89,7 @@ function App() {
           volume={volume === null ? 0.5 : parseInt(volume) / 100}>
           <Main />
           <Player />
+          <GlobalToast />
         </SpotifyWebSDK>
       </Box>
     </ThemeProvider>

@@ -2,6 +2,7 @@ import { Box, Slider, Typography } from "@mui/material";
 import { showTime } from "../../../../utils/formatter";
 import { useEffect, useState } from "react";
 import {
+  useSpotifyDevice,
   useSpotifyPlayer,
   useSpotifyState,
 } from "spotify-web-playback-sdk-for-react";
@@ -15,6 +16,7 @@ function Progress() {
   const player = useSpotifyPlayer();
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState(0);
+  const device = useSpotifyDevice();
 
   useEffect(() => {
     const t = setInterval(updatePosition, 500);
@@ -78,6 +80,7 @@ function Progress() {
         }}
         size="small"
         color="primary"
+        disabled={!Boolean(device)}
         valueLabelDisplay="auto"
         valueLabelFormat={getAriaValueText}
         value={Math.floor(position / 1000)}

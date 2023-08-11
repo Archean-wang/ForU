@@ -17,7 +17,7 @@ function InfoCard({ image, title, type, children }: InfoCardProps) {
   return (
     <Box
       sx={{
-        height: 160,
+        height: "14rem",
         display: "flex",
         alignItems: "center",
         overflowX: "auto",
@@ -25,29 +25,32 @@ function InfoCard({ image, title, type, children }: InfoCardProps) {
         mb: 2,
       }}>
       <Avatar
-        src={image ? image : "spotify.png"}
+        src={image ? image : "/spotify.png"}
         variant="rounded"
-        sx={{ width: 120, height: 120 }}
+        sx={{ width: "12rem", height: "12rem" }}
       />
 
       <Box
         sx={{
           flex: 4,
           display: "flex",
-          height: 120,
+          height: "12rem",
           flexDirection: "column",
           gap: 1,
           justifyContent: "flex-start",
+          overflow: "hidden",
         }}>
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
             gap: 1,
+            overflow: "hidden",
           }}>
           <Typography
             sx={{
-              padding: "2px",
+              minWidth: "2.4rem",
+              padding: 0.5,
               lineHeight: "1.2rem",
               bgcolor: "primary.main",
               borderRadius: 1,
@@ -55,7 +58,9 @@ function InfoCard({ image, title, type, children }: InfoCardProps) {
             }}>
             {types.get(type)}
           </Typography>
-          <Typography fontSize={"2rem"}>{title}</Typography>
+          <Typography fontSize={"2rem"} noWrap>
+            {title}
+          </Typography>
         </Box>
         {children}
       </Box>

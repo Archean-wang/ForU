@@ -16,7 +16,10 @@ import { useStore } from "../../../../store";
 import { Device } from "../../../../utils/interface";
 import { transfer } from "../../../../api";
 import { observer } from "mobx-react-lite";
-import { useSpotifyPlayer } from "spotify-web-playback-sdk-for-react";
+import {
+  useSpotifyDevice,
+  useSpotifyPlayer,
+} from "spotify-web-playback-sdk-for-react";
 
 function getVolumeFromLocalStorage(): number {
   let v = localStorage.getItem("volume");
@@ -30,6 +33,7 @@ function ExtralControl() {
   const [volume, setVolume] = useState(getVolumeFromLocalStorage);
   const [anchorEl, setAnchorEl] = useState<SVGSVGElement | null>(null);
   const open = Boolean(anchorEl);
+  const device = useSpotifyDevice();
 
   useEffect(() => {
     window.electronAPI.onVolumeAdd(onVolumeAdd);
@@ -80,6 +84,7 @@ function ExtralControl() {
   }
 
   function mute() {
+    if (!device) return;
     if (volume === 0) {
       let v = getVolumeFromLocalStorage();
       player?.setVolume(v / 100).then(() => {
@@ -97,6 +102,11 @@ function ExtralControl() {
     setAnchorEl(null);
   };
 
+  const handlePlaying = () => {
+    if (!device) return;
+    navigate("/playing");
+  };
+
   return (
     <Box
       sx={{
@@ -108,11 +118,7 @@ function ExtralControl() {
         alignItems: "center",
         gap: 2,
       }}>
-      <FontAwesomeIcon
-        onClick={() => navigate("/playing")}
-        icon={faBars}
-        cursor="pointer"
-      />
+      <FontAwesomeIcon onClick={handlePlaying} icon={faBars} cursor="pointer" />
 
       <FontAwesomeIcon icon={faLaptop} cursor="pointer" onClick={showDevices} />
       <FontAwesomeIcon
@@ -123,8 +129,7 @@ function ExtralControl() {
 
       <Slider
         sx={{
-          marginLeft: "8px",
-          maxWidth: 80,
+          maxWidth: "4rem",
           ml: 0,
           "& .MuiSlider-thumb": {
             display: "none",
@@ -134,6 +139,7 @@ function ExtralControl() {
           },
         }}
         size="small"
+        disabled={!Boolean(device)}
         valueLabelDisplay="auto"
         value={volume}
         onChange={handleVolume}
@@ -146,6 +152,9 @@ function ExtralControl() {
         onClose={() => setAnchorEl(null)}
         transformOrigin={{ horizontal: "right", vertical: "bottom" }}
         anchorOrigin={{ horizontal: "right", vertical: "top" }}>
+        {store.devicesStore.devices.length === 0 && (
+          <MenuItem>暂无设备</MenuItem>
+        )}
         {store.devicesStore.devices.map((dev: Device) => (
           <MenuItem
             autoFocus={false}

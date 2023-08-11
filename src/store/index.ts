@@ -11,6 +11,7 @@ import recentStore, { RecentStore } from "./recentStore";
 import playingStore, { PlayingStore } from "./playingStore";
 import userProfileStore, { UserProfileStore } from "./userProfileStore";
 import settingsStore, { SettingsStore } from "./settingsStore";
+import globalToastStore, { GlobalToastStore } from "./globalToastStore";
 
 class RootStore {
   loginStore: LoginStore;
@@ -25,6 +26,7 @@ class RootStore {
   playingStore: PlayingStore;
   userProfilseStore: UserProfileStore;
   settingsStore: SettingsStore;
+  globalToastStore: GlobalToastStore;
   constructor() {
     this.loginStore = loginStore;
     this.playlistsStore = playlistsStore;
@@ -38,6 +40,7 @@ class RootStore {
     this.playingStore = playingStore;
     this.userProfilseStore = userProfileStore;
     this.settingsStore = settingsStore;
+    this.globalToastStore = globalToastStore;
   }
 }
 

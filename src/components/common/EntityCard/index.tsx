@@ -13,18 +13,18 @@ function EntityCard({ url, image, title }: EntityCardProps) {
     <Box
       onClick={() => navigate(url)}
       sx={{
-        width: 160,
+        width: "10rem",
         borderRadius: 2,
         display: "flex",
         flexDirection: "column",
         cursor: "pointer",
         gap: 1,
-        padding: 1,
+        padding: "0.5rem",
       }}>
       <Avatar
         variant="rounded"
         src={image}
-        sx={{ width: 140, height: 140, alignSelf: "center" }}
+        sx={{ width: "9rem", height: "9rem", alignSelf: "center" }}
       />
       {title.map((t) => (
         <Typography

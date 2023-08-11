@@ -20,6 +20,7 @@ import {
   faMoon,
   faRightFromBracket,
   faSun,
+  faUserGear,
 } from "@fortawesome/free-solid-svg-icons";
 import { useStore } from "../../../store";
 import debounce from "../../../utils/debounce";
@@ -51,6 +52,13 @@ function Header() {
 
   const handleSettings = () => {
     navigate("/settings");
+    setAnchorEl(null);
+  };
+
+  const handleAccount = () => {
+    window.electronAPI.openURL(
+      "https://www.spotify.com/kr-en/account/overview/"
+    );
     setAnchorEl(null);
   };
 
@@ -128,6 +136,12 @@ function Header() {
             />
           </ListItemIcon>
           {store.colorModeStore.mode === "light" ? "深色模式" : "浅色模式"}
+        </MenuItem>
+        <MenuItem onClick={handleAccount}>
+          <ListItemIcon>
+            <FontAwesomeIcon icon={faUserGear} />
+          </ListItemIcon>
+          账号
         </MenuItem>
         <MenuItem onClick={handleSettings}>
           <ListItemIcon>
