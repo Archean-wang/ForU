@@ -1,5 +1,5 @@
 import { Suspense, lazy } from "react";
-import { Params, createBrowserRouter } from "react-router-dom";
+import { Params, createHashRouter } from "react-router-dom";
 import App from "../App";
 import Daily from "./Daily";
 import {
@@ -25,7 +25,8 @@ const Always = lazy(() => import("./Always"));
 const Recent = lazy(() => import("./Recent"));
 const Settings = lazy(() => import("./Settings"));
 
-const router = createBrowserRouter([
+// for electron app, use hash route
+const router = createHashRouter([
   {
     path: "/",
     element: <App />,
