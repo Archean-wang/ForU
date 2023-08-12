@@ -173,7 +173,6 @@ app.whenReady().then(async () => {
 
   ipcMain.handle("get-setting", (_event, key) => config.get(key));
   ipcMain.handle("set-settings", (_event, key, value) => {
-    console.log(key, value);
     config.set(key, value);
   });
   ipcMain.handle("get-settings", (_event) => {

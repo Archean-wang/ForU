@@ -1,0 +1,37 @@
+appId: com.archean.foru
+productName: foru
+electronDist: "node_modules/electron/dist"
+directories:
+  buildResources: build
+files:
+  - '!**/.vscode/*'
+  - '!src/*'
+  - '!electron.vite.config.{js,ts,mjs,cjs}'
+  - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
+  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
+  - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+asarUnpack:
+  - resources/**
+
+win:
+  executableName: foru
+  icon: ./resource/logo.png
+nsis:
+  artifactName: ${name}-${version}-setup.${ext}
+  shortcutName: ${productName}
+  uninstallDisplayName: ${productName}
+  createDesktopShortcut: always
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+
+linux:
+  icon: ./resource/logo.png
+  target:
+    - AppImage
+    - rpm
+    - deb
+    - pacman
+  category: Video
+appImage:
+  artifactName: ${name}-${version}.${ext}
+npmRebuild: false

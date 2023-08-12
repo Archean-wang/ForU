@@ -12,7 +12,6 @@ import { useStore } from "../../store";
 import { useNavigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import logoURL from "../../assets/spotify_logo.png";
-import debounce from "../../utils/debounce";
 
 function Login() {
   const store = useStore();
@@ -87,7 +86,7 @@ function Login() {
         <img src={logoURL} width={240} />
         <FormControl sx={{ width: "60%", mt: 4 }}>
           <FormLabel>Client ID</FormLabel>
-          <Input value={clientID} onChange={debounce(handleClientID, 300)} />
+          <Input value={clientID} onChange={handleClientID} />
         </FormControl>
         <Button variant="contained" sx={{ width: 100 }} onClick={handlogin}>
           授权登录
