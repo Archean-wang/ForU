@@ -4,7 +4,6 @@
     "module": "ESNext",
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
-    "types": ["electron-vite/node"]
   },
   "include": ["electron.vite.config.ts"]
 }

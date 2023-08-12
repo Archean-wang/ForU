@@ -4,13 +4,15 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin({ exclude: ["conf"] })],
+    plugins: [externalizeDepsPlugin({ exclude: ["conf", "express"] })],
     build: {
       rollupOptions: {
         output: {
           manualChunks(id) {
             if (id.includes("conf")) {
               return "conf";
+            } else if (id.includes("express")) {
+              return "express";
             }
           },
         },

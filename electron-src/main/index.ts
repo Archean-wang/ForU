@@ -7,10 +7,11 @@ import {
   Tray,
   Menu,
   globalShortcut,
+  IpcMainEvent,
 } from "electron";
 import path from "path";
 import express from "express";
-import appIcon from "../../resources/logo.png?asset";
+import appIcon from "../../build/icon.png?asset";
 import Conf from "conf";
 
 const schema = {
@@ -109,18 +110,17 @@ const createWindow = () => {
   });
   server.listen(12138);
 
-  ipcMain.on("open-url", (_event, url) => {
+  ipcMain.on("open-url", (_event: IpcMainEvent, url: string) => {
     shell.openExternal(url);
   });
 
   // 加载页面
   if (!app.isPackaged && process.env["ELECTRON_RENDERER_URL"]) {
     window.loadURL(process.env["ELECTRON_RENDERER_URL"]);
+    window.webContents.openDevTools();
   } else {
     window.loadFile(path.join(__dirname, "../renderer/index.html"));
   }
-
-  window.webContents.openDevTools();
 
   // 退出最小化到托盘
   window.on("close", (event) => {
