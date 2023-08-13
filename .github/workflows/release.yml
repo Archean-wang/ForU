@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - v*.*.*
-      
+
   workflow_dispatch:
 
 jobs:
@@ -55,4 +55,4 @@ jobs:
             dist/*.pacman
             dist/*.blockmap
         env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
