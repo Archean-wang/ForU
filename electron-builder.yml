@@ -18,7 +18,8 @@ nsis:
 
 linux:
   target:
-    - pacman
+    - deb
+    - AppImage
   category: Video
 appImage:
   artifactName: ${name}-${version}.${ext}
