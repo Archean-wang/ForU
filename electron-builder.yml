@@ -20,6 +20,9 @@ linux:
   target:
     - deb
     - AppImage
+    - pacman
+    - zip
+    - tar.gz
   category: Video
 appImage:
   artifactName: ${name}-${version}.${ext}
