@@ -2,11 +2,13 @@ import { makeAutoObservable } from "mobx";
 
 interface Settings {
   exitToTray: boolean;
+  version: string;
 }
 
 export class SettingsStore {
   settings: Settings = {
     exitToTray: true,
+    version: "",
   };
   constructor() {
     makeAutoObservable(this);

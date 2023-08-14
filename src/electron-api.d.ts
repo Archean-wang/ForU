@@ -16,5 +16,17 @@ interface Window {
     getSetting: (key: string) => Promise<any>;
     getSettings: () => Promise<any>;
     setSettings: (key: string, value: any) => void;
+    checkUpdate: () => void;
+    updateNow: () => void;
+    onUpdateError: (
+      cb: (event: IpcRendererEvent, mesage: string) => void
+    ) => void;
+    onUpdatAvailable: (
+      cb: (event: IpcRendererEvent, info: string) => void
+    ) => void;
+    onDownloadProgress: (
+      cb: (event: IpcRendererEvent, info: string) => void
+    ) => void;
+    onUpdatDownloaded: (cb: Callback) => void;
   };
 }

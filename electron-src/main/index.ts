@@ -13,6 +13,7 @@ import path from "path";
 import express from "express";
 import appIcon from "../../build/icon.png?asset";
 import Conf from "conf";
+import { autoUpdater } from "electron-updater";
 
 const schema = {
   exitToTray: {
@@ -22,6 +23,10 @@ const schema = {
   cleintId: {
     type: "string",
     default: "",
+  },
+  version: {
+    type: "string",
+    default: app.getVersion(),
   },
 };
 
@@ -182,4 +187,35 @@ app.whenReady().then(async () => {
   createWindow();
   createWindowMenu();
   createTray();
+  checkUpdate();
 });
+
+function checkUpdate() {
+  autoUpdater.setFeedURL(
+    "https://github.com/Archean-wang/ForU/releases/latest/download"
+  );
+  autoUpdater.autoDownload = false;
+
+  ipcMain.handle("check-update", async function () {
+    return await autoUpdater.checkForUpdatesAndNotify();
+  });
+
+  autoUpdater.on("error", function (_error, message) {
+    window?.webContents.send("update-error", message);
+  });
+
+  autoUpdater.on("update-available", function (info) {
+    window?.webContents.send("updat-available", info);
+  });
+
+  autoUpdater.on("download-progress", function (info) {
+    window?.webContents.send("download-progress", info);
+  });
+
+  autoUpdater.on("update-downloaded", function () {
+    window?.webContents.send("update-downloaded");
+    ipcMain.on("update-now", () => {
+      autoUpdater.quitAndInstall();
+    });
+  });
+}

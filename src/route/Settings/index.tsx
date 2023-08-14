@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -8,13 +9,33 @@ import {
   Typography,
 } from "@mui/material";
 import { useStore } from "../../store";
+import { useEffect, useState } from "react";
+import { IpcRendererEvent } from "electron";
 
 function Settings() {
   const store = useStore();
+  const [updateInfo, setUpdateInfo] = useState("");
 
   const handleExit = (event: React.ChangeEvent<HTMLInputElement>) => {
     store.settingsStore.setExitToTray(event.target.value === "true");
   };
+
+  const checkUpdate = () => {
+    window.electronAPI.checkUpdate();
+  };
+
+  function handleUpdate(_event: IpcRendererEvent, info: string) {
+    console.log(info);
+    setUpdateInfo(info);
+  }
+
+  useEffect(() => {
+    window.electronAPI.onUpdatAvailable(handleUpdate);
+
+    return () => {
+      window.electronAPI.removeAllListeners("check-update");
+    };
+  }, []);
 
   return (
     <Box
@@ -52,6 +73,14 @@ function Settings() {
               label="直接退出"
             />
           </RadioGroup>
+        </FormControl>
+        <FormControl>
+          <FormLabel>当前版本</FormLabel>
+          <Typography>
+            {store.settingsStore.settings.version}
+            <Button onClick={checkUpdate}>检查更新</Button>
+          </Typography>
+          {updateInfo && <Typography>{updateInfo}</Typography>}
         </FormControl>
       </Box>
     </Box>
