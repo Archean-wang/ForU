@@ -197,7 +197,8 @@ function checkUpdate() {
   autoUpdater.autoDownload = false;
 
   ipcMain.handle("check-update", async function () {
-    return await autoUpdater.checkForUpdates();
+    const res = await autoUpdater.checkForUpdatesAndNotify();
+    console.log(res)
   });
 
   autoUpdater.on("error", function (_error, message) {
