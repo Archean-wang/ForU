@@ -26,7 +26,3 @@ linux:
 appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
-
-publish:
-  provider: github
-  repo: https://github.com/Archean-wang/ForU
