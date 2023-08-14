@@ -58,6 +58,6 @@ jobs:
             dist/*.AppImage
             dist/*.deb
             dist/*.tar.gz
-            idst/*.pacman
+            dist/*.pacman
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
