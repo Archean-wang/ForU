@@ -2,7 +2,7 @@
   "name": "foru",
   "description": "A spotify client based on electron",
   "private": true,
-  "version": "0.0.0-init",
+  "version": "0.0.0-test",
   "main": "out/main/index.js",
   "author": {
     "name": "Archean",

@@ -30,12 +30,6 @@ jobs:
       - name: Install Dependencies
         run: yarn install
 
-      - name: Install Electron
-        run: yarn add -D https://github.com/castlabs/electron-releases#v25.4.0+wvcus
-
-      - name: Show package
-        run: cat package.json
-
       - name: build-linux
         if: matrix.os == 'ubuntu-latest'
         run: yarn build:linux
@@ -58,6 +52,5 @@ jobs:
             dist/*.AppImage
             dist/*.deb
             dist/*.tar.gz
-            dist/*.pacman
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

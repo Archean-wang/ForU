@@ -20,10 +20,13 @@ linux:
   target:
     - deb
     - AppImage
-    - pacman
     - zip
     - tar.gz
   category: Video
 appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
+
+publish:
+  provider: github
+  repo: https://github.com/Archean-wang/ForU
