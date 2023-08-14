@@ -52,5 +52,6 @@ jobs:
             dist/*.AppImage
             dist/*.deb
             dist/*.tar.gz
+            dist/latest.yml
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
