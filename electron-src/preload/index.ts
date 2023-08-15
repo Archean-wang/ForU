@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
+import { contextBridge, ipcRenderer } from "electron";
 
 interface Listener {
   (event: Electron.IpcRendererEvent, ...args: any[]): void;
@@ -7,7 +7,7 @@ interface Listener {
 contextBridge.exposeInMainWorld("electronAPI", {
   removeAllListeners: (name: string) => ipcRenderer.removeAllListeners(name),
   // login code
-  onCodeReady: (cb: (event: IpcRendererEvent, code: string) => void) =>
+  onCodeReady: (cb: Listener) =>
     ipcRenderer.on("code-ready", cb),
   // operations
   openURL: (url: string) => ipcRenderer.send("open-url", url),
@@ -25,6 +25,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.invoke("set-settings", key, value),
   // update
   checkUpdate: () => ipcRenderer.invoke("check-update"),
+  updateDownload: () => ipcRenderer.invoke("update-download"),
   updateNow: () => ipcRenderer.send("update-now"),
   onUpdateError: (cb: Listener) => ipcRenderer.on("update-error", cb),
   onUpdatAvailable: (cb: Listener) => ipcRenderer.on("updat-available", cb),

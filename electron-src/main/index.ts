@@ -13,7 +13,7 @@ import path from "path";
 import express from "express";
 import appIcon from "../../build/icon.png?asset";
 import Conf from "conf";
-import { autoUpdater } from "electron-updater";
+import { CancellationToken, autoUpdater } from "electron-updater";
 
 const schema = {
   exitToTray: {
@@ -190,6 +190,8 @@ app.whenReady().then(async () => {
   checkUpdate();
 });
 
+let cancellationToken: undefined | CancellationToken;
+
 function checkUpdate() {
   autoUpdater.setFeedURL(
     "https://github.com/Archean-wang/ForU/releases/latest/download"
@@ -197,9 +199,14 @@ function checkUpdate() {
   autoUpdater.autoDownload = false;
 
   ipcMain.handle("check-update", async function () {
-    const res = await autoUpdater.checkForUpdatesAndNotify();
-    console.log(res)
+    const res = await autoUpdater.checkForUpdates();
+    cancellationToken = res?.cancellationToken;
+    return res;
   });
+
+  ipcMain.handle("update-download", async function (_event) {
+    await autoUpdater.downloadUpdate(cancellationToken)
+  })
 
   autoUpdater.on("error", function (_error, message) {
     window?.webContents.send("update-error", message);

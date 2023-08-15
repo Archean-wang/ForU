@@ -16,16 +16,17 @@ interface Window {
     getSetting: (key: string) => Promise<any>;
     getSettings: () => Promise<any>;
     setSettings: (key: string, value: any) => void;
-    checkUpdate: () => void;
+    checkUpdate: () => Promise<import("electron-updater").UpdateCheckResult>;
     updateNow: () => void;
+    updateDownload: () => Promise<any>;
     onUpdateError: (
-      cb: (event: IpcRendererEvent, mesage: string) => void
+      cb: (event: IpcRendererEvent, mesage: string | undefined) => void
     ) => void;
     onUpdatAvailable: (
-      cb: (event: IpcRendererEvent, info: string) => void
+      cb: (event: IpcRendererEvent, info: import("electron-updater").UpdateInfo) => void
     ) => void;
     onDownloadProgress: (
-      cb: (event: IpcRendererEvent, info: string) => void
+      cb: (event: IpcRendererEvent, info: import("electron-updater").ProgressInfo) => void
     ) => void;
     onUpdatDownloaded: (cb: Callback) => void;
   };
