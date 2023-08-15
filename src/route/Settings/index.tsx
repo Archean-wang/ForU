@@ -4,8 +4,10 @@ import {
   FormControl,
   FormControlLabel,
   FormLabel,
+  Input,
   Radio,
   RadioGroup,
+  TextField,
   Typography,
 } from "@mui/material";
 import { useStore } from "../../store";
@@ -17,6 +19,8 @@ import { observer } from "mobx-react-lite";
 function Settings() {
   const store = useStore();
   const [progressInfo, setProgressInfo] = useState<ProgressInfo | null>(null);
+  const [proxy, setProxy] = useState(store.settingsStore.settings.proxy);
+  const [isURLValid, setIsURLValid] = useState(true);
 
   const handleExit = (event: React.ChangeEvent<HTMLInputElement>) => {
     store.settingsStore.setExitToTray(event.target.value === "true");
@@ -51,6 +55,18 @@ function Settings() {
 
   function onUpdateError(message?: string) {
     store.globalToastStore.setErrorMessage(message ? message : "更新失败");
+  }
+
+  function handleProxy(event: React.ChangeEvent<HTMLInputElement>) {
+    setProxy(event.target.value);
+    const pattern = /^(https?:\/\/)?([0-9a-zA-Z-]+\.)+([0-9a-zA-Z-]+):\d+$/;
+    console.log(pattern.test(event.target.value));
+    if (!event.target.value || pattern.test(event.target.value)) {
+      store.settingsStore.setProxy(event.target.value);
+      setIsURLValid(true);
+    } else {
+      setIsURLValid(false);
+    }
   }
 
   useEffect(() => {
@@ -105,6 +121,19 @@ function Settings() {
             />
           </RadioGroup>
         </FormControl>
+
+        <FormControl>
+          <FormLabel>代理</FormLabel>
+          <Input
+            type="url"
+            value={proxy}
+            placeholder="http://host:port(重启生效)"
+            onChange={handleProxy}
+            error={!isURLValid}
+          />
+          {!isURLValid && <Typography>"代理无效"</Typography>}
+        </FormControl>
+
         <FormControl>
           <FormLabel>当前版本</FormLabel>
           <Typography>

@@ -28,6 +28,10 @@ const schema = {
     type: "string",
     default: app.getVersion(),
   },
+  proxy: {
+    type: "string",
+    default: "",
+  },
 };
 
 const config = new Conf({ projectName: "foru", schema });
@@ -171,6 +175,11 @@ const createTray = () => {
   tray.setContextMenu(createTrayMenu());
 };
 
+// proxy
+if (config.get("proxy")) {
+  app.commandLine.appendSwitch("proxy-server", `${config.get("proxy")}`);
+}
+
 app.whenReady().then(async () => {
   await components.whenReady();
   console.log("components ready:", components.status());
@@ -205,8 +214,8 @@ function checkUpdate() {
   });
 
   ipcMain.handle("update-download", async function (_event) {
-    await autoUpdater.downloadUpdate(cancellationToken)
-  })
+    await autoUpdater.downloadUpdate(cancellationToken);
+  });
 
   autoUpdater.on("error", function (_error, message) {
     window?.webContents.send("update-error", message);
