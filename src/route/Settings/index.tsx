@@ -7,7 +7,6 @@ import {
   Input,
   Radio,
   RadioGroup,
-  TextField,
   Typography,
 } from "@mui/material";
 import { useStore } from "../../store";
@@ -34,7 +33,7 @@ function Settings() {
     window.electronAPI
       .checkUpdate()
       .then((result) => {
-        store.settingsStore.setUpdateInfo(result.updateInfo);
+        store.settingsStore.setUpdateInfo(result);
       })
       .catch(() => store.globalToastStore.setErrorMessage("检查更新失败"));
   };
@@ -142,17 +141,19 @@ function Settings() {
             </Button>
           </Typography>
 
-          {store.settingsStore.settings.updateInfo && (
+          {store.settingsStore.updateAvailable ? (
             <>
               <Typography color="red">
-                {`发现新版本: ${store.settingsStore.settings.updateInfo.version}`}
+                {`发现新版本: ${store.settingsStore.settings.updateCheckResult?.updateInfo.version}`}
                 {progressInfo &&
-                  `下载进度: ${progressInfo.percent.toFixed(2)}%`}
+                  ` | 下载进度: ${progressInfo.percent.toFixed(2)}%`}
                 <Button onClick={handleUpdate} disabled={Boolean(progressInfo)}>
                   立即更新
                 </Button>
               </Typography>
             </>
+          ) : (
+            <Typography sx={{ color: "primary.main" }}>已是最新版本</Typography>
           )}
         </FormControl>
       </Box>

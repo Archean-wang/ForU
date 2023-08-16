@@ -1,10 +1,10 @@
-import { UpdateInfo } from "electron-updater";
+import { UpdateCheckResult } from "electron-updater";
 import { makeAutoObservable } from "mobx";
 
 interface Settings {
   exitToTray: boolean;
   version: string;
-  updateInfo: UpdateInfo | null;
+  updateCheckResult: UpdateCheckResult | null;
   proxy: string;
 }
 
@@ -12,7 +12,7 @@ export class SettingsStore {
   settings: Settings = {
     exitToTray: true,
     version: "",
-    updateInfo: null,
+    updateCheckResult: null,
     proxy: "",
   };
   constructor() {
@@ -28,13 +28,21 @@ export class SettingsStore {
     window.electronAPI.setSettings("exitToTray", value);
   }
 
-  setUpdateInfo(value: UpdateInfo) {
-    this.settings.updateInfo = value;
+  setUpdateInfo(value: UpdateCheckResult) {
+    this.settings.updateCheckResult = value;
   }
 
   setProxy(value: string) {
     this.settings.proxy = value;
     window.electronAPI.setSettings("proxy", value);
+  }
+
+  get updateAvailable() {
+    if (!this.settings.updateCheckResult) return false;
+    return (
+      this.settings.updateCheckResult?.versionInfo.version !==
+      this.settings.updateCheckResult?.updateInfo.version
+    );
   }
 }
 
