@@ -1,12 +1,22 @@
 # ForU
+A third party client of spotify based on Electron.
 
-基于Web Playback SDK的第三方spotify客户端
+This is a learning project for React and Electron.
 
-功能：
-- 控制  上/下一曲、音量、暂停/播放、循环模式切换、进度调整
-- 浏览  歌曲、专辑、歌手、歌单
-- 搜索  歌曲、专辑、歌手、歌单
-- 歌单  创建/编辑/删除
-- 收藏  专辑/歌手/歌单
-- 流转  显示/切换设备
-- 主题  深色模式
+![Alt text](image.png)
+
+## Premise
+1. You need a **Spotify Premium** to play songs.
+2. Then you need to create an app on [Dashboard](https://developer.spotify.com/dashboard),and set "Redirect URIs" to http://localhost:12138/callback , after save you can find client id on settings page
+3. paste the client id when you first launch.
+
+## Install
+Download binaries from the relese page.
+
+For archlinux user, you can find package in AUR:
+```bash
+paru foru
+```
+
+## Limitation
+Not available on windows so far.(may be caused by widevine license)
