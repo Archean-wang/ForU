@@ -3,6 +3,7 @@ productName: foru
 electronDist: "node_modules/electron/dist"
 
 files: ["out/**/*", "!**/node_modules/**/*", "build/**/*"]
+extraResources: ["LICENSE"]
 
 win:
   executableName: foru
