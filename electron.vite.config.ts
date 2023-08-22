@@ -40,6 +40,7 @@ export default defineConfig({
     envPrefix: ["VITE_"],
     root: ".",
     build: {
+//      base: "./",
       rollupOptions: {
         input: {
           index: resolve(__dirname, "index.html"),

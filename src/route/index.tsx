@@ -30,7 +30,11 @@ const router = createHashRouter([
   {
     path: "/",
     element: <App />,
-    errorElement: <ErrorPage />,
+    errorElement: (
+      <Suspense fallback={<Loading />}>
+        <ErrorPage />
+      </Suspense>
+    ),
     id: "root",
     children: [
       {
