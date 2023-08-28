@@ -51,9 +51,12 @@ function PlaybackControl() {
     [player]
   );
 
-  const previous = useCallback(function () {
-    player?.previousTrack();
-  }, []);
+  const previous = useCallback(
+    function () {
+      player?.previousTrack();
+    },
+    [player]
+  );
 
   function shuffle() {
     if (!device) return;
@@ -123,12 +126,12 @@ function PlaybackControl() {
             position: "relative",
             "&::after": {
               content: '"1"',
-              fontSize: "1px",
+              fontSize: "0.8rem",
               fontWeight: "bold",
               display: playbackState?.repeat_mode === 2 ? "inherit" : "none",
               position: "absolute",
               right: -5,
-              top: -6,
+              top: -7,
             },
           }}>
           <FontAwesomeIcon

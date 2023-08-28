@@ -86,7 +86,8 @@ function App() {
         <SpotifyWebSDK
           name={"ForU"}
           getOAuthToken={getAuthCode}
-          volume={volume === null ? 0.5 : parseInt(volume) / 100}>
+          volume={volume === null ? 0.5 : parseInt(volume) / 100}
+          enableMediaSession={true}>
           <Main />
           <Player />
           <GlobalToast />

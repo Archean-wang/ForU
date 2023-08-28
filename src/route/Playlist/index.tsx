@@ -17,9 +17,7 @@ import {
 import { useEffect, useState } from "react";
 import { useStore } from "../../store";
 
-import EditPlaylist, {
-  PlaylistDetail,
-} from "../../components/common/EditPlaylist";
+import EditPlaylist, { PlaylistDetail } from "./EditPlaylist";
 import { PlaylistTrack, PagePlaylistTrack, Track } from "../../utils/interface";
 import { observer } from "mobx-react-lite";
 import EventBus, { MyEvent } from "../../utils/EventBus";

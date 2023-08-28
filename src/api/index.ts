@@ -1,4 +1,4 @@
-import { PlaylistDetail } from "../components/common/EditPlaylist";
+import { PlaylistDetail } from "../route/Playlist/EditPlaylist";
 import http from "../utils/http";
 import {
   AvailableDevices,
