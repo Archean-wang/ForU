@@ -2949,13 +2949,10 @@ source-map@^0.6.0:
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
   integrity sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
 
-spotify-web-playback-sdk-for-react@^1.1.2:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/spotify-web-playback-sdk-for-react/-/spotify-web-playback-sdk-for-react-1.1.4.tgz#20c9dc7ff1522b707f06f60f95e325da6cf74b47"
-  integrity sha512-LY470O1X36/US7Y9hrHuSr2CJ11JEJI3iWPWSHPiyOHtuIbTFP+18Zb0IBLG0+6ym6VCyPt//8Tsmep5Uft6Qg==
-  dependencies:
-    react "^18.2.0"
-    react-dom "^18.2.0"
+spotify-web-playback-sdk-for-react@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/spotify-web-playback-sdk-for-react/-/spotify-web-playback-sdk-for-react-2.0.0.tgz#4bb93a3d05a6cb3cb40b3dc2173b54424401e558"
+  integrity sha512-suVJhGAiaXaqkoMFHCM7HYIyepuUjw2l9U8p5RhcQPXGofBcGAk4lIU2MPfK5D70dqXLVGRoVJ/q4sn8LUg1OQ==
 
 sprintf-js@^1.1.2:
   version "1.1.2"
@@ -3105,10 +3102,15 @@ typed-emitter@^2.1.0:
   optionalDependencies:
     rxjs "^7.5.2"
 
-typescript@^4.0.2, typescript@^4.9.5:
+typescript@^4.0.2:
   version "4.9.5"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
   integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==
+
+typescript@^5.0.0:
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.2.2.tgz#5ebb5e5a5b75f085f22bc3f8460fba308310fa78"
+  integrity sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==
 
 universalify@^0.1.0:
   version "0.1.2"

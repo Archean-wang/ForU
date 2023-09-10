@@ -10,7 +10,7 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
@@ -18,6 +18,5 @@
     "types": ["electron-vite/node", "node"]
   },
   "include": ["src", "electron-src"],
-  "exclude": ["node_modules"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
