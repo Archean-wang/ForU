@@ -12,12 +12,15 @@ import { useStore } from "../../store";
 import { useNavigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import logoURL from "../../assets/spotify_logo.png";
+import { useTranslation } from "react-i18next";
 
 function Login() {
   const store = useStore();
   const navigate = useNavigate();
   const [clientID, setClientID] = useState("");
   const [open, setOpen] = useState(false);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     window.electronAPI.getSetting("client_id").then((id) => {
@@ -89,7 +92,7 @@ function Login() {
           <Input value={clientID} onChange={handleClientID} />
         </FormControl>
         <Button variant="contained" sx={{ width: 100 }} onClick={handlogin}>
-          授权登录
+          {t("login")}
         </Button>
         <Snackbar
           open={open}

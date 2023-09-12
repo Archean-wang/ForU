@@ -25,12 +25,15 @@ import {
 import { useStore } from "../../../store";
 import debounce from "../../../utils/debounce";
 import { observer } from "mobx-react-lite";
+import { useTranslation } from "react-i18next";
 
 function Header() {
   const store = useStore();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     store.userProfilseStore.getUserProfile();
@@ -98,7 +101,7 @@ function Header() {
         />
       </Stack>
       <Input
-        placeholder="搜索"
+        placeholder={t("search")}
         onChange={debounce(onChange, 1000)}
         endAdornment={
           <InputAdornment position="start">
@@ -135,25 +138,27 @@ function Header() {
               icon={store.colorModeStore.mode === "light" ? faMoon : faSun}
             />
           </ListItemIcon>
-          {store.colorModeStore.mode === "light" ? "深色模式" : "浅色模式"}
+          {store.colorModeStore.mode === "light"
+            ? t("darkMode")
+            : t("lightMode")}
         </MenuItem>
         <MenuItem onClick={handleAccount}>
           <ListItemIcon>
             <FontAwesomeIcon icon={faUserGear} />
           </ListItemIcon>
-          账号
+          {t("account")}
         </MenuItem>
         <MenuItem onClick={handleSettings}>
           <ListItemIcon>
             <FontAwesomeIcon icon={faGear} />
           </ListItemIcon>
-          设置
+          {t("settings")}
         </MenuItem>
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <FontAwesomeIcon icon={faRightFromBracket} />
           </ListItemIcon>
-          退出
+          {t("exit")}
         </MenuItem>
       </Menu>
     </Box>

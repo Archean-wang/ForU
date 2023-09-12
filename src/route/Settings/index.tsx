@@ -5,8 +5,11 @@ import {
   FormControlLabel,
   FormLabel,
   Input,
+  MenuItem,
   Radio,
   RadioGroup,
+  Select,
+  SelectChangeEvent,
   Typography,
 } from "@mui/material";
 import { useStore } from "../../store";
@@ -14,12 +17,15 @@ import { useEffect, useState } from "react";
 import { IpcRendererEvent } from "electron";
 import { ProgressInfo } from "electron-updater";
 import { observer } from "mobx-react-lite";
+import { useTranslation } from "react-i18next";
 
 function Settings() {
   const store = useStore();
   const [progressInfo, setProgressInfo] = useState<ProgressInfo | null>(null);
   const [proxy, setProxy] = useState(store.settingsStore.settings.proxy);
   const [isURLValid, setIsURLValid] = useState(true);
+  const { t, i18n } = useTranslation();
+  const [lang, setLang] = useState(store.settingsStore.settings.language);
 
   const handleExit = (event: React.ChangeEvent<HTMLInputElement>) => {
     store.settingsStore.setExitToTray(event.target.value === "true");
@@ -35,7 +41,9 @@ function Settings() {
       .then((result) => {
         store.settingsStore.setUpdateInfo(result);
       })
-      .catch(() => store.globalToastStore.setErrorMessage("检查更新失败"));
+      .catch(() =>
+        store.globalToastStore.setErrorMessage(t("checkUpdateFailedMsg"))
+      );
   };
 
   function onDownloadProgress(_event: IpcRendererEvent, info: ProgressInfo) {
@@ -45,7 +53,9 @@ function Settings() {
   function handleUpdate() {
     window.electronAPI
       .updateDownload()
-      .catch(() => store.globalToastStore.setErrorMessage("下载更新失败"));
+      .catch(() =>
+        store.globalToastStore.setErrorMessage(t("downloadUpdateFailedMsg"))
+      );
   }
 
   function onUpdatDownloaded() {
@@ -53,19 +63,26 @@ function Settings() {
   }
 
   function onUpdateError(message?: string) {
-    store.globalToastStore.setErrorMessage(message ? message : "更新失败");
+    store.globalToastStore.setErrorMessage(
+      message ? message : t("updateFailedMsg")
+    );
   }
 
   function handleProxy(event: React.ChangeEvent<HTMLInputElement>) {
     setProxy(event.target.value);
     const pattern = /^(https?:\/\/)?([0-9a-zA-Z-]+\.)+([0-9a-zA-Z-]+):\d+$/;
-    console.log(pattern.test(event.target.value));
     if (!event.target.value || pattern.test(event.target.value)) {
       store.settingsStore.setProxy(event.target.value);
       setIsURLValid(true);
     } else {
       setIsURLValid(false);
     }
+  }
+
+  function handleLanguage(event: SelectChangeEvent<string>) {
+    i18n.changeLanguage(event.target.value);
+    setLang(event.target.value);
+    window.electronAPI.setSettings("language", event.target.value);
   }
 
   useEffect(() => {
@@ -88,10 +105,9 @@ function Settings() {
         alignItems: "center",
         padding: 2,
         gap: 2,
-      }}
-    >
+      }}>
       <Typography variant="h5" sx={{ alignSelf: "flex-start" }}>
-        设置
+        {t("settings")}
       </Typography>
       <Box
         sx={{
@@ -99,42 +115,48 @@ function Settings() {
           display: "flex",
           flexDirection: "column",
           gap: 2,
-        }}
-      >
+        }}>
         <FormControl>
-          <FormLabel>退出</FormLabel>
+          <FormLabel>{t("exit")}</FormLabel>
           <RadioGroup
             row
             defaultValue={store.settingsStore.settings?.exitToTray.toString()}
-            onChange={handleExit}
-          >
+            onChange={handleExit}>
             <FormControlLabel
               value="true"
               control={<Radio />}
-              label="退出到托盘"
+              label={t("exitToTray")}
             />
             <FormControlLabel
               value="false"
               control={<Radio />}
-              label="直接退出"
+              label={t("exit")}
             />
           </RadioGroup>
         </FormControl>
 
         <FormControl>
-          <FormLabel>代理</FormLabel>
-          <Input
-            type="url"
-            value={proxy}
-            placeholder="http://host:port(重启生效)"
-            onChange={handleProxy}
-            error={!isURLValid}
-          />
-          {!isURLValid && <Typography>"代理无效"</Typography>}
+          <FormLabel>{t("language")}</FormLabel>
+          <Select value={lang} onChange={handleLanguage}>
+            <MenuItem value="en">English</MenuItem>
+            <MenuItem value="zh">简体中文</MenuItem>
+          </Select>
         </FormControl>
 
         <FormControl>
-          <FormLabel>当前版本</FormLabel>
+          <FormLabel>{t("proxy")}</FormLabel>
+          <Input
+            type="url"
+            value={proxy}
+            placeholder={`http://host:port(${t("needRestart")})`}
+            onChange={handleProxy}
+            error={!isURLValid}
+          />
+          {!isURLValid && <Typography>{t("proxyInvalid")}</Typography>}
+        </FormControl>
+
+        <FormControl>
+          <FormLabel>{t("currentVersion")}</FormLabel>
           <Typography>
             <Button onClick={checkUpdate} variant="text">
               {store.settingsStore.settings.version}
@@ -144,16 +166,21 @@ function Settings() {
           {store.settingsStore.updateAvailable ? (
             <>
               <Typography color="red">
-                {`发现新版本: ${store.settingsStore.settings.updateCheckResult?.updateInfo.version}`}
+                {`${t("findNewVersion")}: ${
+                  store.settingsStore.settings.updateCheckResult?.updateInfo
+                    .version
+                }`}
                 {progressInfo &&
-                  ` | 下载进度: ${progressInfo.percent.toFixed(2)}%`}
+                  ` | ${t("progress")}: ${progressInfo.percent.toFixed(2)}%`}
                 <Button onClick={handleUpdate} disabled={Boolean(progressInfo)}>
-                  立即更新
+                  {t("updateNow")}
                 </Button>
               </Typography>
             </>
           ) : (
-            <Typography sx={{ color: "primary.main" }}>已是最新版本</Typography>
+            <Typography sx={{ color: "primary.main" }}>
+              {t("alreadyLatest")}
+            </Typography>
           )}
         </FormControl>
       </Box>

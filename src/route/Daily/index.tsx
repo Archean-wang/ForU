@@ -4,9 +4,11 @@ import { useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import ArtistList from "../../components/itemsList/ArtistList";
 import EntityCard from "../../components/common/EntityCard";
+import { useTranslation } from "react-i18next";
 
 function Daily() {
   const store = useStore();
+  const { t } = useTranslation();
 
   useEffect(() => {
     store.topItemsStore.setTopArtists();
@@ -25,7 +27,7 @@ function Daily() {
         overflowY: "auto",
       }}>
       <Typography variant="h6" sx={{ bgcolor: "primary" }}>
-        最爱播放
+        {t("always")}
       </Typography>
       <Box
         sx={{
@@ -40,7 +42,7 @@ function Daily() {
               ? store.topItemsStore.topTracks.items[0].album.images[0].url
               : ""
           }
-          title={["最多播放"]}
+          title={[t("mostly")]}
         />
         <EntityCard
           url="/recent"
@@ -50,10 +52,10 @@ function Daily() {
                   .url
               : ""
           }
-          title={["最近播放"]}
+          title={[t("recently")]}
         />
       </Box>
-      <Typography variant="h6">最爱的歌手</Typography>
+      <Typography variant="h6">{t("mostPlayArtists")}</Typography>
       <ArtistList
         artists={store.topItemsStore.topArtists.items}
         wrap="nowrap"

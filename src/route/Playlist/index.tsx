@@ -13,6 +13,7 @@ import {
   faCirclePlay,
   faEdit,
   faHeart,
+  faMusic,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { useStore } from "../../store";
@@ -26,6 +27,8 @@ import ContainedButton from "../../components/common/ContainedButton";
 import { useSpotifyDevice } from "spotify-web-playback-sdk-for-react";
 import http from "../../utils/http";
 import Loading from "../../components/common/Loading";
+import { useTranslation } from "react-i18next";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Playlist() {
   const params = useParams();
@@ -45,6 +48,8 @@ function Playlist() {
   );
   const [name, setName] = useState(playlist.name);
   const [description, setDescription] = useState(playlist.description);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     checkPlaylist(
@@ -146,27 +151,28 @@ function Playlist() {
           }}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
             <Typography maxHeight="3rem" overflow="hidden">
-              简介: {description ? description : "暂无"}
+              {`${t("description")}: ${description ? description : t("blank")}`}
             </Typography>
             <Typography noWrap sx={{ maxWidth: 200 }}>
-              {playlist.tracks.total}首
+              <FontAwesomeIcon icon={faMusic} />
+              {` ${playlist.tracks.total}`}
             </Typography>
           </Box>
 
           <Stack direction={"row"} gap={2} alignItems="flex-end">
             <ContainedButton onClick={() => startPlay(0)} icon={faCirclePlay}>
-              播放
+              {t("play")}
             </ContainedButton>
             {playlist.owner.id === store.userProfilseStore.userProfile!.id ? (
               <ContainedButton onClick={editPlaylist} icon={faEdit}>
-                编辑
+                {t("edit")}
               </ContainedButton>
             ) : (
               <ContainedButton
                 onClick={toggleLoved}
                 icon={faHeart}
                 color={isLoved ? "red" : "white"}>
-                收藏
+                {t("follow")}
               </ContainedButton>
             )}
           </Stack>

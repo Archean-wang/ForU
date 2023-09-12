@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { useRef, useState } from "react";
 import { Playlist } from "../../../utils/interface";
+import { useTranslation } from "react-i18next";
 
 type HandleEvent = () => void;
 type HandleCommit = ({ imageUrl, name, description }: PlaylistDetail) => void;
@@ -40,9 +41,11 @@ function EditPlaylist({
   const [description, setDescription] = useState(playlist.description);
   const [errorMsg, setErrorMsg] = useState("");
 
+  const { t } = useTranslation();
+
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>编辑歌单</DialogTitle>
+      <DialogTitle>{t("edit")}</DialogTitle>
       <DialogContent>
         <Box sx={{ position: "relative", display: "flex", gap: 1 }}>
           <Avatar
@@ -68,9 +71,9 @@ function EditPlaylist({
                 const file = files[0];
                 console.log(file);
                 if (file.type !== "image/jpeg") {
-                  setErrorMsg("文件格式不正确, 只能上传jpeg格式!");
+                  setErrorMsg(t("fileTypeError"));
                 } else if (file.size > 256 * 1024) {
-                  setErrorMsg("超过256k大小限制!");
+                  setErrorMsg(t("fileSizeError"));
                 } else {
                   setErrorMsg("");
                   // setImageUrl(URL.createObjectURL(file));
@@ -94,7 +97,7 @@ function EditPlaylist({
           autoFocus
           margin="dense"
           id="name"
-          label="歌单名"
+          label={t("playlistName")}
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -104,7 +107,7 @@ function EditPlaylist({
         <TextField
           margin="dense"
           id="description"
-          label="描述"
+          label={t("description")}
           type="text"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -114,9 +117,9 @@ function EditPlaylist({
       </DialogContent>
       <DialogActions>
         <Button onClick={() => handleCommit({ imageUrl, name, description })}>
-          提交
+          {t("submit")}
         </Button>
-        <Button onClick={handleClose}>取消</Button>
+        <Button onClick={handleClose}>{t("cancel")}</Button>
       </DialogActions>
     </Dialog>
   );

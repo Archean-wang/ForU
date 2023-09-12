@@ -10,7 +10,7 @@ interface CommonListProps {
   loadMore?: Function;
 }
 
-function CommonList({ tracks, title = "列表", loadMore }: CommonListProps) {
+function CommonList({ tracks, title = "List", loadMore }: CommonListProps) {
   const device = useSpotifyDevice();
 
   function startPlay(index: number) {

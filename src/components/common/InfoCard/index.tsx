@@ -1,4 +1,5 @@
 import { Avatar, Box, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 export interface InfoCardProps {
   image?: string | undefined;
@@ -7,13 +8,8 @@ export interface InfoCardProps {
   type: string;
 }
 
-const types = new Map([
-  ["artist", "歌手"],
-  ["album", "专辑"],
-  ["playlist", "歌单"],
-]);
-
 function InfoCard({ image, title, type, children }: InfoCardProps) {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{
@@ -56,7 +52,7 @@ function InfoCard({ image, title, type, children }: InfoCardProps) {
               borderRadius: 1,
               fontSize: "1rem",
             }}>
-            {types.get(type)}
+            {t(type)}
           </Typography>
           <Typography fontSize={"2rem"} noWrap>
             {title}

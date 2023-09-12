@@ -18,6 +18,7 @@ import ArtistList from "../../components/itemsList/ArtistList";
 import http from "../../utils/http";
 import { Albums } from "../../utils/interface";
 import Loading from "../../components/common/Loading";
+import { useTranslation } from "react-i18next";
 
 function Artist() {
   // @ts-ignore
@@ -30,6 +31,8 @@ function Artist() {
   const store = useStore();
   const device = useSpotifyDevice();
   const [loading, setLoading] = useState(false);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     checkArtists(params.id as string).then((res) => {
@@ -90,21 +93,21 @@ function Artist() {
         title={artistInfo.name}>
         <Stack direction={"row"} gap={2}>
           <ContainedButton onClick={start} icon={faPlayCircle}>
-            播放
+            {t("play")}
           </ContainedButton>
           <ContainedButton
             onClick={toggleLoved}
             icon={faHeart}
             color={isLoved ? "red" : "white"}>
-            收藏
+            {t("follow")}
           </ContainedButton>
         </Stack>
       </InfoCard>
 
       <Tabs value={value} onChange={handleChange}>
-        <Tab label="热门歌曲" />
-        <Tab label="专辑" />
-        <Tab label="相关艺人" />
+        <Tab label={t("hot")} />
+        <Tab label={t("album")} />
+        <Tab label={t("ralateArtists")} />
       </Tabs>
       <Box
         sx={{
@@ -119,15 +122,15 @@ function Artist() {
             }}
             columns={[
               {
-                header: "歌名",
+                header: t("title"),
                 field: "name",
               },
               {
-                header: "专辑",
+                header: t("album"),
                 field: "album",
               },
               {
-                header: "时长",
+                header: t("duration"),
                 field: "duration_ms",
               },
             ]}

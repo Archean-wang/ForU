@@ -11,6 +11,7 @@ import {
   useSpotifyPlayer,
   useSpotifyState,
 } from "spotify-web-playback-sdk-for-react";
+import { useTranslation } from "react-i18next";
 
 function Playing() {
   const store = useStore();
@@ -19,6 +20,8 @@ function Playing() {
   const player = useSpotifyPlayer();
   const songs = store.playingStore.playing.queue;
   const device = useSpotifyDevice();
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     store.playingStore.setPlaying();
@@ -46,7 +49,7 @@ function Playing() {
       }}
       component={"div"}>
       <Typography sx={{ fontWeight: "bold", fontSize: 20, color: "gray" }}>
-        当前播放
+        {t("nowPlaying")}
       </Typography>
       {store.playingStore.playing.currently_playing && (
         <SongList
@@ -58,7 +61,7 @@ function Playing() {
       )}
       <Typography
         sx={{ fontWeight: "bold", fontSize: 20, color: "gray", mt: 2 }}>
-        即将播放
+        {t("nextUp")}
       </Typography>
 
       <SongList

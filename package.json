@@ -34,12 +34,14 @@
     "axios": "^1.4.0",
     "conf": "^11.0.2",
     "express": "^4.18.2",
+    "i18next": "^23.5.1",
     "mobx": "^6.9.0",
     "mobx-react-lite": "^3.4.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-i18next": "^13.2.2",
     "react-router-dom": "^6.11.2",
-    "spotify-web-playback-sdk-for-react": "^2.0.0"
+    "spotify-web-playback-sdk-for-react": "^2.0.1"
   },
   "devDependencies": {
     "@types/node": "^18.7.10",

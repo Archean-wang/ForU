@@ -6,6 +6,7 @@ interface Settings {
   version: string;
   updateCheckResult: UpdateCheckResult | null;
   proxy: string;
+  language: string;
 }
 
 export class SettingsStore {
@@ -14,6 +15,7 @@ export class SettingsStore {
     version: "",
     updateCheckResult: null,
     proxy: "",
+    language: "en",
   };
   constructor() {
     makeAutoObservable(this);

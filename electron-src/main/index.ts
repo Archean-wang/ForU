@@ -13,29 +13,18 @@ import path from "path";
 import express from "express";
 import appIcon from "../../build/icon.png?asset";
 import { CancellationToken, autoUpdater } from "electron-updater";
-import Conf from "conf";
+import config from "../config";
 
-const schema = {
-  exitToTray: {
-    type: "boolean",
-    default: true,
-  },
-  cleintId: {
-    type: "string",
-    default: "",
-  },
-  version: {
-    type: "string",
-    default: "0.0.0",
-  },
-  proxy: {
-    type: "string",
-    default: "",
-  },
-};
+import resources from "../i18n";
+import i18next from "i18next";
 
-const config = new Conf({ projectName: "foru", schema });
 config.set("version", app.getVersion());
+i18next.init({
+  resources,
+  lng: config.get("language") as string,
+  fallbackLng: "en",
+});
+
 let paused = true;
 let window: null | BrowserWindow = null;
 
@@ -56,6 +45,7 @@ const action = {
   volumeSub: () => window?.webContents.send("volume-sub"),
 };
 
+// shortcuts
 const createWindowMenu = () => {
   const menu = Menu.buildFromTemplate([
     {
@@ -115,7 +105,7 @@ const createWindow = () => {
   server.get("/callback", (req, res) => {
     const code = req.query.code;
     window?.webContents.send("code-ready", code);
-    res.send("登录成功");
+    res.send(i18next.t("loginSuccessfully"));
   });
   server.listen(12138);
 
@@ -144,27 +134,29 @@ const createWindow = () => {
 const createTrayMenu = () =>
   Menu.buildFromTemplate([
     {
-      label: "上一首",
+      label: i18next.t("previous"),
       click: action.previous,
     },
     {
-      label: paused ? "播放" : "暂停",
+      label: paused ? i18next.t("play") : i18next.t("pause"),
       click: action.toggle,
     },
     {
-      label: "下一首",
+      label: i18next.t("next"),
       click: action.next,
     },
     {
-      label: "退出",
+      label: i18next.t("exit"),
       click: () => {
         window?.destroy();
       },
     },
   ]);
 
+let tray: Tray;
+
 const createTray = () => {
-  const tray = new Tray(appIcon);
+  tray = new Tray(appIcon);
   tray.setToolTip("Foru");
   tray.setTitle("Foru");
   tray.on("click", action.toggleShow);
@@ -188,6 +180,10 @@ app.whenReady().then(async () => {
   ipcMain.handle("get-setting", (_event, key) => config.get(key));
   ipcMain.handle("set-settings", (_event, key, value) => {
     config.set(key, value);
+    if (key === "language") {
+      i18next.changeLanguage(value);
+      tray.setContextMenu(createTrayMenu());
+    }
   });
   ipcMain.handle("get-settings", (_event) => {
     return config.store;

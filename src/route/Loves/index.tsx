@@ -11,11 +11,14 @@ import EventBus from "../../utils/EventBus";
 import { useSpotifyDevice } from "spotify-web-playback-sdk-for-react";
 import ContainedButton from "../../components/common/ContainedButton";
 import Loading from "../../components/common/Loading";
+import { useTranslation } from "react-i18next";
 
 function Loves() {
   const store = useStore();
   const device = useSpotifyDevice();
   const [loading, setLoading] = useState(false);
+
+  const { t } = useTranslation();
 
   function handle() {
     store.lovesStore.setLoves();
@@ -77,11 +80,11 @@ function Loves() {
             gap: 1,
           }}>
           <Typography noWrap sx={{ fontSize: "2rem", fontWeight: "bolder" }}>
-            我喜欢的
+            {t("favourite")}
           </Typography>
           <Stack direction={"row"} gap={2}>
             <ContainedButton onClick={() => startPlay(0)} icon={faCirclePlay}>
-              播放
+              {t("play")}
             </ContainedButton>
           </Stack>
         </Box>

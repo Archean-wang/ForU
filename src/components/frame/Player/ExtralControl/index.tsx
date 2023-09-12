@@ -20,6 +20,7 @@ import {
   useSpotifyDevice,
   useSpotifyPlayer,
 } from "spotify-web-playback-sdk-for-react";
+import { useTranslation } from "react-i18next";
 
 function getVolumeFromLocalStorage(): number {
   let v = localStorage.getItem("volume");
@@ -34,6 +35,8 @@ function ExtralControl() {
   const [anchorEl, setAnchorEl] = useState<SVGSVGElement | null>(null);
   const open = Boolean(anchorEl);
   const device = useSpotifyDevice();
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     window.electronAPI.onVolumeAdd(onVolumeAdd);
@@ -153,7 +156,7 @@ function ExtralControl() {
         transformOrigin={{ horizontal: "right", vertical: "bottom" }}
         anchorOrigin={{ horizontal: "right", vertical: "top" }}>
         {store.devicesStore.devices.length === 0 && (
-          <MenuItem>暂无设备</MenuItem>
+          <MenuItem>{t("noDeviceFound")}</MenuItem>
         )}
         {store.devicesStore.devices.map((dev: Device) => (
           <MenuItem

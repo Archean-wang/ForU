@@ -43,6 +43,7 @@ import {
 import ListDropDownButton from "./ListDropDownButton";
 import ListButton from "./ListButton";
 import { useSpotifyDevice } from "spotify-web-playback-sdk-for-react";
+import { useTranslation } from "react-i18next";
 
 function Sidebar() {
   const store = useStore();
@@ -56,6 +57,8 @@ function Sidebar() {
 
   const [albumMenu, setAlbumMenu] = useState<Anchor | null>(null);
   const [albumIdx, setAlbumIdx] = useState(-1);
+
+  const { t } = useTranslation();
 
   const navigate = useNavigate();
 
@@ -221,12 +224,12 @@ function Sidebar() {
       }}>
       <List dense>
         <ListButton
-          primary="主页"
+          primary={t("home")}
           icon={faHouse}
           onClick={() => navigate("/")}
         />
         <ListButton
-          primary="我喜欢的"
+          primary={t("favourite")}
           icon={faHeart}
           iconColor="primary.main"
           onClick={() => navigate("/loves")}
@@ -243,11 +246,11 @@ function Sidebar() {
           alignItems: "center",
         }}>
         <Typography noWrap className="musicLibrary" sx={{ mr: "auto" }}>
-          音乐库
+          {t("library")}
         </Typography>
 
         <FontAwesomeIcon
-          title="添加歌单"
+          title={t("addTo")}
           icon={faAdd}
           cursor="pointer"
           onClick={addPlaylist}
@@ -260,13 +263,13 @@ function Sidebar() {
           overflowX: "hidden",
         }}
         component="nav">
-        <ListDropDownButton title="歌单" icon={faHeadphonesSimple}>
+        <ListDropDownButton title={t("playlist")} icon={faHeadphonesSimple}>
           {playlistsList}
         </ListDropDownButton>
-        <ListDropDownButton title="歌手" icon={faUser}>
+        <ListDropDownButton title={t("artist")} icon={faUser}>
           {artistsList}
         </ListDropDownButton>
-        <ListDropDownButton title="专辑" icon={faCompactDisc}>
+        <ListDropDownButton title={t("album")} icon={faCompactDisc}>
           {albumsList}
         </ListDropDownButton>
       </List>
@@ -284,13 +287,13 @@ function Sidebar() {
           <ListItemIcon>
             <FontAwesomeIcon icon={faPlayCircle} />
           </ListItemIcon>
-          播放
+          {t("play")}
         </MenuItem>
         <MenuItem onClick={deletePlaylist} dense>
           <ListItemIcon>
             <FontAwesomeIcon icon={faDeleteLeft} />
           </ListItemIcon>
-          删除歌单
+          {t("delete")}
         </MenuItem>
       </Menu>
 
@@ -307,13 +310,13 @@ function Sidebar() {
           <ListItemIcon>
             <FontAwesomeIcon icon={faPlayCircle} />
           </ListItemIcon>
-          播放
+          {t("play")}
         </MenuItem>
         <MenuItem onClick={unfollowArtist} dense>
           <ListItemIcon>
             <FontAwesomeIcon icon={faHeartBroken} />
           </ListItemIcon>
-          取消关注
+          {t("unfollow")}
         </MenuItem>
       </Menu>
 
@@ -330,7 +333,7 @@ function Sidebar() {
           <ListItemIcon>
             <FontAwesomeIcon icon={faPlayCircle} />
           </ListItemIcon>
-          播放
+          {t("play")}
         </MenuItem>
         <MenuItem
           dense
@@ -345,7 +348,7 @@ function Sidebar() {
           <ListItemIcon>
             <FontAwesomeIcon icon={faHeartBroken} />
           </ListItemIcon>
-          取消收藏
+          {t("unfollow")}
         </MenuItem>
       </Menu>
     </Box>

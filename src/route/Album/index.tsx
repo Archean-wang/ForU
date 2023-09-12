@@ -8,12 +8,18 @@ import {
   startPlayback,
   unfollowAlbums,
 } from "../../api";
-import { faCirclePlay, faHeart } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCirclePlay,
+  faHeart,
+  faMusic,
+} from "@fortawesome/free-solid-svg-icons";
 import { useCallback, useEffect, useState } from "react";
 import { useStore } from "../../store";
 import InfoCard from "../../components/common/InfoCard";
 import ContainedButton from "../../components/common/ContainedButton";
 import { useSpotifyDevice } from "spotify-web-playback-sdk-for-react";
+import { useTranslation } from "react-i18next";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Album() {
   const params = useParams();
@@ -22,6 +28,8 @@ function Album() {
   const [isLoved, setIsLoved] = useState(false);
   const store = useStore();
   const device = useSpotifyDevice();
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     checkAlbums(params.id as string).then((res) => {
@@ -72,19 +80,20 @@ function Album() {
               {album.release_date}
             </Typography>
             <Typography noWrap sx={{ fontSize: "1rem" }}>
-              {album.total_tracks}首
+              <FontAwesomeIcon icon={faMusic} />
+              {` ${album.total_tracks}`}
             </Typography>
           </Box>
 
           <Stack direction={"row"} gap={2}>
             <ContainedButton onClick={startPlay} icon={faCirclePlay}>
-              播放
+              {t("play")}
             </ContainedButton>
             <ContainedButton
               onClick={toggleLoved}
               icon={faHeart}
               color={isLoved ? "red" : "white"}>
-              收藏
+              {t("follow")}
             </ContainedButton>
           </Stack>
         </Box>
@@ -98,15 +107,15 @@ function Album() {
           }}
           columns={[
             {
-              header: "歌名",
+              header: t("title"),
               field: "name",
             },
             {
-              header: "歌手",
+              header: t("artist"),
               field: "artists",
             },
             {
-              header: "时长",
+              header: t("duration"),
               field: "duration_ms",
             },
           ]}

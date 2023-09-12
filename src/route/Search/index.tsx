@@ -16,6 +16,7 @@ import {
   SearchTracks,
 } from "../../utils/interface";
 import Loading from "../../components/common/Loading";
+import { useTranslation } from "react-i18next";
 
 function Search() {
   const {
@@ -29,6 +30,8 @@ function Search() {
   const [albumItems, setAlbumItems] = useState(albums.items);
   const [playlistItems, setPlaylistItems] = useState(playlists.items);
   const [loading, setLoading] = useState(false);
+
+  const { t } = useTranslation();
 
   function handleChange(event: React.SyntheticEvent, newValue: number) {
     setValue(newValue);
@@ -88,10 +91,10 @@ function Search() {
         flexDirection: "column",
       }}>
       <Tabs value={value} onChange={handleChange} sx={{ mb: 2, height: 8 }}>
-        <Tab label="歌曲" />
-        <Tab label="歌手" />
-        <Tab label="专辑" />
-        <Tab label="歌单" />
+        <Tab label={t("title")} />
+        <Tab label={t("artist")} />
+        <Tab label={t("album")} />
+        <Tab label={t("playlist")} />
       </Tabs>
       <Box sx={{ flex: 1, overflow: "hidden" }}>
         {value === 0 && (

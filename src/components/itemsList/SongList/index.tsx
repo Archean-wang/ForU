@@ -36,6 +36,7 @@ import SubMenu from "../../common/SubMenu";
 import ContextMenu from "../../common/ContextMenu";
 import debounce from "../../../utils/debounce";
 import { observer } from "mobx-react-lite";
+import { useTranslation } from "react-i18next";
 
 const Cell = styled(TableCell)(
   ({ theme }) => `
@@ -67,19 +68,19 @@ interface SongListProps {
 
 const defaultColumns = [
   {
-    header: "歌名",
+    header: "title",
     field: "name",
   },
   {
-    header: "歌手",
+    header: "artist",
     field: "artists",
   },
   {
-    header: "专辑",
+    header: "album",
     field: "album",
   },
   {
-    header: "时长",
+    header: "duration",
     field: "duration_ms",
   },
 ] as ColumnDefine[];
@@ -98,6 +99,8 @@ function SongList({
   const [loves, setLoves] = useState(Array(items.length).fill(false));
   const store = useStore();
   const deLoadMore = loadMore && debounce(loadMore, 1000);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     // at most 50 ids once
@@ -264,7 +267,7 @@ function SongList({
               <TableCell align="left">#</TableCell>
               {columns.map((v, index) => (
                 <TableCell align="left" key={index} sx={{ flex: 1 }}>
-                  {v.header}
+                  {t(v.header)}
                 </TableCell>
               ))}
               <TableCell align="left"></TableCell>
@@ -311,16 +314,16 @@ function SongList({
 
       <ContextMenu onClose={handleClose} anchorPosition={menuPos}>
         <MenuItem onClick={addToQueue} dense>
-          下一首播放
+          {t("playNext")}
         </MenuItem>
         {currentPlaylist?.owner.id ===
           store.userProfilseStore.userProfile?.id && (
           <MenuItem onClick={deleteFromPlaylist} dense>
-            从歌单删除
+            {t("deleteFromPlaylist")}
           </MenuItem>
         )}
 
-        <SubMenu title="添加到">
+        <SubMenu title={t("addTo")}>
           {store.playlistsStore
             .playlists!.items.filter(
               (v) => v.owner.id === store.userProfilseStore.userProfile!.id
@@ -331,7 +334,7 @@ function SongList({
               </MenuItem>
             ))}
         </SubMenu>
-        <SubMenu title="歌手">
+        <SubMenu title={t("artists")}>
           {items.length > 0 &&
             idx != -1 &&
             items[idx].artists.map((ar) => (

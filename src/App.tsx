@@ -12,16 +12,13 @@ import { SpotifyWebSDK } from "spotify-web-playback-sdk-for-react";
 import Main from "./components/frame/Main";
 import GlobalToast from "./components/common/GlobalToast";
 
+import "./i18n";
+import { useConfig } from "./components/config";
+
 function App() {
   const volume = localStorage.getItem("volume");
   const store = useStore();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    window.electronAPI
-      .getSettings()
-      .then((res) => store.settingsStore.setSettings(res));
-  }, []);
 
   // 自动登录
   useEffect(() => {
