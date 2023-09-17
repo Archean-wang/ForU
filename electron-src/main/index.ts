@@ -14,16 +14,11 @@ import express from "express";
 import appIcon from "../../build/icon.png?asset";
 import { CancellationToken, autoUpdater } from "electron-updater";
 import config from "../config";
-
-import resources from "../i18n";
+import initI18n from "../i18n";
 import i18next from "i18next";
 
 config.set("version", app.getVersion());
-i18next.init({
-  resources,
-  lng: config.get("language") as string,
-  fallbackLng: "en",
-});
+initI18n(config.get("language") as string);
 
 let paused = true;
 let window: null | BrowserWindow = null;

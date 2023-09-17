@@ -48,7 +48,6 @@ function Header() {
   };
 
   const handleLogout = () => {
-    store.loginStore.setLogin(false);
     localStorage.clear();
     navigate("/login");
   };

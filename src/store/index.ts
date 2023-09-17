@@ -1,5 +1,4 @@
 import React from "react";
-import loginStore, { LoginStore } from "./loginStore";
 import playlistsStore, { PlaylistsStore } from "./playlistsStore";
 import albumsStore, { AlbumsStore } from "./albumsStore";
 import artistsStore, { ArtistsStore } from "./artistsStore";
@@ -14,7 +13,6 @@ import settingsStore, { SettingsStore } from "./settingsStore";
 import globalToastStore, { GlobalToastStore } from "./globalToastStore";
 
 class RootStore {
-  loginStore: LoginStore;
   playlistsStore: PlaylistsStore;
   albumsStore: AlbumsStore;
   artistsStore: ArtistsStore;
@@ -28,7 +26,6 @@ class RootStore {
   settingsStore: SettingsStore;
   globalToastStore: GlobalToastStore;
   constructor() {
-    this.loginStore = loginStore;
     this.playlistsStore = playlistsStore;
     this.albumsStore = albumsStore;
     this.artistsStore = artistsStore;

@@ -2,36 +2,23 @@ import { getToken } from "./utils/authentication";
 
 import { useStore } from "./store";
 import { observer } from "mobx-react-lite";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 
 import Player from "./components/frame/Player";
 import { Box, ThemeProvider, createTheme } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+
 import { grey } from "@mui/material/colors";
 import { SpotifyWebSDK } from "spotify-web-playback-sdk-for-react";
 import Main from "./components/frame/Main";
 import GlobalToast from "./components/common/GlobalToast";
 
 import "./i18n";
-import { useConfig } from "./components/config";
+import useAutoLogin from "./hooks/useAutologin.ts";
 
 function App() {
   const volume = localStorage.getItem("volume");
   const store = useStore();
-  const navigate = useNavigate();
-
-  // 自动登录
-  useEffect(() => {
-    if (!store.loginStore.login) {
-      getToken()
-        .then(() => {
-          store.loginStore.setLogin(true);
-        })
-        .catch(() => {
-          navigate("/login");
-        });
-    }
-  }, []);
+  const login = useAutoLogin();
 
   const getAuthCode = useCallback(async function (cb: Function) {
     const token = await getToken();
@@ -69,7 +56,7 @@ function App() {
     },
   });
 
-  return store.loginStore.login ? (
+  return login ? (
     <ThemeProvider theme={theme}>
       <Box
         onContextMenu={(e) => {

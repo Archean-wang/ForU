@@ -8,14 +8,12 @@ import {
 } from "@mui/material";
 import { getAccessToken, getAuthCode } from "../../utils/authentication";
 import { useEffect, useState } from "react";
-import { useStore } from "../../store";
 import { useNavigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import logoURL from "../../assets/spotify_logo.png";
 import { useTranslation } from "react-i18next";
 
 function Login() {
-  const store = useStore();
   const navigate = useNavigate();
   const [clientID, setClientID] = useState("");
   const [open, setOpen] = useState(false);
@@ -30,13 +28,9 @@ function Login() {
   }, []);
 
   useEffect(() => {
-    if (store.loginStore.login) navigate("/");
-  }, [store.loginStore.login]);
-
-  useEffect(() => {
     window.electronAPI.onCodeReady((_event, code) => {
       getAccessToken(code).then(() => {
-        store.loginStore.setLogin(true);
+        navigate("/");
       });
     });
     return () => {
