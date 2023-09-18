@@ -4,7 +4,9 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin({ exclude: ["conf", "express"] })],
+    plugins: [
+      externalizeDepsPlugin({ exclude: ["conf", "express", "i18next"] }),
+    ],
     build: {
       rollupOptions: {
         output: {
@@ -13,6 +15,8 @@ export default defineConfig({
               return "conf";
             } else if (id.includes("express")) {
               return "express";
+            } else if (id.includes("i18n")) {
+              return "i18next";
             }
           },
         },
@@ -40,7 +44,7 @@ export default defineConfig({
     envPrefix: ["VITE_"],
     root: ".",
     build: {
-//      base: "./",
+      //      base: "./",
       rollupOptions: {
         input: {
           index: resolve(__dirname, "index.html"),
